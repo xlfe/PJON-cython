@@ -1,11 +1,16 @@
-from python_pjon_pi import setup,LocalUDP
+import time
+from python_pjon_pi import LocalUDP
 
 
 
 def callback(test):
     print "CALLBACK!!"
 
-print setup(callback, 10)
 
-l= LocalUDP(100)
-print l.get_id()
+l= LocalUDP(44, callback)
+print l.device_id()
+
+while True:
+    l.loop()
+    time.sleep(0.1)
+
