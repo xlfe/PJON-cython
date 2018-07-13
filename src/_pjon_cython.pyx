@@ -69,12 +69,13 @@ bus_id[:] = [10, 0, 0, 50] #// Bus id definition
 cdef object ludp_f
 cdef void ludp_receiver_function(uint8_t *payload, uint16_t length, const PJON_Packet_Info &packet_info):
     global ludp_f
-    result_from_function = (<object>ludp_f)(<char*>payload, length)
+    result_from_function = ludp_f(<char*>payload, length)
 
 cdef class LocalUdp:
     cdef  PJON[LocalUDP] *bus
 
     def __cinit__(self, device_id, callback):
+        global ludp_f
         self.bus = new PJON[LocalUDP](device_id)
         ludp_f = callback
         self.bus.set_receiver(&ludp_receiver_function)
