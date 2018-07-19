@@ -13,30 +13,26 @@ PJON is one of very few open-source implementations of multi-master communicatio
 
 ## Current status:
 
-- work in progress, focus on LocalUDP, GlobalUDP and SWBB strategies
+- very much a work in progress, focus on LocalUDP, GlobalUDP and SWBB strategies
+
+GlobalUDP has a very basic implementation (others are not yet)
+* Tested and working to talk to other PJON nodes using GlobalUDP (RPi LINUX and ESP32)
 
 PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
-
 
 ## Installation
 
 ## Minimal client example
 
 ```python
-from pjon_python.base_client import PjonBaseSerialClient
-import time
+from _pjon_cython import GlobalUdp
 
-pjon_cli = PjonBaseSerialClient(1, 'COM6')
-pjon_cli.start_client()
+def callback(o, test, length):
+    print "Recv (" + str(length) + "): " +  test[:length]
+    o.reply("P")
 
-
-def receive_handler(payload, packet_length, packet_info):
-    print "received packet from device %s with payload: %s" % (packet_info.sender_id, payload)
-
-pjon_cli.set_receive(receive_handler)
+g = GlobalUdp(44, callback)
 
 while True:
-    #             recipient id   payload
-    pjon_cli.send(35,            'C123456789')  # payload can be string or an array of bytes (or any type suitable for casting to byte)
-    time.sleep(1)
+    g.loop(10)
 ```

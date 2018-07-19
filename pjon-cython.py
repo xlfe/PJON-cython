@@ -1,29 +1,13 @@
-import time
-from _pjon_cython import LocalUdp
+from _pjon_cython import GlobalUdp
+
+def callback(o, test, length):
+    print "Recv (" + str(length) + "): " +  test[:length]
+    o.reply("P")
+
+g = GlobalUdp(44, callback)
+
+while True:
+    g.loop(10)
 
 
-
-def callback(test, length):
-    print "CALLBACK!!"
-    print test
-    print length
-
-
-l= LocalUdp(99, callback)
-print l.device_id()
-
-l.loop()
-print l.get_packets_count()
-
-l.send(44, 'Ptest')
-try:
-    while True:
-        l.loop()
-finally:
-    print l.get_packets_count()
-
-
-# g = GlobalUDP(45, callback)
-# print g.device_id()
-# g.loop()
 
