@@ -1,6 +1,6 @@
 # PJON-cython
 
-Call the PJON C++ library directly from Python (via [Cython](http://cython.org/))
+Call the PJON C++ library directly from Python 2 or Python 3 (via [Cython](http://cython.org/))
 
 PJON (Github: [PJON](https://github.com/gioblu/PJON/) ) is an open-source, multi-master, multi-media (one-wire, two-wires, radio) communication protocol available for various platforms (Arduino/AVR, ESP8266, Teensy).
 
