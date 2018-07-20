@@ -14,12 +14,13 @@ setup(
       description='Call the PJON C++ library directly from Python',
       ext_modules=cythonize(
             Extension(
-                  "_pjon_cython",
-                  sources=["src/_pjon_cython.pyx"],
+                  "pjon_cython",
+                  sources=["src/pjon_cython.pyx"],
                   language = "c++",
                   extra_compile_args=std_args + ['-std=c++11', '-DLINUX', '-DPJON_INCLUDE_LUDP','-DPJON_INCLUDE_GUDP']
                                      + ['-Wno-unneeded-internal-declaration','-Wno-unused-variable'], #'"-Wc++11-extensions"],
-                  include_dirs=['PJON/src'])
+                  include_dirs=['PJON/src']),
+            compiler_directives={'embedsignature': True}
       )
 )
 

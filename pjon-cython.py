@@ -1,13 +1,16 @@
-from _pjon_cython import GlobalUdp
+import pjon_cython as PJON
 
-def callback(o, test, length):
-    print "Recv (" + str(length) + "): " +  test[:length]
-    o.reply("P")
+class GlobalUDP(PJON.GlobalUDP):
 
-g = GlobalUdp(44, callback)
+    def receive(self, data, length, packet_info):
+        print ("Recv ({}): {}".format(length, data))
+        print (packet_info)
+        self.reply(b'P')
+
+g = GlobalUDP(44)
 
 while True:
-    g.loop(10)
+    g.loop(timeout_us=1000)
 
 
 
