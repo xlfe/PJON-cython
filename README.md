@@ -14,12 +14,11 @@ PJON is one of very few open-source implementations of multi-master communicatio
 ## Current status:
 
 - simple implementation working - focus on LocalUDP, GlobalUDP and ThroughSerial strategies
+- LocalUDP - (Should work but not tested)
+- GlobalUDP - Tested and appears to work
+- ThroughSerial - Tested and appears to work
 
-LocalUDP - (Should work but not tested)
-GlobalUDP - Tested and appears to work
-ThroughSerial - Tested and appears to work
-
-PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
+Note - PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
 
 ## Testing (see pjon-cython-testing.py)
 
