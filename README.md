@@ -13,26 +13,68 @@ PJON is one of very few open-source implementations of multi-master communicatio
 
 ## Current status:
 
-- very much a work in progress, focus on LocalUDP, GlobalUDP and SWBB strategies
+- simple implementation working - focus on LocalUDP, GlobalUDP and ThroughSerial strategies
 
-GlobalUDP has a very basic implementation (others are not yet)
-* Tested and working to talk to other PJON nodes using GlobalUDP (RPi LINUX and ESP32)
+LocalUDP - (Should work but not tested)
+GlobalUDP - Tested and appears to work
+ThroughSerial - Tested and appears to work
 
 PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
 
-## Installation
+## Testing (see pjon-cython-testing.py)
 
-## Minimal client example
+```bash
+python setup.py build_ext --inplace; python pjon-cython-testing.py
+python3 setup.py build_ext --inplace; python3 pjon-cython-testing.py
+```
+
+## Install
+
+```bash
+python setup.py install
+```
+
+## GlobalUDP example
 
 ```python
-from _pjon_cython import GlobalUdp
+import pjon_cython as PJON
 
-def callback(o, test, length):
-    print "Recv (" + str(length) + "): " +  test[:length]
-    o.reply("P")
+class GlobalUDP(PJON.GlobalUDP):
 
-g = GlobalUdp(44, callback)
+    def receive(self, data, length, packet_info):
+        print ("Recv ({}): {}".format(length, data))
+        print (packet_info)
+        self.reply(b'P')
+
+g = GlobalUDP(44)
+g.add_node(123,'192.168.22.10',1234)
+g.send(123, b'HELO')
 
 while True:
-    g.loop(10)
+    g.loop()
+
+```
+
+## Through Serial example
+
+```python
+import pjon_cython as PJON
+
+#ThroughSerial Example
+# Make sure you set self.bus.set_synchronous_acknowledge(false) on the other side
+
+class ThroughSerial(PJON.ThroughSerial):
+
+    def receive(self, data, length, packet_info):
+        if data.startswith(b'H'):
+            print ("Recv ({}): {} - REPLYING".format(length, data))
+            self.reply(b'BONZA')
+        else:
+            print ("Recv ({}): {}".format(length, data))
+        print ('')
+
+ts = ThroughSerial(44, b"<YOUR SERIAL DEVICE HERE>", 115200)
+
+while True:
+    ts.loop()
 ```

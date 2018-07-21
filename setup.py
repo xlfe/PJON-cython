@@ -17,7 +17,8 @@ setup(
                   "pjon_cython",
                   sources=["src/pjon_cython.pyx"],
                   language = "c++",
-                  extra_compile_args=std_args + ['-std=c++11', '-DLINUX', '-DPJON_INCLUDE_LUDP','-DPJON_INCLUDE_GUDP']
+                  extra_compile_args=std_args + ['-std=c++11', '-DLINUX', '-DPJON_INCLUDE_TS',
+                                                 '-DPJON_INCLUDE_LUDP','-DPJON_INCLUDE_GUDP']
                                      + ['-Wno-unneeded-internal-declaration','-Wno-unused-variable'], #'"-Wc++11-extensions"],
                   include_dirs=['PJON/src']),
             compiler_directives={'embedsignature': True}
