@@ -1,0 +1,8 @@
+include *.txt
+recursive-include pjon_cython *.pyx
+recursive-include PJON *
+prune PJON/examples
+prune PJON/devices
+prune PJON/documentation
+prune PJON/specification
+prune PJON/trademark

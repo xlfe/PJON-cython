@@ -6,6 +6,7 @@ PJON (Github: [PJON](https://github.com/gioblu/PJON/) ) is an open-source, multi
 
 PJON is one of very few open-source implementations of multi-master communication protocols for microcontrollers.
 
+
 ## PJON-cython vs PJON-python
 
 **PJON-cython** allows you to use the C++ PJON library from Python via Cython (C++ wrappers for Python) while
@@ -18,7 +19,10 @@ PJON is one of very few open-source implementations of multi-master communicatio
 - GlobalUDP - Tested and appears to work
 - ThroughSerial - Tested and appears to work
 
-Note - PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
+Note
+
+- PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
+- PJON-cython references [xlfe/PJON](https://github.com/xlfe/PJON/) which has Linux serial support
 
 ## Testing (see pjon-cython-testing.py)
 
@@ -27,10 +31,16 @@ python setup.py build_ext --inplace; python pjon-cython-testing.py
 python3 setup.py build_ext --inplace; python3 pjon-cython-testing.py
 ```
 
-## Install
+## Install from this repo
 
 ```bash
 python setup.py install
+```
+
+## Install from pip
+
+```bash
+pip install pjon-cython
 ```
 
 ## GlobalUDP example
