@@ -40,7 +40,6 @@ setup(
       author='xlfe',
       description='Call the PJON C++ library directly from Python',
       cmdclass=cmdclass,
-      install_requires= ['cython'] if USE_CYTHON else [],
       ext_modules= [
             Extension(
                   "pjon_cython",

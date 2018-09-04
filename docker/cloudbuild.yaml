@@ -7,7 +7,7 @@ steps:
   env:
     - DISABLE_CYTHON=1
 - name: 'pjon_cython-runner'
-  args: ['python', './setup.py', 'build']
+  args: ['bash', 'docker/with_cython.sh']
   id: test_with_cython
   env:
     - FORCE_CYTHON=1
