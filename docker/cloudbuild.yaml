@@ -1,0 +1,13 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'docker/Dockerfile', '-t', 'pjon_cython-runner', '.']
+- name: 'pjon_cython-runner'
+  args: ['python', './setup.py', 'build']
+  id: test_nocython
+  env:
+    - DISABLE_CYTHON=1
+- name: 'pjon_cython-runner'
+  args: ['python', './setup.py', 'build']
+  id: test_with_cython
+  env:
+    - FORCE_CYTHON=1
