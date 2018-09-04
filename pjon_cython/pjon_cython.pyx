@@ -45,7 +45,7 @@ cdef extern from "PJON.h":
         uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
         uint16_t update()
         uint16_t receive()
-        void set_synchronous_acknowledge(uint8_t state)
+        # void set_synchronous_acknowledge(uint8_t state)
         uint16_t receive(uint32_t duration)
         uint8_t device_id()
         void set_custom_pointer(void *pointer)
@@ -78,7 +78,7 @@ cdef class GlobalUDP:
         self.bus = new PJON[_globaludp](device_id)
         self.bus.set_custom_pointer(<void*> self)
         self.bus.set_receiver(&_globaludp_receiver)
-        self.bus.begin()
+        # self.bus.set_asynchronous_acknowledge(1)
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -173,7 +173,7 @@ cdef class ThroughSerial:
             raise Exception("Couldn't open serial port")
 
         self.bus.strategy.set_serial(s)
-        self.bus.set_synchronous_acknowledge(0)
+        # self.bus.set_synchronous_acknowledge(0)
         self.bus.strategy.set_baud_rate(baud_rate)
 
         self.bus.set_custom_pointer(<void*> self)
