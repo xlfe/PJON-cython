@@ -1,8 +1,35 @@
+#!/usr/bin/env python
+
 from setuptools import setup, Extension
-from Cython.Build import build_ext
+import os
 
-std_args =['-std=c++11', '-DLINUX']
+if 'FORCE_CYTHON' in os.environ:
+      USE_CYTHON = True
+elif 'DISABLE_CYTHON' in os.environ:
+      USE_CYTHON = False
+else:
+      USE_CYTHON = 'auto'
 
+
+
+if USE_CYTHON:
+      try:
+            from Cython.Distutils import build_ext
+      except ImportError:
+            if USE_CYTHON=='auto':
+                  USE_CYTHON=False
+            else:
+                  raise
+
+
+cmdclass = { }
+
+
+if USE_CYTHON:
+      source = 'pyx'
+      cmdclass.update({ 'build_ext': build_ext })
+else:
+    source = 'cpp'
 
 setup(
       name='pjon_cython',
@@ -12,16 +39,22 @@ setup(
       license='Apache 2.0',
       author='xlfe',
       description='Call the PJON C++ library directly from Python',
-      # cmdclass={ 'build_ext': build_ext },
+      cmdclass=cmdclass,
       ext_modules= [
-
             Extension(
                   "pjon_cython",
-                  sources=["pjon_cython/pjon_cython.cpp"],
+                  sources=["pjon_cython/pjon_cython.{}".format(source)],
                   language = "c++",
-                  extra_compile_args=std_args + ['-std=c++11', '-DLINUX', '-DPJON_INCLUDE_TS',
-                                                 '-DPJON_INCLUDE_LUDP','-DPJON_INCLUDE_GUDP']
-                                     + ['-Wno-unneeded-internal-declaration','-Wno-unused-variable'], #'"-Wc++11-extensions"],
+                  extra_compile_args=[
+                        '-std=c++11',
+                        '-DPJON_INCLUDE_TS',
+                        '-DPJON_INCLUDE_LUDP',
+                        '-DPJON_INCLUDE_GUDP',
+                        # '-DPJON_INCLUDE_PACKET_ID=true',
+                        # '-DPJON_INCLUDE_ASYNC_ACK=true',
+                        '-DLINUX',
+                        '-Wno-unneeded-internal-declaration',
+                        '-Wno-unused-variable'],
                   include_dirs=['PJON/src']),
             # compiler_directives={'embedsignature': True}
       # )
