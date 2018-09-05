@@ -10,6 +10,8 @@ elif 'DISABLE_CYTHON' in os.environ:
 else:
     USE_CYTHON = 'auto'
 
+setup_requires = ['nose>=1.0']
+
 if USE_CYTHON:
     try:
         from Cython.Distutils import build_ext
@@ -24,6 +26,7 @@ cmdclass = {}
 if USE_CYTHON:
     source = 'pyx'
     cmdclass.update({'build_ext': build_ext})
+    setup_requires.append('Cython')
 else:
     source = 'cpp'
 
@@ -35,7 +38,7 @@ setup(
     license='Apache 2.0',
     author='xlfe',
     description='Call the PJON C++ library directly from Python',
-    setup_requires=['nose>=1.0'],
+    setup_requires=setup_requires,
     test_suite = 'nose.collector',
     cmdclass=cmdclass,
     ext_modules=[
