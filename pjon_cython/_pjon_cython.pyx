@@ -7,8 +7,9 @@ ctypedef unsigned int uint32_t
 ctypedef int PJON_SERIAL_TYPE
 
 ctypedef void* PJON_Receiver
+ctypedef void* PJON_Error
 
-cdef extern from "interfaces/LINUX/PJON_LINUX_WiringSerial.h":
+cdef extern from "interfaces/LINUX/PJON_LINUX_Interface.h":
     int serialOpen (const char *device, const int baud)
 
 cdef extern from "PJON.h":
@@ -17,6 +18,9 @@ cdef extern from "PJON.h":
     const uint8_t  PJON_NO_HEADER
     const uint16_t PJON_BROADCAST
     const uint16_t GUDP_DEFAULT_PORT
+    const uint8_t PJON_CONNECTION_LOST
+    const uint8_t PJON_PACKETS_BUFFER_FULL
+    const uint8_t PJON_CONTENT_TOO_LONG
 
     cdef struct PJON_Packet_Info:
         uint8_t header
@@ -43,6 +47,7 @@ cdef extern from "PJON.h":
         PJON(uint8_t device_id)
         void begin()
         uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
+        void set_error(PJON_Error e)
         uint16_t update()
         uint16_t receive()
         # void set_synchronous_acknowledge(uint8_t state)
@@ -52,6 +57,20 @@ cdef extern from "PJON.h":
         uint16_t get_packets_count(uint8_t device_id)
         void set_receiver(PJON_Receiver r)
         uint16_t send(uint8_t id, const char *string, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
+
+
+
+cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer):
+
+    if code == PJON_CONNECTION_LOST:
+        raise Exception("Connection lost")
+
+    if code == PJON_PACKETS_BUFFER_FULL:
+        raise Exception("Packet buffer is full")
+
+    if code == PJON_CONTENT_TOO_LONG:
+        raise Exception("Content is too long")
+
 
 cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
     return dict(
@@ -78,6 +97,7 @@ cdef class GlobalUDP:
         self.bus = new PJON[_globaludp](device_id)
         self.bus.set_custom_pointer(<void*> self)
         self.bus.set_receiver(&_globaludp_receiver)
+        self.bus.set_error(&error_handler)
         # self.bus.set_asynchronous_acknowledge(1)
 
     def receive(self, payload, length, packet_info):
@@ -124,6 +144,7 @@ cdef class LocalUDP:
         self.bus = new PJON[_localudp](device_id)
         self.bus.set_custom_pointer(<void*> self)
         self.bus.set_receiver(&_localudp_receiver)
+        self.bus.set_error(&error_handler)
         self.bus.begin()
 
     def receive(self, payload, length, packet_info):
@@ -178,6 +199,7 @@ cdef class ThroughSerial:
 
         self.bus.set_custom_pointer(<void*> self)
         self.bus.set_receiver(&_through_serial_receiver)
+        self.bus.set_error(&error_handler)
         self.bus.begin()
 
     def receive(self, payload, length, packet_info):
