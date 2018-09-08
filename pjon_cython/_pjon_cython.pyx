@@ -49,6 +49,7 @@ cdef extern from "PJON.h":
         uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
         void set_error(PJON_Error e)
         uint16_t update()
+        uint16_t send_repeatedly(uint8_t id, const char *string, uint16_t length, uint32_t timing, uint8_t  header, uint16_t p_id, uint16_t requested_port)
         uint16_t receive()
         # void set_synchronous_acknowledge(uint8_t state)
         uint16_t receive(uint32_t duration)
@@ -129,6 +130,10 @@ cdef class GlobalUDP:
         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
         self.bus.strategy.add_node(device_id, ip_ints, port)
 
+    def send_repeatedly(self, device_id, data, timing):
+        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, PJON_BROADCAST)
+
+
 
 cdef void _localudp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
     cdef LocalUDP self = <object> _pi.custom_pointer
@@ -171,6 +176,9 @@ cdef class LocalUDP:
 
     def reply(self, data):
         self.bus.reply(data, len(data), PJON_NO_HEADER, 0, PJON_BROADCAST)
+
+    def send_repeatedly(self, device_id, data, timing):
+        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, PJON_BROADCAST)
 
 
 
@@ -226,6 +234,9 @@ cdef class ThroughSerial:
 
     def reply(self, data):
         self.bus.reply(data, len(data), PJON_NO_HEADER, 0, PJON_BROADCAST)
+
+    def send_repeatedly(self, device_id, data, timing):
+        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, PJON_BROADCAST)
 
 
 
