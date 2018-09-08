@@ -56,8 +56,8 @@ setup(
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
                 '-Wno-unused-variable'],
-            include_dirs=['PJON/src']),
-        # compiler_directives={'embedsignature': True}
-        # )
+            include_dirs=['PJON/src'],
+        compiler_directives={'embedsignature': True}
+        )
     ]
 )
