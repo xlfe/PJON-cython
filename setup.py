@@ -32,7 +32,7 @@ else:
 
 setup(
     name='pjon_cython',
-    version='11.1.2',
+    version='11.1.3',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',

@@ -22,7 +22,6 @@ PJON is one of very few open-source implementations of multi-master communicatio
 Note
 
 - PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
-- PJON-cython references [xlfe/PJON](https://github.com/xlfe/PJON/) which has Linux serial support
 
 ## Testing (see pjon-cython-testing.py)
 
