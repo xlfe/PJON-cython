@@ -32,7 +32,7 @@ else:
 
 setup(
     name='pjon_cython',
-    version='11.1.2',
+    version='11.1.4',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',
@@ -56,8 +56,8 @@ setup(
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
                 '-Wno-unused-variable'],
-            include_dirs=['PJON/src']),
-        # compiler_directives={'embedsignature': True}
-        # )
+            include_dirs=['PJON/src'],
+        compiler_directives={'embedsignature': True}
+        )
     ]
 )
