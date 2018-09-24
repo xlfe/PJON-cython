@@ -23,18 +23,16 @@ Note
 
 - PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
 
-## Testing (see pjon-cython-testing.py)
-
-```bash
-python setup.py build_ext --inplace; python pjon-cython-testing.py
-python3 setup.py build_ext --inplace; python3 pjon-cython-testing.py
-gcloud builds submit --config docker/cloudbuild.yaml
-```
-
 ## Install from pip
 
 ```bash
 pip install pjon-cython
+```
+
+## Testing
+
+```bash
+$(which python) setup.py nosetests --with-doctest --doctest-extension=md
 ```
 
 ## GlobalUDP example
