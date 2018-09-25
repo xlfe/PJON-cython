@@ -105,10 +105,6 @@ class PJON_Id_Acquisition_Fail(BaseException):
 class PJON_Devices_Buffer_Full(BaseException):
     pass
 
-class PJON_Send_Fail(BaseException):
-    pass
-
-
 
 cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer) except *:
 
@@ -197,16 +193,13 @@ cdef class GlobalUDP:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def reply(self, data):
-        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def send_repeatedly(self, device_id, data, timing):
-        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
@@ -266,17 +259,13 @@ cdef class LocalUDP:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def reply(self, data):
-        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def send_repeatedly(self, device_id, data, timing):
-        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
-
+        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
 
 
@@ -341,15 +330,12 @@ cdef class ThroughSerial:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def reply(self, data):
-        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
     def send_repeatedly(self, device_id, data, timing):
-        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
-            raise PJON_Send_Fail()
+        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
 

@@ -59,7 +59,7 @@ $(which python) setup.py nosetests --with-doctest --doctest-extension=md
 ...         self.reply(b'P')
 
 >>> g = GlobalUDP(44)
->>> g.send(123, b'HELO')
+>>> idx = g.send(123, b'HELO')
 >>> # calling loop calls the PJON bus.update() and bus.receive()
 >>> # and the return is the results of those functions -
 >>> packets_to_send, receive_status = g.loop()
@@ -91,8 +91,11 @@ True
 ...
 >>> # Put your actual serial device in here...
 >>> ts = ThroughSerial(44, b"/dev/null", 115200)
->>> ts.send(100, b'PING')
->>>
+>>> # Send returns the packet's index in the packet buffer
+>>> ts.send(100, b'PING 1')
+0
+>>> ts.send(100, b'PING 2')
+1
 >>> # Error handling happens through exceptions such as PJON.PJON_Connection_Lost
 >>> while True:
 ...     packets_to_send, receive_status = ts.loop()
