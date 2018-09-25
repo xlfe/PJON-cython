@@ -9,7 +9,7 @@ else
 fi
 
 if [[ -n "${FORCE_CYTHON}" ]]; then
-    "$PIP" install -r ./requirements.txt
+    "$PIP" install Cython
 fi
 
 "$PYTHON" ./setup.py test

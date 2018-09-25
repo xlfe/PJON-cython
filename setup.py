@@ -30,16 +30,27 @@ if USE_CYTHON:
 else:
     source = 'cpp'
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='pjon_cython',
-    version='11.1.3',
+    version='11.1.4',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',
     author='xlfe',
     description='Call the PJON C++ library directly from Python',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     setup_requires=setup_requires,
     test_suite = 'nose.collector',
+    classifiers = [
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'
+    ],
     cmdclass=cmdclass,
     ext_modules=[
         Extension(
@@ -53,11 +64,17 @@ setup(
                 '-DPJON_INCLUDE_GUDP',
                 # '-DPJON_INCLUDE_PACKET_ID=true',
                 # '-DPJON_INCLUDE_ASYNC_ACK=true',
+                '-DPJON_MAX_PACKETS=100',
+                '-DPJON_PACKET_MAX_LENGTH=245',
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
+                '-Wno-logical-op-parentheses',
                 '-Wno-unused-variable'],
             include_dirs=['PJON/src'],
-        compiler_directives={'embedsignature': True}
+        compiler_directives={
+            'binding':True,
+            'embedsignature': True
+        }
         )
     ]
 )

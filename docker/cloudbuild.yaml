@@ -1,29 +1,63 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'docker/Dockerfile', '-t', 'ubuntu-runner', '.']
 
-- name: 'ubuntu-runner'
+- name: 'python:2.7'
   args: ['bash', 'docker/run_tests.sh']
-  id: py2_without_cython
+  id: py27_without_cython
+  waitFor: ['-']
   env:
     - DISABLE_CYTHON=1
 
-- name: 'ubuntu-runner'
+- name: 'python:2.7'
   args: ['bash', 'docker/run_tests.sh']
-  id: py2_with_cython
+  id: py27_with_cython
+  waitFor: ['-']
   env:
     - FORCE_CYTHON=1
 
-- name: 'ubuntu-runner'
+- name: 'python:3.4'
   args: ['bash', 'docker/run_tests.sh']
-  id: py3_without_cython
+  id: py34_without_cython
+  waitFor: ['-']
+  env:
+  - DISABLE_CYTHON=1
+  - PYTHON3=1
+
+- name: 'python:3.4'
+  args: ['bash', 'docker/run_tests.sh']
+  id: py34_with_cython
+  waitFor: ['-']
+  env:
+  - FORCE_CYTHON=1
+  - PYTHON3=1
+
+- name: 'python:3.5'
+  args: ['bash', 'docker/run_tests.sh']
+  id: py35_without_cython
+  waitFor: ['-']
+  env:
+  - DISABLE_CYTHON=1
+  - PYTHON3=1
+
+- name: 'python:3.5'
+  args: ['bash', 'docker/run_tests.sh']
+  id: py35_with_cython
+  waitFor: ['-']
+  env:
+  - FORCE_CYTHON=1
+  - PYTHON3=1
+
+- name: 'python:3.6'
+  args: ['bash', 'docker/run_tests.sh']
+  id: py36_without_cython
+  waitFor: ['-']
   env:
     - DISABLE_CYTHON=1
     - PYTHON3=1
 
-- name: 'ubuntu-runner'
+- name: 'python:3.6'
   args: ['bash', 'docker/run_tests.sh']
-  id: py3_with_cython
+  waitFor: ['-']
+  id: py36_with_cython
   env:
     - FORCE_CYTHON=1
     - PYTHON3=1
