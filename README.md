@@ -23,6 +23,14 @@ Note
 
 - PJON-cython versions are aligned with PJON versions to indicate compatibility with C implementation for uC platforms.
 
+#### Python support
+
+Python 2.7, 3.4, 3.5 and 3.6 are tested and considered supported
+
+#### Platform support
+
+Linux and Mac OS X are considered supported. Windows is not supported (sorry!).
+
 ## Install from pip
 
 ```bash
@@ -87,7 +95,7 @@ True
 >>>
 >>> # Error handling happens through exceptions such as PJON.PJON_Connection_Lost
 >>> while True:
-...     ts.loop()
+...     packets_to_send, receive_status = ts.loop()
 Traceback (most recent call last):
     ...
 PJON_Connection_Lost

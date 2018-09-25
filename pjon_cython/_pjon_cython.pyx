@@ -65,20 +65,19 @@ cdef extern from "PJON.h":
         T strategy
         PJON()
         void set_id(uint8_t id)
-        void begin()
-        uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
-        void set_error(PJON_Error e)
-        uint16_t update()
-        uint16_t send_repeatedly(uint8_t id, const char *string, uint16_t length, uint32_t timing, uint8_t  header, uint16_t p_id, uint16_t requested_port)
-        uint16_t receive()
-        # void set_synchronous_acknowledge(uint8_t state)
-        uint16_t receive(uint32_t duration)
         uint8_t device_id()
+        void begin()
+        void set_error(PJON_Error e)
+        void set_receiver(PJON_Receiver r)
+        uint16_t update() except *
+        uint16_t receive() except *
+        # void set_synchronous_acknowledge(uint8_t state)
+        uint16_t receive(uint32_t duration) except *
         void set_custom_pointer(void *pointer)
         uint16_t get_packets_count(uint8_t device_id)
-        void set_receiver(PJON_Receiver r)
-        uint16_t send(uint8_t id, const char *string, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port)
-
+        uint16_t send(uint8_t id, const char *string, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port) except *
+        uint16_t send_repeatedly(uint8_t id, const char *string, uint16_t length, uint32_t timing, uint8_t  header, uint16_t p_id, uint16_t requested_port) except *
+        uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port) except *
 
 PJON_BROADCAST = _PJON_BROADCAST
 PJON_ACK = _PJON_ACK
@@ -91,22 +90,22 @@ PJON_MAX_PACKETS = _PJON_MAX_PACKETS
 LUDP_RESPONSE_TIMEOUT = _LUDP_RESPONSE_TIMEOUT
 PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH
 
-class PJON_Connection_Lost(Exception):
+class PJON_Connection_Lost(BaseException):
     pass
 
-class PJON_Packets_Buffer_Full(Exception):
+class PJON_Packets_Buffer_Full(BaseException):
     pass
 
-class PJON_Content_Too_Long(Exception):
+class PJON_Content_Too_Long(BaseException):
     pass
 
-class PJON_Id_Acquisition_Fail(Exception):
+class PJON_Id_Acquisition_Fail(BaseException):
     pass
 
-class PJON_Devices_Buffer_Full(Exception):
+class PJON_Devices_Buffer_Full(BaseException):
     pass
 
-class PJON_Send_Fail(Exception):
+class PJON_Send_Fail(BaseException):
     pass
 
 

@@ -30,6 +30,9 @@ if USE_CYTHON:
 else:
     source = 'cpp'
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name='pjon_cython',
     version='11.1.4',
@@ -38,8 +41,16 @@ setup(
     license='Apache 2.0',
     author='xlfe',
     description='Call the PJON C++ library directly from Python',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     setup_requires=setup_requires,
     test_suite = 'nose.collector',
+    classifiers = [
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'
+    ],
     cmdclass=cmdclass,
     ext_modules=[
         Extension(

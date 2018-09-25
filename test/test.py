@@ -98,7 +98,7 @@ def test_raises_connection_lost():
 
 def test_doesnt_raise_conn_lost():
     "Check that we don't get CONNECTION_LOST error"
-    connection_lost()
+    connection_lost(-1)
 
 @raises(PJON.PJON_Content_Too_Long)
 def test_raises_content_too_long():
