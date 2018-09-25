@@ -18,7 +18,6 @@ cdef extern from "PJON.h":
     const uint8_t PJON_NOT_ASSIGNED
     const uint8_t  PJON_NO_HEADER
     const uint16_t GUDP_DEFAULT_PORT
-    const uint16_t TS_TIME_IN
 
     const uint8_t PJON_CONNECTION_LOST
     const uint8_t PJON_PACKETS_BUFFER_FULL
