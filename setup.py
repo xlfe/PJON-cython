@@ -51,13 +51,19 @@ setup(
                 '-DPJON_INCLUDE_TS',
                 '-DPJON_INCLUDE_LUDP',
                 '-DPJON_INCLUDE_GUDP',
-                # '-DPJON_INCLUDE_PACKET_ID=true',
-                # '-DPJON_INCLUDE_ASYNC_ACK=true',
+                '-DPJON_INCLUDE_PACKET_ID=true',
+                '-DPJON_INCLUDE_ASYNC_ACK=true',
+                '-DPJON_MAX_PACKETS=100',
+                '-DPJON_PACKET_MAX_LENGTH=245',
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
+                '-Wno-logical-op-parentheses',
                 '-Wno-unused-variable'],
             include_dirs=['PJON/src'],
-        compiler_directives={'embedsignature': True}
+        compiler_directives={
+            'binding':True,
+            'embedsignature': True
+        }
         )
     ]
 )

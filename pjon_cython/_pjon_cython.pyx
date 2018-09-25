@@ -1,5 +1,5 @@
 import cython
-import time
+from libcpp cimport bool as bool_t
 
 ctypedef unsigned char uint8_t
 ctypedef unsigned short uint16_t
@@ -49,18 +49,18 @@ cdef extern from "PJON.h":
 
     cdef cppclass _localudp "LocalUDP":
         uint8_t get_max_attempts()
-        uint8_t can_start()
+        bool_t can_start()
 
     cdef cppclass _globaludp "GlobalUDP":
         uint16_t add_node(uint8_t remote_id, const uint8_t remote_ip[], uint16_t port_number)
         uint8_t get_max_attempts()
-        uint8_t can_start()
+        bool_t can_start()
 
     cdef cppclass _throughserial "ThroughSerial":
         void set_serial(PJON_SERIAL_TYPE serial_port)
         void set_baud_rate(uint32_t baud)
         uint8_t get_max_attempts()
-        uint8_t can_start()
+        bool_t can_start()
 
     cdef cppclass PJON[T]:
         T strategy
@@ -107,9 +107,14 @@ class PJON_Id_Acquisition_Fail(Exception):
 class PJON_Devices_Buffer_Full(Exception):
     pass
 
+class PJON_Send_Fail(Exception):
+    pass
+
 
 
 cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer) except *:
+
+    # raise Exception('Code: {} Data: {}'.format(code, data))
 
     if code == PJON_CONNECTION_LOST:
         raise PJON_Connection_Lost()
@@ -144,6 +149,7 @@ cdef void _globaludp_receiver(uint8_t *payload, uint16_t length, const PJON_Pack
     cdef GlobalUDP self = <object> _pi.custom_pointer
     self._receive(payload, length, make_packet_info_dict(_pi))
 
+
 cdef class GlobalUDP:
     """
     GlobalUDP Strategy - you must create a new class that inherits this one and add a receive function
@@ -163,7 +169,7 @@ cdef class GlobalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start() == 1
+        assert self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -193,17 +199,20 @@ cdef class GlobalUDP:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def reply(self, data):
-        self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
+
+    def send_repeatedly(self, device_id, data, timing):
+        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
         self.bus.strategy.add_node(device_id, ip_ints, port)
-
-    def send_repeatedly(self, device_id, data, timing):
-        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
 
 
 
@@ -229,7 +238,7 @@ cdef class LocalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start() == 1
+        assert self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -259,13 +268,16 @@ cdef class LocalUDP:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def reply(self, data):
-        self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def send_repeatedly(self, device_id, data, timing):
-        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
 
 
@@ -301,9 +313,7 @@ cdef class ThroughSerial:
         # self.bus.set_synchronous_acknowledge(0)
         self.bus.strategy.set_baud_rate(baud_rate)
         self.bus.begin()
-        # Sleep to avoid condition where can_start fails
-        time.sleep(1)
-        assert self.bus.strategy.can_start() == 1
+        assert self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -333,13 +343,15 @@ cdef class ThroughSerial:
             return to_be_sent, self.bus.receive()
 
     def send(self, device_id, data):
-        self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def reply(self, data):
-        self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+        if self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
     def send_repeatedly(self, device_id, data, timing):
-        self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
-
+        if self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST) == PJON_FAIL:
+            raise PJON_Send_Fail()
 
 
