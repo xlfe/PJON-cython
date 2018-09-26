@@ -18,9 +18,6 @@ cdef extern from "PJON.h":
     const uint8_t PJON_NOT_ASSIGNED
     const uint8_t  PJON_NO_HEADER
     const uint16_t GUDP_DEFAULT_PORT
-    const uint8_t PJON_CONNECTION_LOST
-    const uint8_t PJON_PACKETS_BUFFER_FULL
-    const uint8_t PJON_CONTENT_TOO_LONG
 
     const uint8_t PJON_CONNECTION_LOST
     const uint8_t PJON_PACKETS_BUFFER_FULL
@@ -166,7 +163,9 @@ cdef class GlobalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -236,7 +235,9 @@ cdef class LocalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -296,7 +297,7 @@ cdef class ThroughSerial:
     def __dealloc__(self):
         del self.bus
 
-    def __init__(self, device_id, port, baud_rate):
+    def __init__(self, device_id, port, baud_rate, port_timeout_s=10):
         self.bus.set_id(device_id)
         cdef int s = serialOpen(port, baud_rate)
 
@@ -307,7 +308,9 @@ cdef class ThroughSerial:
         # self.bus.set_synchronous_acknowledge(0)
         self.bus.strategy.set_baud_rate(baud_rate)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
