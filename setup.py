@@ -35,7 +35,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pjon_cython',
-    version='11.1.4',
+    version='11.1.5',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',

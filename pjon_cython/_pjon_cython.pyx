@@ -165,10 +165,13 @@ cdef class GlobalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
 
     def set_port(self, port):
         self.bus.strategy.set_port(port)
+        return self
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
@@ -234,13 +237,16 @@ cdef class LocalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
 
     def set_port(self, port):
         self.bus.strategy.set_port(port)
+        return self
 
     def _receive(self, payload, length, packet_info):
         self.receive(payload[:length], length, packet_info)
@@ -308,7 +314,9 @@ cdef class ThroughSerial:
         # self.bus.set_synchronous_acknowledge(0)
         self.bus.strategy.set_baud_rate(baud_rate)
         self.bus.begin()
-        assert self.bus.strategy.can_start()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
