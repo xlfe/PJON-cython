@@ -49,11 +49,13 @@ cdef extern from "PJON.h":
     cdef cppclass _localudp "LocalUDP":
         uint8_t get_max_attempts()
         bool_t can_start()
+        void set_port(uint16_t port)
 
     cdef cppclass _globaludp "GlobalUDP":
         uint16_t add_node(uint8_t remote_id, const uint8_t remote_ip[], uint16_t port_number)
         uint8_t get_max_attempts()
         bool_t can_start()
+        void set_port(uint16_t port)
 
     cdef cppclass _throughserial "ThroughSerial":
         void set_serial(PJON_SERIAL_TYPE serial_port)
@@ -165,6 +167,9 @@ cdef class GlobalUDP:
         self.bus.begin()
         assert self.bus.strategy.can_start()
 
+    def set_port(self, port):
+        self.bus.strategy.set_port(port)
+
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
 
@@ -233,6 +238,9 @@ cdef class LocalUDP:
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
+
+    def set_port(self, port):
+        self.bus.strategy.set_port(port)
 
     def _receive(self, payload, length, packet_info):
         self.receive(payload[:length], length, packet_info)

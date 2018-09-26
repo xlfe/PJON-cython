@@ -112,6 +112,16 @@ def test_doesnt_raise_content_too_long():
     l.send(1, b'b'*(PJON.PJON_PACKET_MAX_LENGTH-10))
 
 
+def test_set_port():
+    "Test set_port"
+
+    l = LocalUDP(100)
+    l.set_port(1234)
+    l.send(2, b'To port 1234')
+
+    g = GlobalUDP(200)
+    g.set_port(2345)
+    g.send(2, b'To port 2345')
 
 cython_class_methods = lambda _: [func for func in dir(_) if callable(getattr(_, func)) and not func.startswith("__")]
 
@@ -121,8 +131,8 @@ def test_base_functions():
     """
 
     classes = {
-        PJON.GlobalUDP : {'add_node'},
-        PJON.LocalUDP: {} ,
+        PJON.GlobalUDP : {'add_node', 'set_port'},
+        PJON.LocalUDP: {'set_port'},
         PJON.ThroughSerial : {}
     }
 
