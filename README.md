@@ -122,7 +122,7 @@ PJON_Connection_Lost
 <__main__.GlobalUDP object at 0x...>
 >>> #They return the class object, so you can "chain them"
 >>> del g
->>> pjon = GlobalUDP(100).set_port(8821)
+>>> pjon = GlobalUDP(100).set_port(8821).set_autoregistration(False)
 >>> pjon                                                            # doctest: +ELLIPSIS
 <__main__.GlobalUDP object at 0x...>
 

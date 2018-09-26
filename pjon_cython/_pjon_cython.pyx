@@ -56,6 +56,7 @@ cdef extern from "PJON.h":
         uint8_t get_max_attempts()
         bool_t can_start()
         void set_port(uint16_t port)
+        void set_autoregistration(bool_t enabled)
 
     cdef cppclass _throughserial "ThroughSerial":
         void set_serial(PJON_SERIAL_TYPE serial_port)
@@ -168,6 +169,10 @@ cdef class GlobalUDP:
 
     def set_port(self, port):
         self.bus.strategy.set_port(port)
+        return self
+
+    def set_autoregistration(self, enabled):
+        self.bus.strategy.set_autoregistration(1 if enabled else 0)
         return self
 
     def can_start(self):
