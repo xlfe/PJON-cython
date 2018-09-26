@@ -68,6 +68,9 @@ cdef extern from "PJON.h":
         T strategy
         PJON()
         void set_id(uint8_t id)
+        void set_packet_id(bool_t state)
+        void set_crc_32(bool_t state)
+        void set_asynchronous_acknowledge(bool_t state)
         uint8_t device_id()
         void begin()
         void set_error(PJON_Error e)
@@ -166,6 +169,18 @@ cdef class GlobalUDP:
     def __init__(self, device_id):
         self.bus.set_id(device_id)
         self.bus.begin()
+
+    def set_crc_32(self, enabled):
+        self.bus.set_crc_32(1 if enabled else 0)
+        return self
+
+    def set_packet_id(self, enabled):
+        self.bus.set_packet_id(1 if enabled else 0)
+        return self
+
+    def set_asynchronous_acknowledge(self, enabled):
+        self.bus.set_asynchronous_acknowledge(1 if enabled else 0)
+        return self
 
     def set_port(self, port):
         self.bus.strategy.set_port(port)
