@@ -35,7 +35,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pjon_cython',
-    version='11.1.4',
+    version='11.1.5',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',
@@ -59,11 +59,16 @@ setup(
             language="c++",
             extra_compile_args=[
                 '-std=c++11',
+                '-DPJON_INCLUDE_ANY',
                 '-DPJON_INCLUDE_TS',
                 '-DPJON_INCLUDE_LUDP',
                 '-DPJON_INCLUDE_GUDP',
-                # '-DPJON_INCLUDE_PACKET_ID=true',
-                # '-DPJON_INCLUDE_ASYNC_ACK=true',
+                '-DPJON_INCLUDE_PACKET_ID=true',
+                '-DPJON_INCLUDE_ASYNC_ACK=true',
+
+                # '-DTS_RESPONSE_TIME_OUT=5000',
+                # '-DTS_BYTE_TIME_OUT=5000',
+
                 '-DPJON_MAX_PACKETS=100',
                 '-DPJON_PACKET_MAX_LENGTH=245',
                 '-DLINUX',

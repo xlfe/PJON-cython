@@ -69,6 +69,8 @@ $(which python) setup.py nosetests --with-doctest --doctest-extension=md
 >>> #PJON constants are available too
 >>> receive_status == PJON.PJON_FAIL
 True
+>>> # When you're done with your PJON interface, you can cleanup the connection by deleting it
+>>> del g
 
 ```
 
@@ -102,5 +104,38 @@ True
 Traceback (most recent call last):
     ...
 PJON_Connection_Lost
+
+```
+
+
+## Setting configurable properties
+
+```python
+>>> import pjon_cython as PJON
+>>> class GlobalUDP(PJON.GlobalUDP):
+...     def receive(self, data, length, packet_info):
+...         print ("Recv ({}): {}".format(length, data))
+
+>>> # GlobalUDP and LocalUDP both support set_port to configure their UDP listening port
+>>> g = GlobalUDP(99, 8821)
+>>> del g
+>>> #They return the class object, so you can "chain them"
+>>> pjon = GlobalUDP(100,8821).set_autoregistration(False)
+>>> pjon                                                            # doctest: +ELLIPSIS
+<__main__.GlobalUDP object at 0x...>
+>>>
+>>> # These options affect packet overhead (in bytes)
+>>> pjon.packet_overhead()
+6
+>>> pjon.set_crc_32(True).packet_overhead()
+9
+>>> pjon.set_packet_id(True).packet_overhead()
+11
+>>> pjon.set_synchronous_acknowledge(True).packet_overhead()
+11
+>>> pjon.set_packet_id(False).set_asynchronous_acknowledge(False).packet_overhead()
+9
+>>> pjon.set_crc_32(False).include_sender_info(False).packet_overhead()
+5
 
 ```
