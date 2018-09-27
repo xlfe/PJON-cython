@@ -303,7 +303,7 @@ cdef class ThroughSerial(PJONBUS):
         self.s = serialOpen(port, baud_rate)
 
         if(int(self.s) < 0):
-            raise PJON_Unable_To_Create_Bus()
+            raise PJON_Unable_To_Create_Bus('Unable to open serial port')
 
         self.link.strategy.set_serial(self.s)
         self.link.strategy.set_baud_rate(baud_rate)
