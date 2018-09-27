@@ -785,8 +785,8 @@ static const char *__pyx_f[] = {
   "stringsource",
 };
 
-/* "pjon_cython/_pjon_cython.pyx":4
- * from libcpp cimport bool as bool_t
+/* "pjon_cython/_pjon_cython.pyx":5
+ * from os import close
  * 
  * ctypedef unsigned char uint8_t             # <<<<<<<<<<<<<<
  * ctypedef unsigned short uint16_t
@@ -794,7 +794,7 @@ static const char *__pyx_f[] = {
  */
 typedef unsigned char __pyx_t_11pjon_cython_12_pjon_cython_uint8_t;
 
-/* "pjon_cython/_pjon_cython.pyx":5
+/* "pjon_cython/_pjon_cython.pyx":6
  * 
  * ctypedef unsigned char uint8_t
  * ctypedef unsigned short uint16_t             # <<<<<<<<<<<<<<
@@ -803,7 +803,7 @@ typedef unsigned char __pyx_t_11pjon_cython_12_pjon_cython_uint8_t;
  */
 typedef unsigned short __pyx_t_11pjon_cython_12_pjon_cython_uint16_t;
 
-/* "pjon_cython/_pjon_cython.pyx":6
+/* "pjon_cython/_pjon_cython.pyx":7
  * ctypedef unsigned char uint8_t
  * ctypedef unsigned short uint16_t
  * ctypedef unsigned int uint32_t             # <<<<<<<<<<<<<<
@@ -812,7 +812,7 @@ typedef unsigned short __pyx_t_11pjon_cython_12_pjon_cython_uint16_t;
  */
 typedef unsigned int __pyx_t_11pjon_cython_12_pjon_cython_uint32_t;
 
-/* "pjon_cython/_pjon_cython.pyx":8
+/* "pjon_cython/_pjon_cython.pyx":9
  * ctypedef unsigned int uint32_t
  * 
  * ctypedef int PJON_SERIAL_TYPE             # <<<<<<<<<<<<<<
@@ -822,11 +822,12 @@ typedef unsigned int __pyx_t_11pjon_cython_12_pjon_cython_uint32_t;
 typedef int __pyx_t_11pjon_cython_12_pjon_cython_PJON_SERIAL_TYPE;
 
 /*--- Type declarations ---*/
+struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS;
 struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP;
 struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP;
 struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial;
 
-/* "pjon_cython/_pjon_cython.pyx":10
+/* "pjon_cython/_pjon_cython.pyx":11
  * ctypedef int PJON_SERIAL_TYPE
  * 
  * ctypedef void* PJON_Receiver             # <<<<<<<<<<<<<<
@@ -835,7 +836,7 @@ struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial;
  */
 typedef void *__pyx_t_11pjon_cython_12_pjon_cython_PJON_Receiver;
 
-/* "pjon_cython/_pjon_cython.pyx":11
+/* "pjon_cython/_pjon_cython.pyx":12
  * 
  * ctypedef void* PJON_Receiver
  * ctypedef void* PJON_Error             # <<<<<<<<<<<<<<
@@ -844,42 +845,56 @@ typedef void *__pyx_t_11pjon_cython_12_pjon_cython_PJON_Receiver;
  */
 typedef void *__pyx_t_11pjon_cython_12_pjon_cython_PJON_Error;
 
-/* "pjon_cython/_pjon_cython.pyx":149
+/* "pjon_cython/_pjon_cython.pyx":166
  * 
  * 
- * cdef class GlobalUDP:             # <<<<<<<<<<<<<<
- *     """
- *     GlobalUDP Strategy - you must create a new class that inherits this one and add a receive function
+ * cdef class PJONBUS:             # <<<<<<<<<<<<<<
+ *     cdef PJON[_any] *bus
+ * 
+ */
+struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS {
+  PyObject_HEAD
+  PJON<Any>  *bus;
+};
+
+
+/* "pjon_cython/_pjon_cython.pyx":243
+ * 
+ * 
+ * cdef class GlobalUDP(PJONBUS):             # <<<<<<<<<<<<<<
+ *     cdef StrategyLink[_globaludp] * link
+ * 
  */
 struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP {
-  PyObject_HEAD
-  PJON<GlobalUDP>  *bus;
+  struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS __pyx_base;
+  StrategyLink<GlobalUDP>  *link;
 };
 
 
-/* "pjon_cython/_pjon_cython.pyx":222
- *     self._receive(payload, length, make_packet_info_dict(_pi))
+/* "pjon_cython/_pjon_cython.pyx":269
  * 
- * cdef class LocalUDP:             # <<<<<<<<<<<<<<
- *     """
- *     LocalUDP Strategy - you must create a new class that inherits this one and add a receive function
+ * 
+ * cdef class LocalUDP(PJONBUS):             # <<<<<<<<<<<<<<
+ *     cdef StrategyLink[_localudp] * link
+ * 
  */
 struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP {
-  PyObject_HEAD
-  PJON<LocalUDP>  *bus;
+  struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS __pyx_base;
+  StrategyLink<LocalUDP>  *link;
 };
 
 
-/* "pjon_cython/_pjon_cython.pyx":290
- *     self._receive(payload, length, make_packet_info_dict(_pi))
+/* "pjon_cython/_pjon_cython.pyx":286
+ *             raise PJON_Unable_To_Create_Bus()
  * 
- * cdef class ThroughSerial:             # <<<<<<<<<<<<<<
- *     """
- *     ThroughSerial Strategy - you must create a new class that inherits this one and add a receive function
+ * cdef class ThroughSerial(PJONBUS):             # <<<<<<<<<<<<<<
+ *     cdef StrategyLink[_throughserial] *link
+ *     cdef int s
  */
 struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial {
-  PyObject_HEAD
-  PJON<ThroughSerial>  *bus;
+  struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS __pyx_base;
+  StrategyLink<ThroughSerial>  *link;
+  int s;
 };
 
 
@@ -1141,6 +1156,12 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
 /* SetupReduce.proto */
 static int __Pyx_setup_reduce(PyObject* type_obj);
 
+/* Import.proto */
+static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
+
+/* ImportFrom.proto */
+static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
+
 /* CalculateMetaclass.proto */
 static PyObject *__Pyx_CalculateMetaclass(PyTypeObject *metaclass, PyObject *bases);
 
@@ -1185,6 +1206,48 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_int(unsigned int value)
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_unsigned_char(unsigned char value);
 
+/* CppExceptionConversion.proto */
+#ifndef __Pyx_CppExn2PyErr
+#include <new>
+#include <typeinfo>
+#include <stdexcept>
+#include <ios>
+static void __Pyx_CppExn2PyErr() {
+  try {
+    if (PyErr_Occurred())
+      ; // let the latest Python exn pass through and ignore the current one
+    else
+      throw;
+  } catch (const std::bad_alloc& exn) {
+    PyErr_SetString(PyExc_MemoryError, exn.what());
+  } catch (const std::bad_cast& exn) {
+    PyErr_SetString(PyExc_TypeError, exn.what());
+  } catch (const std::bad_typeid& exn) {
+    PyErr_SetString(PyExc_TypeError, exn.what());
+  } catch (const std::domain_error& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::invalid_argument& exn) {
+    PyErr_SetString(PyExc_ValueError, exn.what());
+  } catch (const std::ios_base::failure& exn) {
+    PyErr_SetString(PyExc_IOError, exn.what());
+  } catch (const std::out_of_range& exn) {
+    PyErr_SetString(PyExc_IndexError, exn.what());
+  } catch (const std::overflow_error& exn) {
+    PyErr_SetString(PyExc_OverflowError, exn.what());
+  } catch (const std::range_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::underflow_error& exn) {
+    PyErr_SetString(PyExc_ArithmeticError, exn.what());
+  } catch (const std::exception& exn) {
+    PyErr_SetString(PyExc_RuntimeError, exn.what());
+  }
+  catch (...)
+  {
+    PyErr_SetString(PyExc_RuntimeError, "Unknown exception");
+  }
+}
+#endif
+
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
@@ -1192,10 +1255,10 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 static CYTHON_INLINE unsigned char __Pyx_PyInt_As_unsigned_char(PyObject *);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE unsigned short __Pyx_PyInt_As_unsigned_short(PyObject *);
+static CYTHON_INLINE unsigned int __Pyx_PyInt_As_unsigned_int(PyObject *);
 
 /* CIntFromPy.proto */
-static CYTHON_INLINE unsigned int __Pyx_PyInt_As_unsigned_int(PyObject *);
+static CYTHON_INLINE unsigned short __Pyx_PyInt_As_unsigned_short(PyObject *);
 
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
@@ -1231,14 +1294,13 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 /* Module declarations from 'libcpp' */
 
 /* Module declarations from 'pjon_cython._pjon_cython' */
+static PyTypeObject *__pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS = 0;
 static PyTypeObject *__pyx_ptype_11pjon_cython_12_pjon_cython_GlobalUDP = 0;
 static PyTypeObject *__pyx_ptype_11pjon_cython_12_pjon_cython_LocalUDP = 0;
 static PyTypeObject *__pyx_ptype_11pjon_cython_12_pjon_cython_ThroughSerial = 0;
 static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t, void *); /*proto*/
 static PyObject *__pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(struct PJON_Packet_Info const &); /*proto*/
-static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t, struct PJON_Packet_Info const &); /*proto*/
-static void __pyx_f_11pjon_cython_12_pjon_cython__localudp_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t, struct PJON_Packet_Info const &); /*proto*/
-static void __pyx_f_11pjon_cython_12_pjon_cython__through_serial_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t, struct PJON_Packet_Info const &); /*proto*/
+static void __pyx_f_11pjon_cython_12_pjon_cython__pjon_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t, struct PJON_Packet_Info const &); /*proto*/
 #define __Pyx_MODULE_NAME "pjon_cython._pjon_cython"
 extern int __pyx_module_is_main_pjon_cython___pjon_cython;
 int __pyx_module_is_main_pjon_cython___pjon_cython = 0;
@@ -1246,11 +1308,12 @@ int __pyx_module_is_main_pjon_cython___pjon_cython = 0;
 /* Implementation of 'pjon_cython._pjon_cython' */
 static PyObject *__pyx_builtin_BaseException;
 static PyObject *__pyx_builtin_NotImplementedError;
-static PyObject *__pyx_builtin_map;
 static PyObject *__pyx_builtin_TypeError;
-static const char __pyx_k__4[] = ".";
+static PyObject *__pyx_builtin_map;
+static const char __pyx_k__7[] = ".";
 static const char __pyx_k_id[] = "id";
 static const char __pyx_k_ip[] = "ip";
+static const char __pyx_k_os[] = "os";
 static const char __pyx_k_doc[] = "__doc__";
 static const char __pyx_k_map[] = "map";
 static const char __pyx_k_data[] = "data";
@@ -1258,8 +1321,10 @@ static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_port[] = "port";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_close[] = "close";
 static const char __pyx_k_split[] = "split";
 static const char __pyx_k_header[] = "header";
+static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_length[] = "length";
 static const char __pyx_k_module[] = "__module__";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -1304,10 +1369,9 @@ static const char __pyx_k_PJON_Devices_Buffer_Full[] = "PJON_Devices_Buffer_Full
 static const char __pyx_k_PJON_Id_Acquisition_Fail[] = "PJON_Id_Acquisition_Fail";
 static const char __pyx_k_PJON_Packets_Buffer_Full[] = "PJON_Packets_Buffer_Full";
 static const char __pyx_k_pjon_cython__pjon_cython[] = "pjon_cython._pjon_cython";
-static const char __pyx_k_Couldn_t_open_serial_port[] = "Couldn't open serial port";
+static const char __pyx_k_PJON_Unable_To_Create_Bus[] = "PJON_Unable_To_Create_Bus";
 static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
 static PyObject *__pyx_n_s_BaseException;
-static PyObject *__pyx_kp_s_Couldn_t_open_serial_port;
 static PyObject *__pyx_n_s_LUDP_RESPONSE_TIMEOUT;
 static PyObject *__pyx_n_s_NotImplementedError;
 static PyObject *__pyx_n_s_PJON_ACK;
@@ -1324,17 +1388,20 @@ static PyObject *__pyx_n_s_PJON_NAK;
 static PyObject *__pyx_n_s_PJON_PACKET_MAX_LENGTH;
 static PyObject *__pyx_n_s_PJON_Packets_Buffer_Full;
 static PyObject *__pyx_n_s_PJON_TO_BE_SENT;
+static PyObject *__pyx_n_s_PJON_Unable_To_Create_Bus;
 static PyObject *__pyx_n_s_TypeError;
-static PyObject *__pyx_kp_s__4;
+static PyObject *__pyx_kp_s__7;
 static PyObject *__pyx_n_s_add_node_locals_lambda;
 static PyObject *__pyx_n_s_baud_rate;
 static PyObject *__pyx_n_s_cline_in_traceback;
+static PyObject *__pyx_n_s_close;
 static PyObject *__pyx_n_s_data;
 static PyObject *__pyx_n_s_device_id;
 static PyObject *__pyx_n_s_doc;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_header;
 static PyObject *__pyx_n_s_id;
+static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_ip;
 static PyObject *__pyx_n_s_length;
 static PyObject *__pyx_n_s_main;
@@ -1343,6 +1410,7 @@ static PyObject *__pyx_n_s_metaclass;
 static PyObject *__pyx_n_s_module;
 static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_kp_s_no_default___reduce___due_to_non;
+static PyObject *__pyx_n_s_os;
 static PyObject *__pyx_n_s_packet_info;
 static PyObject *__pyx_n_s_payload;
 static PyObject *__pyx_n_s_pjon_cython__pjon_cython;
@@ -1364,70 +1432,61 @@ static PyObject *__pyx_n_s_split;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_timeout_us;
 static PyObject *__pyx_n_s_timing;
+static int __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static void __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_4packet_overhead(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_6set_synchronous_acknowledge(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_8set_asynchronous_acknowledge(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_10include_sender_info(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_12set_crc_32(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_14set_packet_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_16can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_18receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_20_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_22device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_24get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_26get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_28loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_timeout_us); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_30send(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_32reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_data); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_34send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static void __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_port); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_timeout_us); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
+static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_autoregistration(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_enabled); /* proto */
 static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v__); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_ip, PyObject *__pyx_v_port); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_30__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_32__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8add_node(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_ip, PyObject *__pyx_v_port); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static void __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_10set_port(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_port); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_16get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_18get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_20loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_timeout_us); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_22send(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_24reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_26send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_28__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_30__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
+static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static void __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port, PyObject *__pyx_v_baud_rate); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_16get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_18loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_timeout_us); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_20send(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_22reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_data); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_24send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_26__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_28__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4_fd(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
+static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port, PyObject *__pyx_v_baud_rate); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_GlobalUDP(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_LocalUDP(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_ThroughSerial(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_int_0;
 static PyObject *__pyx_k__2;
-static PyObject *__pyx_k__3;
-static PyObject *__pyx_k__8;
-static PyObject *__pyx_k__12;
+static PyObject *__pyx_k__5;
+static PyObject *__pyx_k__6;
+static PyObject *__pyx_k__11;
 static PyObject *__pyx_tuple_;
-static PyObject *__pyx_tuple__5;
-static PyObject *__pyx_tuple__6;
-static PyObject *__pyx_tuple__7;
+static PyObject *__pyx_tuple__3;
+static PyObject *__pyx_tuple__4;
+static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
-static PyObject *__pyx_tuple__11;
+static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__14;
 static PyObject *__pyx_tuple__15;
@@ -1435,9 +1494,11 @@ static PyObject *__pyx_tuple__16;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__19;
+static PyObject *__pyx_tuple__20;
+static PyObject *__pyx_tuple__21;
 /* Late includes */
 
-/* "pjon_cython/_pjon_cython.pyx":111
+/* "pjon_cython/_pjon_cython.pyx":128
  * 
  * 
  * cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer) except *:             # <<<<<<<<<<<<<<
@@ -1453,7 +1514,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("error_handler", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":115
+  /* "pjon_cython/_pjon_cython.pyx":132
  *     # raise Exception('Code: {} Data: {}'.format(code, data))
  * 
  *     if code == PJON_CONNECTION_LOST:             # <<<<<<<<<<<<<<
@@ -1463,14 +1524,14 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __pyx_t_1 = ((__pyx_v_code == PJON_CONNECTION_LOST) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":116
+    /* "pjon_cython/_pjon_cython.pyx":133
  * 
  *     if code == PJON_CONNECTION_LOST:
  *         raise PJON_Connection_Lost()             # <<<<<<<<<<<<<<
  * 
  *     if code == PJON_PACKETS_BUFFER_FULL:
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Connection_Lost); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Connection_Lost); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 133, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -1483,18 +1544,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 116, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 133, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 116, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 133, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 116, __pyx_L1_error)
+    __PYX_ERR(0, 133, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":115
+    /* "pjon_cython/_pjon_cython.pyx":132
  *     # raise Exception('Code: {} Data: {}'.format(code, data))
  * 
  *     if code == PJON_CONNECTION_LOST:             # <<<<<<<<<<<<<<
@@ -1503,7 +1564,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":118
+  /* "pjon_cython/_pjon_cython.pyx":135
  *         raise PJON_Connection_Lost()
  * 
  *     if code == PJON_PACKETS_BUFFER_FULL:             # <<<<<<<<<<<<<<
@@ -1513,14 +1574,14 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __pyx_t_1 = ((__pyx_v_code == PJON_PACKETS_BUFFER_FULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":119
+    /* "pjon_cython/_pjon_cython.pyx":136
  * 
  *     if code == PJON_PACKETS_BUFFER_FULL:
  *         raise PJON_Packets_Buffer_Full()             # <<<<<<<<<<<<<<
  * 
  *     if code == PJON_CONTENT_TOO_LONG:
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Packets_Buffer_Full); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Packets_Buffer_Full); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 136, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -1533,18 +1594,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 136, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 119, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 136, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 119, __pyx_L1_error)
+    __PYX_ERR(0, 136, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":118
+    /* "pjon_cython/_pjon_cython.pyx":135
  *         raise PJON_Connection_Lost()
  * 
  *     if code == PJON_PACKETS_BUFFER_FULL:             # <<<<<<<<<<<<<<
@@ -1553,7 +1614,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":121
+  /* "pjon_cython/_pjon_cython.pyx":138
  *         raise PJON_Packets_Buffer_Full()
  * 
  *     if code == PJON_CONTENT_TOO_LONG:             # <<<<<<<<<<<<<<
@@ -1563,14 +1624,14 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __pyx_t_1 = ((__pyx_v_code == PJON_CONTENT_TOO_LONG) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":122
+    /* "pjon_cython/_pjon_cython.pyx":139
  * 
  *     if code == PJON_CONTENT_TOO_LONG:
  *         raise PJON_Content_Too_Long()             # <<<<<<<<<<<<<<
  * 
  *     if code == PJON_DEVICES_BUFFER_FULL:
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Content_Too_Long); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Content_Too_Long); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 139, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -1583,18 +1644,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 122, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 122, __pyx_L1_error)
+    __PYX_ERR(0, 139, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":121
+    /* "pjon_cython/_pjon_cython.pyx":138
  *         raise PJON_Packets_Buffer_Full()
  * 
  *     if code == PJON_CONTENT_TOO_LONG:             # <<<<<<<<<<<<<<
@@ -1603,7 +1664,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":124
+  /* "pjon_cython/_pjon_cython.pyx":141
  *         raise PJON_Content_Too_Long()
  * 
  *     if code == PJON_DEVICES_BUFFER_FULL:             # <<<<<<<<<<<<<<
@@ -1613,14 +1674,14 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __pyx_t_1 = ((__pyx_v_code == PJON_DEVICES_BUFFER_FULL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":125
+    /* "pjon_cython/_pjon_cython.pyx":142
  * 
  *     if code == PJON_DEVICES_BUFFER_FULL:
  *         raise PJON_Devices_Buffer_Full()             # <<<<<<<<<<<<<<
  * 
  *     if code == PJON_ID_ACQUISITION_FAIL:
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Devices_Buffer_Full); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 125, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Devices_Buffer_Full); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 142, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -1633,18 +1694,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 125, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 125, __pyx_L1_error)
+    __PYX_ERR(0, 142, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":124
+    /* "pjon_cython/_pjon_cython.pyx":141
  *         raise PJON_Content_Too_Long()
  * 
  *     if code == PJON_DEVICES_BUFFER_FULL:             # <<<<<<<<<<<<<<
@@ -1653,7 +1714,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":127
+  /* "pjon_cython/_pjon_cython.pyx":144
  *         raise PJON_Devices_Buffer_Full()
  * 
  *     if code == PJON_ID_ACQUISITION_FAIL:             # <<<<<<<<<<<<<<
@@ -1663,14 +1724,14 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __pyx_t_1 = ((__pyx_v_code == PJON_ID_ACQUISITION_FAIL) != 0);
   if (unlikely(__pyx_t_1)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":128
+    /* "pjon_cython/_pjon_cython.pyx":145
  * 
  *     if code == PJON_ID_ACQUISITION_FAIL:
  *         raise PJON_Id_Acquisition_Fail()             # <<<<<<<<<<<<<<
  * 
  *     raise Exception("PJON Error Code Unknown")
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Id_Acquisition_Fail); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Id_Acquisition_Fail); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_4 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -1683,18 +1744,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
       }
     }
     if (__pyx_t_4) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else {
-      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 128, __pyx_L1_error)
+    __PYX_ERR(0, 145, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":127
+    /* "pjon_cython/_pjon_cython.pyx":144
  *         raise PJON_Devices_Buffer_Full()
  * 
  *     if code == PJON_ID_ACQUISITION_FAIL:             # <<<<<<<<<<<<<<
@@ -1703,20 +1764,20 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":130
+  /* "pjon_cython/_pjon_cython.pyx":147
  *         raise PJON_Id_Acquisition_Fail()
  * 
  *     raise Exception("PJON Error Code Unknown")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple_, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_Raise(__pyx_t_2, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __PYX_ERR(0, 130, __pyx_L1_error)
+  __PYX_ERR(0, 147, __pyx_L1_error)
 
-  /* "pjon_cython/_pjon_cython.pyx":111
+  /* "pjon_cython/_pjon_cython.pyx":128
  * 
  * 
  * cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer) except *:             # <<<<<<<<<<<<<<
@@ -1733,7 +1794,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython_error_handler(__pyx_t_11pjon_cy
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pjon_cython/_pjon_cython.pyx":133
+/* "pjon_cython/_pjon_cython.pyx":150
  * 
  * 
  * cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
@@ -1748,7 +1809,7 @@ static PyObject *__pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(stru
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("make_packet_info_dict", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":134
+  /* "pjon_cython/_pjon_cython.pyx":151
  * 
  * cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
  *     return dict(             # <<<<<<<<<<<<<<
@@ -1757,96 +1818,96 @@ static PyObject *__pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(stru
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "pjon_cython/_pjon_cython.pyx":135
+  /* "pjon_cython/_pjon_cython.pyx":152
  * cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
  *     return dict(
  *         header=_pi.header,             # <<<<<<<<<<<<<<
  *         id=_pi.id,
  *         receiver_id = _pi.receiver_id,
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 135, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.header); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 135, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.header); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_header, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_header, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":136
+  /* "pjon_cython/_pjon_cython.pyx":153
  *     return dict(
  *         header=_pi.header,
  *         id=_pi.id,             # <<<<<<<<<<<<<<
  *         receiver_id = _pi.receiver_id,
  *         receiver_bus_id =_pi.receiver_bus_id,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v__pi.id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 136, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v__pi.id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_id, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_id, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":137
+  /* "pjon_cython/_pjon_cython.pyx":154
  *         header=_pi.header,
  *         id=_pi.id,
  *         receiver_id = _pi.receiver_id,             # <<<<<<<<<<<<<<
  *         receiver_bus_id =_pi.receiver_bus_id,
  *         sender_id = _pi.sender_id,
  */
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.receiver_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 137, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.receiver_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_receiver_id, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_receiver_id, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":138
+  /* "pjon_cython/_pjon_cython.pyx":155
  *         id=_pi.id,
  *         receiver_id = _pi.receiver_id,
  *         receiver_bus_id =_pi.receiver_bus_id,             # <<<<<<<<<<<<<<
  *         sender_id = _pi.sender_id,
  *         sender_bus_id = _pi.sender_bus_id,
  */
-  __pyx_t_2 = __Pyx_PyObject_FromCString(__pyx_v__pi.receiver_bus_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 138, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_FromCString(__pyx_v__pi.receiver_bus_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 155, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_receiver_bus_id, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_receiver_bus_id, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":139
+  /* "pjon_cython/_pjon_cython.pyx":156
  *         receiver_id = _pi.receiver_id,
  *         receiver_bus_id =_pi.receiver_bus_id,
  *         sender_id = _pi.sender_id,             # <<<<<<<<<<<<<<
  *         sender_bus_id = _pi.sender_bus_id,
  *         port = _pi.port
  */
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.sender_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(__pyx_v__pi.sender_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 156, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_sender_id, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_sender_id, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":140
+  /* "pjon_cython/_pjon_cython.pyx":157
  *         receiver_bus_id =_pi.receiver_bus_id,
  *         sender_id = _pi.sender_id,
  *         sender_bus_id = _pi.sender_bus_id,             # <<<<<<<<<<<<<<
  *         port = _pi.port
  *     )
  */
-  __pyx_t_2 = __Pyx_PyObject_FromCString(__pyx_v__pi.sender_bus_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 140, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_FromCString(__pyx_v__pi.sender_bus_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_sender_bus_id, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_sender_bus_id, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":141
+  /* "pjon_cython/_pjon_cython.pyx":158
  *         sender_id = _pi.sender_id,
  *         sender_bus_id = _pi.sender_bus_id,
  *         port = _pi.port             # <<<<<<<<<<<<<<
  *     )
  * 
  */
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v__pi.port); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 141, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v__pi.port); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_port, __pyx_t_2) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_port, __pyx_t_2) < 0) __PYX_ERR(0, 152, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":133
+  /* "pjon_cython/_pjon_cython.pyx":150
  * 
  * 
  * cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
@@ -1866,16 +1927,16 @@ static PyObject *__pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(stru
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":144
+/* "pjon_cython/_pjon_cython.pyx":161
  *     )
  * 
- * cdef void _globaludp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef GlobalUDP self = <object> _pi.custom_pointer
+ * cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
+ *     cdef PJONBUS self = <object> _pi.custom_pointer
  *     self._receive(payload, length, make_packet_info_dict(_pi))
  */
 
-static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *__pyx_v_payload, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_length, struct PJON_Packet_Info const &__pyx_v__pi) {
-  struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self = 0;
+static void __pyx_f_11pjon_cython_12_pjon_cython__pjon_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *__pyx_v_payload, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_length, struct PJON_Packet_Info const &__pyx_v__pi) {
+  struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self = 0;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
@@ -1885,35 +1946,35 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
   PyObject *__pyx_t_6 = NULL;
   int __pyx_t_7;
   PyObject *__pyx_t_8 = NULL;
-  __Pyx_RefNannySetupContext("_globaludp_receiver", 0);
+  __Pyx_RefNannySetupContext("_pjon_receiver", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":145
+  /* "pjon_cython/_pjon_cython.pyx":162
  * 
- * cdef void _globaludp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef GlobalUDP self = <object> _pi.custom_pointer             # <<<<<<<<<<<<<<
+ * cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
+ *     cdef PJONBUS self = <object> _pi.custom_pointer             # <<<<<<<<<<<<<<
  *     self._receive(payload, length, make_packet_info_dict(_pi))
  * 
  */
-  if (!(likely(((((PyObject *)__pyx_v__pi.custom_pointer)) == Py_None) || likely(__Pyx_TypeTest(((PyObject *)__pyx_v__pi.custom_pointer), __pyx_ptype_11pjon_cython_12_pjon_cython_GlobalUDP))))) __PYX_ERR(0, 145, __pyx_L1_error)
+  if (!(likely(((((PyObject *)__pyx_v__pi.custom_pointer)) == Py_None) || likely(__Pyx_TypeTest(((PyObject *)__pyx_v__pi.custom_pointer), __pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS))))) __PYX_ERR(0, 162, __pyx_L1_error)
   __pyx_t_1 = ((PyObject *)__pyx_v__pi.custom_pointer);
   __Pyx_INCREF(__pyx_t_1);
-  __pyx_v_self = ((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_t_1);
+  __pyx_v_self = ((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":146
- * cdef void _globaludp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef GlobalUDP self = <object> _pi.custom_pointer
+  /* "pjon_cython/_pjon_cython.pyx":163
+ * cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
+ *     cdef PJONBUS self = <object> _pi.custom_pointer
  *     self._receive(payload, length, make_packet_info_dict(_pi))             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyBytes_FromCString(__pyx_v_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyBytes_FromCString(__pyx_v_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(__pyx_v__pi); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_5 = __pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(__pyx_v__pi); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 163, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   __pyx_t_7 = 0;
@@ -1930,7 +1991,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -1941,7 +2002,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -1950,7 +2011,7 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
   } else
   #endif
   {
-    __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 163, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (__pyx_t_6) {
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -1964,18 +2025,18 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
     __pyx_t_3 = 0;
     __pyx_t_4 = 0;
     __pyx_t_5 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 163, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":144
+  /* "pjon_cython/_pjon_cython.pyx":161
  *     )
  * 
- * cdef void _globaludp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef GlobalUDP self = <object> _pi.custom_pointer
+ * cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
+ *     cdef PJONBUS self = <object> _pi.custom_pointer
  *     self._receive(payload, length, make_packet_info_dict(_pi))
  */
 
@@ -1989,82 +2050,82 @@ static void __pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver(__pyx_t_11p
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("pjon_cython._pjon_cython._globaludp_receiver", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __Pyx_WriteUnraisable("pjon_cython._pjon_cython._pjon_receiver", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
   __Pyx_XDECREF((PyObject *)__pyx_v_self);
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pjon_cython/_pjon_cython.pyx":155
- *     cdef PJON[_globaludp] *bus
+/* "pjon_cython/_pjon_cython.pyx":169
+ *     cdef PJON[_any] *bus
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- *         self.bus = new PJON[_globaludp]()
+ *         self.bus = new PJON[_any]()
  *         self.bus.set_custom_pointer(<void*> self)
  */
 
 /* Python wrapper */
-static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__ (wrapper)", 0);
   if (unlikely(PyTuple_GET_SIZE(__pyx_args) > 0)) {
     __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 0, 0, PyTuple_GET_SIZE(__pyx_args)); return -1;}
   if (unlikely(__pyx_kwds) && unlikely(PyDict_Size(__pyx_kwds) > 0) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "__cinit__", 0))) return -1;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS___cinit__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static int __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":156
+  /* "pjon_cython/_pjon_cython.pyx":170
  * 
  *     def __cinit__(self):
- *         self.bus = new PJON[_globaludp]()             # <<<<<<<<<<<<<<
+ *         self.bus = new PJON[_any]()             # <<<<<<<<<<<<<<
  *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_globaludp_receiver)
+ *         self.bus.set_receiver(&_pjon_receiver)
  */
-  __pyx_v_self->bus = new PJON<GlobalUDP> ();
+  __pyx_v_self->bus = new PJON<Any> ();
 
-  /* "pjon_cython/_pjon_cython.pyx":157
+  /* "pjon_cython/_pjon_cython.pyx":171
  *     def __cinit__(self):
- *         self.bus = new PJON[_globaludp]()
+ *         self.bus = new PJON[_any]()
  *         self.bus.set_custom_pointer(<void*> self)             # <<<<<<<<<<<<<<
- *         self.bus.set_receiver(&_globaludp_receiver)
+ *         self.bus.set_receiver(&_pjon_receiver)
  *         self.bus.set_error(&error_handler)
  */
   __pyx_v_self->bus->set_custom_pointer(((void *)__pyx_v_self));
 
-  /* "pjon_cython/_pjon_cython.pyx":158
- *         self.bus = new PJON[_globaludp]()
+  /* "pjon_cython/_pjon_cython.pyx":172
+ *         self.bus = new PJON[_any]()
  *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_globaludp_receiver)             # <<<<<<<<<<<<<<
+ *         self.bus.set_receiver(&_pjon_receiver)             # <<<<<<<<<<<<<<
  *         self.bus.set_error(&error_handler)
- *         # self.bus.set_asynchronous_acknowledge(1)
- */
-  __pyx_v_self->bus->set_receiver((&__pyx_f_11pjon_cython_12_pjon_cython__globaludp_receiver));
-
-  /* "pjon_cython/_pjon_cython.pyx":159
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_globaludp_receiver)
- *         self.bus.set_error(&error_handler)             # <<<<<<<<<<<<<<
- *         # self.bus.set_asynchronous_acknowledge(1)
  * 
+ */
+  __pyx_v_self->bus->set_receiver((&__pyx_f_11pjon_cython_12_pjon_cython__pjon_receiver));
+
+  /* "pjon_cython/_pjon_cython.pyx":173
+ *         self.bus.set_custom_pointer(<void*> self)
+ *         self.bus.set_receiver(&_pjon_receiver)
+ *         self.bus.set_error(&error_handler)             # <<<<<<<<<<<<<<
+ * 
+ *     def __dealloc__(self):
  */
   __pyx_v_self->bus->set_error((&__pyx_f_11pjon_cython_12_pjon_cython_error_handler));
 
-  /* "pjon_cython/_pjon_cython.pyx":155
- *     cdef PJON[_globaludp] *bus
+  /* "pjon_cython/_pjon_cython.pyx":169
+ *     cdef PJON[_any] *bus
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- *         self.bus = new PJON[_globaludp]()
+ *         self.bus = new PJON[_any]()
  *         self.bus.set_custom_pointer(<void*> self)
  */
 
@@ -2074,8 +2135,8 @@ static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(struct __p
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":162
- *         # self.bus.set_asynchronous_acknowledge(1)
+/* "pjon_cython/_pjon_cython.pyx":175
+ *         self.bus.set_error(&error_handler)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         del self.bus
@@ -2083,31 +2144,31 @@ static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(struct __p
  */
 
 /* Python wrapper */
-static void __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__dealloc__(PyObject *__pyx_v_self) {
+static void __pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
+static void __pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_3__dealloc__(PyObject *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__dealloc__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_2__dealloc__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static void __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":163
+  /* "pjon_cython/_pjon_cython.pyx":176
  * 
  *     def __dealloc__(self):
  *         del self.bus             # <<<<<<<<<<<<<<
  * 
- *     def __init__(self, device_id):
+ *     def packet_overhead(self):
  */
   delete __pyx_v_self->bus;
 
-  /* "pjon_cython/_pjon_cython.pyx":162
- *         # self.bus.set_asynchronous_acknowledge(1)
+  /* "pjon_cython/_pjon_cython.pyx":175
+ *         self.bus.set_error(&error_handler)
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
  *         del self.bus
@@ -2118,148 +2179,406 @@ static void __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__dealloc__(struct
   __Pyx_RefNannyFinishContext();
 }
 
-/* "pjon_cython/_pjon_cython.pyx":165
+/* "pjon_cython/_pjon_cython.pyx":178
  *         del self.bus
  * 
- *     def __init__(self, device_id):             # <<<<<<<<<<<<<<
- *         self.bus.set_id(device_id)
- *         self.bus.begin()
+ *     def packet_overhead(self):             # <<<<<<<<<<<<<<
+ *         return self.bus.packet_overhead(PJON_NO_HEADER)
+ * 
  */
 
 /* Python wrapper */
-static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,0};
-    PyObject* values[1] = {0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 165, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-    }
-    __pyx_v_device_id = values[0];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 165, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return -1;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  __Pyx_RefNannySetupContext("__init__", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":166
- * 
- *     def __init__(self, device_id):
- *         self.bus.set_id(device_id)             # <<<<<<<<<<<<<<
- *         self.bus.begin()
- * 
- */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 166, __pyx_L1_error)
-  __pyx_v_self->bus->set_id(__pyx_t_1);
-
-  /* "pjon_cython/_pjon_cython.pyx":167
- *     def __init__(self, device_id):
- *         self.bus.set_id(device_id)
- *         self.bus.begin()             # <<<<<<<<<<<<<<
- * 
- *     def set_port(self, port):
- */
-  __pyx_v_self->bus->begin();
-
-  /* "pjon_cython/_pjon_cython.pyx":165
- *         del self.bus
- * 
- *     def __init__(self, device_id):             # <<<<<<<<<<<<<<
- *         self.bus.set_id(device_id)
- *         self.bus.begin()
- */
-
-  /* function exit code */
-  __pyx_r = 0;
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = -1;
-  __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":169
- *         self.bus.begin()
- * 
- *     def set_port(self, port):             # <<<<<<<<<<<<<<
- *         self.bus.strategy.set_port(port)
- *         return self
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_port(PyObject *__pyx_v_self, PyObject *__pyx_v_port); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_port(PyObject *__pyx_v_self, PyObject *__pyx_v_port) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_5packet_overhead(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_5packet_overhead(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_port (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), ((PyObject *)__pyx_v_port));
+  __Pyx_RefNannySetupContext("packet_overhead (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_4packet_overhead(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_port) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_4packet_overhead(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_1;
-  __Pyx_RefNannySetupContext("set_port", 0);
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("packet_overhead", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":170
+  /* "pjon_cython/_pjon_cython.pyx":179
  * 
- *     def set_port(self, port):
- *         self.bus.strategy.set_port(port)             # <<<<<<<<<<<<<<
+ *     def packet_overhead(self):
+ *         return self.bus.packet_overhead(PJON_NO_HEADER)             # <<<<<<<<<<<<<<
+ * 
+ *     def set_synchronous_acknowledge(self, enabled):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->packet_overhead(PJON_NO_HEADER)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":178
+ *         del self.bus
+ * 
+ *     def packet_overhead(self):             # <<<<<<<<<<<<<<
+ *         return self.bus.packet_overhead(PJON_NO_HEADER)
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.packet_overhead", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":181
+ *         return self.bus.packet_overhead(PJON_NO_HEADER)
+ * 
+ *     def set_synchronous_acknowledge(self, enabled):             # <<<<<<<<<<<<<<
+ *         "Acknowledge receipt of packets"
+ *         self.bus.set_synchronous_acknowledge(1 if enabled else 0)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_7set_synchronous_acknowledge(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static char __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_6set_synchronous_acknowledge[] = "Acknowledge receipt of packets";
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_7set_synchronous_acknowledge(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_synchronous_acknowledge (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_6set_synchronous_acknowledge(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_6set_synchronous_acknowledge(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("set_synchronous_acknowledge", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":183
+ *     def set_synchronous_acknowledge(self, enabled):
+ *         "Acknowledge receipt of packets"
+ *         self.bus.set_synchronous_acknowledge(1 if enabled else 0)             # <<<<<<<<<<<<<<
  *         return self
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_1 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 170, __pyx_L1_error)
-  __pyx_v_self->bus->strategy.set_port(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 183, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->bus->set_synchronous_acknowledge(__pyx_t_1);
 
-  /* "pjon_cython/_pjon_cython.pyx":171
- *     def set_port(self, port):
- *         self.bus.strategy.set_port(port)
+  /* "pjon_cython/_pjon_cython.pyx":184
+ *         "Acknowledge receipt of packets"
+ *         self.bus.set_synchronous_acknowledge(1 if enabled else 0)
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def set_asynchronous_acknowledge(self, enabled):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":181
+ *         return self.bus.packet_overhead(PJON_NO_HEADER)
+ * 
+ *     def set_synchronous_acknowledge(self, enabled):             # <<<<<<<<<<<<<<
+ *         "Acknowledge receipt of packets"
+ *         self.bus.set_synchronous_acknowledge(1 if enabled else 0)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.set_synchronous_acknowledge", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":186
+ *         return self
+ * 
+ *     def set_asynchronous_acknowledge(self, enabled):             # <<<<<<<<<<<<<<
+ *         "sync or async ack"
+ *         self.bus.set_asynchronous_acknowledge(1 if enabled else 0)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_9set_asynchronous_acknowledge(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static char __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_8set_asynchronous_acknowledge[] = "sync or async ack";
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_9set_asynchronous_acknowledge(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_asynchronous_acknowledge (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_8set_asynchronous_acknowledge(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_8set_asynchronous_acknowledge(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("set_asynchronous_acknowledge", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":188
+ *     def set_asynchronous_acknowledge(self, enabled):
+ *         "sync or async ack"
+ *         self.bus.set_asynchronous_acknowledge(1 if enabled else 0)             # <<<<<<<<<<<<<<
+ *         return self
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->bus->set_asynchronous_acknowledge(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":189
+ *         "sync or async ack"
+ *         self.bus.set_asynchronous_acknowledge(1 if enabled else 0)
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def include_sender_info(self, enabled):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":186
+ *         return self
+ * 
+ *     def set_asynchronous_acknowledge(self, enabled):             # <<<<<<<<<<<<<<
+ *         "sync or async ack"
+ *         self.bus.set_asynchronous_acknowledge(1 if enabled else 0)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.set_asynchronous_acknowledge", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":191
+ *         return self
+ * 
+ *     def include_sender_info(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.include_sender_info(1 if enabled else 0)
+ *         return self
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_11include_sender_info(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_11include_sender_info(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("include_sender_info (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_10include_sender_info(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_10include_sender_info(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("include_sender_info", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":192
+ * 
+ *     def include_sender_info(self, enabled):
+ *         self.bus.include_sender_info(1 if enabled else 0)             # <<<<<<<<<<<<<<
+ *         return self
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 192, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->bus->include_sender_info(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":193
+ *     def include_sender_info(self, enabled):
+ *         self.bus.include_sender_info(1 if enabled else 0)
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def set_crc_32(self, enabled):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":191
+ *         return self
+ * 
+ *     def include_sender_info(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.include_sender_info(1 if enabled else 0)
+ *         return self
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.include_sender_info", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":195
+ *         return self
+ * 
+ *     def set_crc_32(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.set_crc_32(1 if enabled else 0)
+ *         return self
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_13set_crc_32(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_13set_crc_32(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_crc_32 (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_12set_crc_32(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_12set_crc_32(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("set_crc_32", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":196
+ * 
+ *     def set_crc_32(self, enabled):
+ *         self.bus.set_crc_32(1 if enabled else 0)             # <<<<<<<<<<<<<<
+ *         return self
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 196, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->bus->set_crc_32(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":197
+ *     def set_crc_32(self, enabled):
+ *         self.bus.set_crc_32(1 if enabled else 0)
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def set_packet_id(self, enabled):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":195
+ *         return self
+ * 
+ *     def set_crc_32(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.set_crc_32(1 if enabled else 0)
+ *         return self
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.set_crc_32", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":199
+ *         return self
+ * 
+ *     def set_packet_id(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.set_packet_id(1 if enabled else 0)
+ *         return self
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_15set_packet_id(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_15set_packet_id(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_packet_id (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_14set_packet_id(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_14set_packet_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("set_packet_id", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":200
+ * 
+ *     def set_packet_id(self, enabled):
+ *         self.bus.set_packet_id(1 if enabled else 0)             # <<<<<<<<<<<<<<
+ *         return self
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->bus->set_packet_id(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":201
+ *     def set_packet_id(self, enabled):
+ *         self.bus.set_packet_id(1 if enabled else 0)
  *         return self             # <<<<<<<<<<<<<<
  * 
  *     def can_start(self):
@@ -2269,17 +2588,17 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(stru
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":169
- *         self.bus.begin()
+  /* "pjon_cython/_pjon_cython.pyx":199
+ *         return self
  * 
- *     def set_port(self, port):             # <<<<<<<<<<<<<<
- *         self.bus.strategy.set_port(port)
+ *     def set_packet_id(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.bus.set_packet_id(1 if enabled else 0)
  *         return self
  */
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.set_port", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.set_packet_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2287,7 +2606,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(stru
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":173
+/* "pjon_cython/_pjon_cython.pyx":203
  *         return self
  * 
  *     def can_start(self):             # <<<<<<<<<<<<<<
@@ -2296,25 +2615,25 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_port(stru
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_17can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_17can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("can_start (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_16can_start(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_16can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("can_start", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":174
+  /* "pjon_cython/_pjon_cython.pyx":204
  * 
  *     def can_start(self):
  *         return self.bus.strategy.can_start()             # <<<<<<<<<<<<<<
@@ -2322,13 +2641,13 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(str
  *     def receive(self, payload, length, packet_info):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->bus->strategy.can_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->bus->strategy.can_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 204, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":173
+  /* "pjon_cython/_pjon_cython.pyx":203
  *         return self
  * 
  *     def can_start(self):             # <<<<<<<<<<<<<<
@@ -2339,7 +2658,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(str
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.can_start", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.can_start", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2347,7 +2666,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(str
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":176
+/* "pjon_cython/_pjon_cython.pyx":206
  *         return self.bus.strategy.can_start()
  * 
  *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
@@ -2356,8 +2675,8 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8can_start(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_19receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_19receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   CYTHON_UNUSED PyObject *__pyx_v_payload = 0;
   CYTHON_UNUSED PyObject *__pyx_v_length = 0;
   CYTHON_UNUSED PyObject *__pyx_v_packet_info = 0;
@@ -2389,17 +2708,17 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11receive(PyOb
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 1); __PYX_ERR(0, 176, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 1); __PYX_ERR(0, 206, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 2); __PYX_ERR(0, 176, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 2); __PYX_ERR(0, 206, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "receive") < 0)) __PYX_ERR(0, 176, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "receive") < 0)) __PYX_ERR(0, 206, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -2414,39 +2733,39 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11receive(PyOb
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 176, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 206, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_18receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_18receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("receive", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":177
+  /* "pjon_cython/_pjon_cython.pyx":207
  * 
  *     def receive(self, payload, length, packet_info):
  *         raise NotImplementedError()             # <<<<<<<<<<<<<<
  * 
  *     def _receive(self, payload, length, packet_info):
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_builtin_NotImplementedError); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_builtin_NotImplementedError); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 207, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 177, __pyx_L1_error)
+  __PYX_ERR(0, 207, __pyx_L1_error)
 
-  /* "pjon_cython/_pjon_cython.pyx":176
+  /* "pjon_cython/_pjon_cython.pyx":206
  *         return self.bus.strategy.can_start()
  * 
  *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
@@ -2457,14 +2776,14 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10receive(CYTH
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":179
+/* "pjon_cython/_pjon_cython.pyx":209
  *         raise NotImplementedError()
  * 
  *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
@@ -2473,8 +2792,8 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10receive(CYTH
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_21_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_21_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_payload = 0;
   PyObject *__pyx_v_length = 0;
   PyObject *__pyx_v_packet_info = 0;
@@ -2506,17 +2825,17 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13_receive(PyO
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 1); __PYX_ERR(0, 179, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 1); __PYX_ERR(0, 209, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 2); __PYX_ERR(0, 179, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 2); __PYX_ERR(0, 209, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_receive") < 0)) __PYX_ERR(0, 179, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_receive") < 0)) __PYX_ERR(0, 209, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -2531,20 +2850,20 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13_receive(PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 179, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 209, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_20_receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_20_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -2555,16 +2874,16 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("_receive", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":180
+  /* "pjon_cython/_pjon_cython.pyx":210
  * 
  *     def _receive(self, payload, length, packet_info):
  *         self.receive(payload[:length], length, packet_info)             # <<<<<<<<<<<<<<
  * 
  *     def device_id(self):
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 180, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_payload, 0, 0, NULL, &__pyx_v_length, NULL, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 180, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_payload, 0, 0, NULL, &__pyx_v_length, NULL, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   __pyx_t_5 = 0;
@@ -2581,7 +2900,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2590,14 +2909,14 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   {
-    __pyx_t_6 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 210, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -2611,14 +2930,14 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
     __Pyx_GIVEREF(__pyx_v_packet_info);
     PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_5, __pyx_v_packet_info);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 180, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 210, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":179
+  /* "pjon_cython/_pjon_cython.pyx":209
  *         raise NotImplementedError()
  * 
  *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
@@ -2635,7 +2954,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2643,7 +2962,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":182
+/* "pjon_cython/_pjon_cython.pyx":212
  *         self.receive(payload[:length], length, packet_info)
  * 
  *     def device_id(self):             # <<<<<<<<<<<<<<
@@ -2652,25 +2971,25 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12_receive(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_23device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_23device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("device_id (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_22device_id(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_22device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("device_id", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":183
+  /* "pjon_cython/_pjon_cython.pyx":213
  * 
  *     def device_id(self):
  *         return self.bus.device_id()             # <<<<<<<<<<<<<<
@@ -2678,13 +2997,13 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(st
  *     def get_max_attempts(self):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->device_id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 183, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->device_id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":182
+  /* "pjon_cython/_pjon_cython.pyx":212
  *         self.receive(payload[:length], length, packet_info)
  * 
  *     def device_id(self):             # <<<<<<<<<<<<<<
@@ -2695,7 +3014,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(st
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.device_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.device_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2703,7 +3022,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(st
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":185
+/* "pjon_cython/_pjon_cython.pyx":215
  *         return self.bus.device_id()
  * 
  *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
@@ -2712,25 +3031,25 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_14device_id(st
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_17get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_17get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_25get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_25get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("get_max_attempts (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_attempts(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_24get_max_attempts(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_24get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_max_attempts", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":186
+  /* "pjon_cython/_pjon_cython.pyx":216
  * 
  *     def get_max_attempts(self):
  *         return self.bus.strategy.get_max_attempts()             # <<<<<<<<<<<<<<
@@ -2738,13 +3057,13 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_atte
  *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->strategy.get_max_attempts()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 186, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->strategy.get_max_attempts()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":185
+  /* "pjon_cython/_pjon_cython.pyx":215
  *         return self.bus.device_id()
  * 
  *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
@@ -2755,7 +3074,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_atte
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.get_max_attempts", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.get_max_attempts", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2763,7 +3082,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_atte
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":188
+/* "pjon_cython/_pjon_cython.pyx":218
  *         return self.bus.strategy.get_max_attempts()
  * 
  *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
@@ -2772,8 +3091,8 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_16get_max_atte
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_19get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_19get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_27get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_27get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -2800,7 +3119,7 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_19get_packets_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_packets_count") < 0)) __PYX_ERR(0, 188, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_packets_count") < 0)) __PYX_ERR(0, 218, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2814,27 +3133,27 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_19get_packets_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_packets_count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 188, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("get_packets_count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 218, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_count(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_26get_packets_count(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_device_id);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_26get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("get_packets_count", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":189
+  /* "pjon_cython/_pjon_cython.pyx":219
  * 
  *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
  *         return self.bus.get_packets_count(device_id)             # <<<<<<<<<<<<<<
@@ -2842,14 +3161,14 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_
  *     def loop(self, timeout_us=None):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 189, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v_self->bus->get_packets_count(__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 189, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 219, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v_self->bus->get_packets_count(__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":188
+  /* "pjon_cython/_pjon_cython.pyx":218
  *         return self.bus.strategy.get_max_attempts()
  * 
  *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
@@ -2860,7 +3179,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -2868,7 +3187,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":191
+/* "pjon_cython/_pjon_cython.pyx":221
  *         return self.bus.get_packets_count(device_id)
  * 
  *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
@@ -2877,9 +3196,9 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_18get_packets_
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_21loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop[] = "\n        :param self:\n        :param timeout_us: optional parameter - timeout in uS on receive() call\n        :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)\n        ";
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_21loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_29loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_28loop[] = "\n        :param self:\n        :param timeout_us: optional parameter - timeout in uS on receive() call\n        :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)\n        ";
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_29loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_timeout_us = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
@@ -2906,7 +3225,7 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_21loop(PyObjec
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "loop") < 0)) __PYX_ERR(0, 191, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "loop") < 0)) __PYX_ERR(0, 221, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -2920,20 +3239,20 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_21loop(PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("loop", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 191, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("loop", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 221, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_timeout_us);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_28loop(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_timeout_us);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_timeout_us) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_28loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_timeout_us) {
   __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_to_be_sent;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -2946,17 +3265,17 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("loop", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":197
+  /* "pjon_cython/_pjon_cython.pyx":227
  *         :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)
  *         """
  *         to_be_sent = self.bus.update()             # <<<<<<<<<<<<<<
  *         if timeout_us is not None:
  *             return to_be_sent, self.bus.receive(timeout_us)
  */
-  __pyx_t_1 = __pyx_v_self->bus->update(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 197, __pyx_L1_error)
+  __pyx_t_1 = __pyx_v_self->bus->update(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 227, __pyx_L1_error)
   __pyx_v_to_be_sent = __pyx_t_1;
 
-  /* "pjon_cython/_pjon_cython.pyx":198
+  /* "pjon_cython/_pjon_cython.pyx":228
  *         """
  *         to_be_sent = self.bus.update()
  *         if timeout_us is not None:             # <<<<<<<<<<<<<<
@@ -2967,7 +3286,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "pjon_cython/_pjon_cython.pyx":199
+    /* "pjon_cython/_pjon_cython.pyx":229
  *         to_be_sent = self.bus.update()
  *         if timeout_us is not None:
  *             return to_be_sent, self.bus.receive(timeout_us)             # <<<<<<<<<<<<<<
@@ -2975,13 +3294,13 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
  *             return to_be_sent, self.bus.receive()
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 199, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timeout_us); if (unlikely((__pyx_t_5 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 199, __pyx_L1_error)
-    __pyx_t_1 = __pyx_v_self->bus->receive(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 199, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 199, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timeout_us); if (unlikely((__pyx_t_5 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self->bus->receive(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 229, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 199, __pyx_L1_error)
+    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
@@ -2993,7 +3312,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
     __pyx_t_7 = 0;
     goto __pyx_L0;
 
-    /* "pjon_cython/_pjon_cython.pyx":198
+    /* "pjon_cython/_pjon_cython.pyx":228
  *         """
  *         to_be_sent = self.bus.update()
  *         if timeout_us is not None:             # <<<<<<<<<<<<<<
@@ -3002,7 +3321,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":201
+  /* "pjon_cython/_pjon_cython.pyx":231
  *             return to_be_sent, self.bus.receive(timeout_us)
  *         else:
  *             return to_be_sent, self.bus.receive()             # <<<<<<<<<<<<<<
@@ -3011,12 +3330,12 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_7 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 201, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 231, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __pyx_v_self->bus->receive(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 201, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 201, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self->bus->receive(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 231, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 231, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
+    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 231, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_7);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_7);
@@ -3029,7 +3348,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
     goto __pyx_L0;
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":191
+  /* "pjon_cython/_pjon_cython.pyx":221
  *         return self.bus.get_packets_count(device_id)
  * 
  *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
@@ -3042,7 +3361,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3050,7 +3369,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":203
+/* "pjon_cython/_pjon_cython.pyx":233
  *             return to_be_sent, self.bus.receive()
  * 
  *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
@@ -3059,8 +3378,8 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop(struct 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_23send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_23send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_31send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_31send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
   PyObject *__pyx_v_data = 0;
   PyObject *__pyx_r = 0;
@@ -3089,11 +3408,11 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_23send(PyObjec
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, 1); __PYX_ERR(0, 203, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, 1); __PYX_ERR(0, 233, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send") < 0)) __PYX_ERR(0, 203, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send") < 0)) __PYX_ERR(0, 233, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3106,20 +3425,20 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_23send(PyObjec
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 203, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 233, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_30send(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_30send(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
@@ -3129,7 +3448,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct 
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("send", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":204
+  /* "pjon_cython/_pjon_cython.pyx":234
  * 
  *     def send(self, device_id, data):
  *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
@@ -3137,17 +3456,17 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct 
  *     def reply(self, data):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 204, __pyx_L1_error)
-  __pyx_t_4 = __pyx_v_self->bus->send(__pyx_t_1, __pyx_t_2, __pyx_t_3, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_From_unsigned_short(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 204, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_4 = __pyx_v_self->bus->send(__pyx_t_1, __pyx_t_2, __pyx_t_3, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_unsigned_short(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 234, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_r = __pyx_t_5;
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":203
+  /* "pjon_cython/_pjon_cython.pyx":233
  *             return to_be_sent, self.bus.receive()
  * 
  *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
@@ -3158,7 +3477,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3166,7 +3485,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct 
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":206
+/* "pjon_cython/_pjon_cython.pyx":236
  *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
  * 
  *     def reply(self, data):             # <<<<<<<<<<<<<<
@@ -3175,19 +3494,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_22send(struct 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_25reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_25reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_33reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_33reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("reply (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), ((PyObject *)__pyx_v_data));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_32reply(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v_data));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_data) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_32reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_data) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   char const *__pyx_t_1;
@@ -3196,7 +3515,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("reply", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":207
+  /* "pjon_cython/_pjon_cython.pyx":237
  * 
  *     def reply(self, data):
  *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
@@ -3204,16 +3523,16 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct
  *     def send_repeatedly(self, device_id, data, timing):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 207, __pyx_L1_error)
-  __pyx_t_2 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 207, __pyx_L1_error)
-  __pyx_t_3 = __pyx_v_self->bus->reply(__pyx_t_1, __pyx_t_2, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 207, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 237, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 237, __pyx_L1_error)
+  __pyx_t_3 = __pyx_v_self->bus->reply(__pyx_t_1, __pyx_t_2, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 237, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":206
+  /* "pjon_cython/_pjon_cython.pyx":236
  *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
  * 
  *     def reply(self, data):             # <<<<<<<<<<<<<<
@@ -3224,7 +3543,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.reply", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.reply", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3232,7 +3551,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":209
+/* "pjon_cython/_pjon_cython.pyx":239
  *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
  * 
  *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
@@ -3241,8 +3560,8 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_24reply(struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_27send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_27send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_35send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_35send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
   PyObject *__pyx_v_data = 0;
   PyObject *__pyx_v_timing = 0;
@@ -3274,17 +3593,17 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_27send_repeate
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 1); __PYX_ERR(0, 209, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 1); __PYX_ERR(0, 239, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timing)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 2); __PYX_ERR(0, 209, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 2); __PYX_ERR(0, 239, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send_repeatedly") < 0)) __PYX_ERR(0, 209, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send_repeatedly") < 0)) __PYX_ERR(0, 239, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -3299,20 +3618,20 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_27send_repeate
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 209, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 239, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeatedly(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data, __pyx_v_timing);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_34send_repeatedly(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data, __pyx_v_timing);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_34send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
@@ -3323,26 +3642,26 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeate
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("send_repeatedly", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":210
+  /* "pjon_cython/_pjon_cython.pyx":240
  * 
  *     def send_repeatedly(self, device_id, data, timing):
  *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
  * 
- *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 210, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 210, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 210, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timing); if (unlikely((__pyx_t_4 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 210, __pyx_L1_error)
-  __pyx_t_5 = __pyx_v_self->bus->send_repeatedly(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 210, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 210, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timing); if (unlikely((__pyx_t_4 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_5 = __pyx_v_self->bus->send_repeatedly(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 240, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_r = __pyx_t_6;
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":209
+  /* "pjon_cython/_pjon_cython.pyx":239
  *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
  * 
  *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
@@ -3353,7 +3672,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeate
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -3361,17 +3680,505 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_26send_repeate
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":212
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
- *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+/* "(tree fragment)":1
+ * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_36__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__reduce_cython__", 0);
+
+  /* "(tree fragment)":2
+ * def __reduce_cython__(self):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
+ * def __setstate_cython__(self, __pyx_state):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ */
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __PYX_ERR(1, 2, __pyx_L1_error)
+
+  /* "(tree fragment)":1
+ * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.__reduce_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "(tree fragment)":3
+ * def __reduce_cython__(self):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_38__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_7PJONBUS_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__setstate_cython__", 0);
+
+  /* "(tree fragment)":4
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
+ */
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_Raise(__pyx_t_1, 0, 0, 0);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __PYX_ERR(1, 4, __pyx_L1_error)
+
+  /* "(tree fragment)":3
+ * def __reduce_cython__(self):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.PJONBUS.__setstate_cython__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":246
+ *     cdef StrategyLink[_globaludp] * link
+ * 
+ *     def __cinit__(self):             # <<<<<<<<<<<<<<
+ *         self.link = new StrategyLink[_globaludp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ */
+
+/* Python wrapper */
+static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__cinit__ (wrapper)", 0);
+  if (unlikely(PyTuple_GET_SIZE(__pyx_args) > 0)) {
+    __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 0, 0, PyTuple_GET_SIZE(__pyx_args)); return -1;}
+  if (unlikely(__pyx_kwds) && unlikely(PyDict_Size(__pyx_kwds) > 0) && unlikely(!__Pyx_CheckKeywordStrings(__pyx_kwds, "__cinit__", 0))) return -1;
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  StrategyLink<GlobalUDP>  *__pyx_t_1;
+  __Pyx_RefNannySetupContext("__cinit__", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":247
+ * 
+ *     def __cinit__(self):
+ *         self.link = new StrategyLink[_globaludp]()             # <<<<<<<<<<<<<<
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ * 
+ */
+  try {
+    __pyx_t_1 = new StrategyLink<GlobalUDP> ();
+  } catch(...) {
+    __Pyx_CppExn2PyErr();
+    __PYX_ERR(0, 247, __pyx_L1_error)
+  }
+  __pyx_v_self->link = __pyx_t_1;
+
+  /* "pjon_cython/_pjon_cython.pyx":248
+ *     def __cinit__(self):
+ *         self.link = new StrategyLink[_globaludp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)             # <<<<<<<<<<<<<<
+ * 
+ *     def __del__(self):
+ */
+  __pyx_v_self->__pyx_base.bus->strategy.set_link(((StrategyLinkBase *)__pyx_v_self->link));
+
+  /* "pjon_cython/_pjon_cython.pyx":246
+ *     cdef StrategyLink[_globaludp] * link
+ * 
+ *     def __cinit__(self):             # <<<<<<<<<<<<<<
+ *         self.link = new StrategyLink[_globaludp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ */
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":250
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ * 
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         del self.link
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__del__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__del__", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":251
+ * 
+ *     def __del__(self):
+ *         del self.link             # <<<<<<<<<<<<<<
+ * 
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):
+ */
+  delete __pyx_v_self->link;
+
+  /* "pjon_cython/_pjon_cython.pyx":250
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ * 
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         del self.link
+ * 
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":253
+ *         del self.link
+ * 
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
+ */
+
+/* Python wrapper */
+static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_device_id = 0;
+  PyObject *__pyx_v_port = 0;
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_port,0};
+    PyObject* values[2] = {0,0};
+    values[1] = __pyx_k__5;
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_port);
+          if (value) { values[1] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 253, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_device_id = values[0];
+    __pyx_v_port = values[1];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 253, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return -1;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_port);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
+  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_2;
+  int __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  __Pyx_RefNannySetupContext("__init__", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":254
+ * 
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):
+ *         self.bus.set_id(device_id)             # <<<<<<<<<<<<<<
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
+ */
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 254, __pyx_L1_error)
+  __pyx_v_self->__pyx_base.bus->set_id(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":255
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)             # <<<<<<<<<<<<<<
+ *         self.bus.begin()
+ *         if not self.link.can_start():
+ */
+  __pyx_t_2 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_2 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 255, __pyx_L1_error)
+  __pyx_v_self->link->strategy.set_port(__pyx_t_2);
+
+  /* "pjon_cython/_pjon_cython.pyx":256
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()             # <<<<<<<<<<<<<<
+ *         if not self.link.can_start():
+ *             raise PJON_Unable_To_Create_Bus()
+ */
+  __pyx_v_self->__pyx_base.bus->begin();
+
+  /* "pjon_cython/_pjon_cython.pyx":257
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
+ *         if not self.link.can_start():             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
+ * 
+ */
+  __pyx_t_3 = ((!(__pyx_v_self->link->can_start() != 0)) != 0);
+  if (unlikely(__pyx_t_3)) {
+
+    /* "pjon_cython/_pjon_cython.pyx":258
+ *         self.bus.begin()
+ *         if not self.link.can_start():
+ *             raise PJON_Unable_To_Create_Bus()             # <<<<<<<<<<<<<<
+ * 
+ *     def set_autoregistration(self, enabled):
+ */
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Unable_To_Create_Bus); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 258, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+      if (likely(__pyx_t_6)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_6);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_5, function);
+      }
+    }
+    if (__pyx_t_6) {
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 258, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    } else {
+      __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 258, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 258, __pyx_L1_error)
+
+    /* "pjon_cython/_pjon_cython.pyx":257
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
+ *         if not self.link.can_start():             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
+ * 
+ */
+  }
+
+  /* "pjon_cython/_pjon_cython.pyx":253
+ *         del self.link
+ * 
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
+ */
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":260
+ *             raise PJON_Unable_To_Create_Bus()
+ * 
+ *     def set_autoregistration(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.link.strategy.set_autoregistration(1 if enabled else 0)
+ *         return self
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_autoregistration(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_autoregistration(PyObject *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_autoregistration (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_autoregistration(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), ((PyObject *)__pyx_v_enabled));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_6set_autoregistration(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_enabled) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  bool __pyx_t_1;
+  int __pyx_t_2;
+  __Pyx_RefNannySetupContext("set_autoregistration", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":261
+ * 
+ *     def set_autoregistration(self, enabled):
+ *         self.link.strategy.set_autoregistration(1 if enabled else 0)             # <<<<<<<<<<<<<<
+ *         return self
+ * 
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_enabled); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 261, __pyx_L1_error)
+  if (__pyx_t_2) {
+    __pyx_t_1 = 1;
+  } else {
+    __pyx_t_1 = 0;
+  }
+  __pyx_v_self->link->strategy.set_autoregistration(__pyx_t_1);
+
+  /* "pjon_cython/_pjon_cython.pyx":262
+ *     def set_autoregistration(self, enabled):
+ *         self.link.strategy.set_autoregistration(1 if enabled else 0)
+ *         return self             # <<<<<<<<<<<<<<
+ * 
+ *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __pyx_r = ((PyObject *)__pyx_v_self);
+  goto __pyx_L0;
+
+  /* "pjon_cython/_pjon_cython.pyx":260
+ *             raise PJON_Unable_To_Create_Bus()
+ * 
+ *     def set_autoregistration(self, enabled):             # <<<<<<<<<<<<<<
+ *         self.link.strategy.set_autoregistration(1 if enabled else 0)
+ *         return self
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.set_autoregistration", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":264
+ *         return self
+ * 
+ *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9add_node(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9add_node(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
   PyObject *__pyx_v_ip = 0;
   PyObject *__pyx_v_port = 0;
@@ -3381,7 +4188,7 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyO
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_ip,&__pyx_n_s_port,0};
     PyObject* values[3] = {0,0,0};
-    values[2] = __pyx_k__3;
+    values[2] = __pyx_k__6;
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -3404,7 +4211,7 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyO
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ip)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("add_node", 0, 2, 3, 1); __PYX_ERR(0, 212, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("add_node", 0, 2, 3, 1); __PYX_ERR(0, 264, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -3414,7 +4221,7 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyO
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_node") < 0)) __PYX_ERR(0, 212, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "add_node") < 0)) __PYX_ERR(0, 264, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -3432,24 +4239,24 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node(PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("add_node", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 212, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("add_node", 0, 2, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 264, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pjon_cython._pjon_cython.GlobalUDP.add_node", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_ip, __pyx_v_port);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8add_node(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_ip, __pyx_v_port);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":213
+/* "pjon_cython/_pjon_cython.pyx":265
  * 
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))             # <<<<<<<<<<<<<<
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
  * 
  */
 
@@ -3473,7 +4280,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("lambda", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v__); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_v__); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -3490,15 +4297,15 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":212
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+/* "pjon_cython/_pjon_cython.pyx":264
+ *         return self
  * 
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
  */
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_ip, PyObject *__pyx_v_port) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_8add_node(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_ip, PyObject *__pyx_v_port) {
   PyObject *__pyx_v_ip_ints = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -3510,21 +4317,21 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(str
   __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_6;
   __Pyx_RefNannySetupContext("add_node", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":213
+  /* "pjon_cython/_pjon_cython.pyx":265
  * 
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))             # <<<<<<<<<<<<<<
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
  * 
  */
-  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_11pjon_cython_12_pjon_cython_9GlobalUDP_8add_node_lambda, 0, __pyx_n_s_add_node_locals_lambda, NULL, __pyx_n_s_pjon_cython__pjon_cython, __pyx_d, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CyFunction_NewEx(&__pyx_mdef_11pjon_cython_12_pjon_cython_9GlobalUDP_8add_node_lambda, 0, __pyx_n_s_add_node_locals_lambda, NULL, __pyx_n_s_pjon_cython__pjon_cython, __pyx_d, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ip, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ip, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
@@ -3532,33 +4339,33 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(str
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_3);
   __pyx_t_1 = 0;
   __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_map, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_map, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyByteArray_Type)), __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyByteArray_Type)), __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 265, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_ip_ints = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":214
+  /* "pjon_cython/_pjon_cython.pyx":266
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
- *         self.bus.strategy.add_node(device_id, ip_ints, port)             # <<<<<<<<<<<<<<
+ *         self.link.strategy.add_node(device_id, ip_ints, port)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_4 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_4 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyObject_AsUString(__pyx_v_ip_ints); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_6 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
-  (void)(__pyx_v_self->bus->strategy.add_node(__pyx_t_4, __pyx_t_5, __pyx_t_6));
+  __pyx_t_4 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_4 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_AsUString(__pyx_v_ip_ints); if (unlikely((!__pyx_t_5) && PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_6 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L1_error)
+  (void)(__pyx_v_self->link->strategy.add_node(__pyx_t_4, __pyx_t_5, __pyx_t_6));
 
-  /* "pjon_cython/_pjon_cython.pyx":212
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+  /* "pjon_cython/_pjon_cython.pyx":264
+ *         return self
  * 
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
  */
 
   /* function exit code */
@@ -3584,19 +4391,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_28add_node(str
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_31__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_31__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_30__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_30__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_10__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3608,7 +4415,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_30__reduce_cyt
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3638,19 +4445,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_30__reduce_cyt
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_33__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_33__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_32__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_32__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_12__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3661,7 +4468,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_32__setstate_c
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -3684,141 +4491,12 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_9GlobalUDP_32__setstate_c
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":218
- * 
- * 
- * cdef void _localudp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef LocalUDP self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- */
-
-static void __pyx_f_11pjon_cython_12_pjon_cython__localudp_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *__pyx_v_payload, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_length, struct PJON_Packet_Info const &__pyx_v__pi) {
-  struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self = 0;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  __Pyx_RefNannySetupContext("_localudp_receiver", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":219
- * 
- * cdef void _localudp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef LocalUDP self = <object> _pi.custom_pointer             # <<<<<<<<<<<<<<
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- * 
- */
-  if (!(likely(((((PyObject *)__pyx_v__pi.custom_pointer)) == Py_None) || likely(__Pyx_TypeTest(((PyObject *)__pyx_v__pi.custom_pointer), __pyx_ptype_11pjon_cython_12_pjon_cython_LocalUDP))))) __PYX_ERR(0, 219, __pyx_L1_error)
-  __pyx_t_1 = ((PyObject *)__pyx_v__pi.custom_pointer);
-  __Pyx_INCREF(__pyx_t_1);
-  __pyx_v_self = ((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":220
- * cdef void _localudp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef LocalUDP self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))             # <<<<<<<<<<<<<<
- * 
- * cdef class LocalUDP:
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyBytes_FromCString(__pyx_v_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(__pyx_v__pi); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  __pyx_t_7 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-      __pyx_t_7 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    if (__pyx_t_6) {
-      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, __pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_t_5);
-    __pyx_t_3 = 0;
-    __pyx_t_4 = 0;
-    __pyx_t_5 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":218
- * 
- * 
- * cdef void _localudp_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef LocalUDP self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("pjon_cython._pjon_cython._localudp_receiver", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_XDECREF((PyObject *)__pyx_v_self);
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "pjon_cython/_pjon_cython.pyx":228
- *     cdef PJON[_localudp] *bus
+/* "pjon_cython/_pjon_cython.pyx":272
+ *     cdef StrategyLink[_localudp] * link
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- *         self.bus = new PJON[_localudp]()
- *         self.bus.set_custom_pointer(<void*> self)
+ *         self.link = new StrategyLink[_localudp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  */
 
 /* Python wrapper */
@@ -3840,710 +4518,128 @@ static int __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_1__cinit__(PyObject *
 static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
+  StrategyLink<LocalUDP>  *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":229
+  /* "pjon_cython/_pjon_cython.pyx":273
  * 
  *     def __cinit__(self):
- *         self.bus = new PJON[_localudp]()             # <<<<<<<<<<<<<<
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_localudp_receiver)
+ *         self.link = new StrategyLink[_localudp]()             # <<<<<<<<<<<<<<
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ * 
  */
-  __pyx_v_self->bus = new PJON<LocalUDP> ();
+  try {
+    __pyx_t_1 = new StrategyLink<LocalUDP> ();
+  } catch(...) {
+    __Pyx_CppExn2PyErr();
+    __PYX_ERR(0, 273, __pyx_L1_error)
+  }
+  __pyx_v_self->link = __pyx_t_1;
 
-  /* "pjon_cython/_pjon_cython.pyx":230
+  /* "pjon_cython/_pjon_cython.pyx":274
  *     def __cinit__(self):
- *         self.bus = new PJON[_localudp]()
- *         self.bus.set_custom_pointer(<void*> self)             # <<<<<<<<<<<<<<
- *         self.bus.set_receiver(&_localudp_receiver)
- *         self.bus.set_error(&error_handler)
- */
-  __pyx_v_self->bus->set_custom_pointer(((void *)__pyx_v_self));
-
-  /* "pjon_cython/_pjon_cython.pyx":231
- *         self.bus = new PJON[_localudp]()
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_localudp_receiver)             # <<<<<<<<<<<<<<
- *         self.bus.set_error(&error_handler)
+ *         self.link = new StrategyLink[_localudp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)             # <<<<<<<<<<<<<<
  * 
+ *     def __del__(self):
  */
-  __pyx_v_self->bus->set_receiver((&__pyx_f_11pjon_cython_12_pjon_cython__localudp_receiver));
+  __pyx_v_self->__pyx_base.bus->strategy.set_link(((StrategyLinkBase *)__pyx_v_self->link));
 
-  /* "pjon_cython/_pjon_cython.pyx":232
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_localudp_receiver)
- *         self.bus.set_error(&error_handler)             # <<<<<<<<<<<<<<
- * 
- *     def __dealloc__(self):
- */
-  __pyx_v_self->bus->set_error((&__pyx_f_11pjon_cython_12_pjon_cython_error_handler));
-
-  /* "pjon_cython/_pjon_cython.pyx":228
- *     cdef PJON[_localudp] *bus
+  /* "pjon_cython/_pjon_cython.pyx":272
+ *     cdef StrategyLink[_localudp] * link
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- *         self.bus = new PJON[_localudp]()
- *         self.bus.set_custom_pointer(<void*> self)
- */
-
-  /* function exit code */
-  __pyx_r = 0;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":234
- *         self.bus.set_error(&error_handler)
- * 
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.bus
- * 
- */
-
-/* Python wrapper */
-static void __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__dealloc__(PyObject *__pyx_v_self) {
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__dealloc__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-}
-
-static void __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":235
- * 
- *     def __dealloc__(self):
- *         del self.bus             # <<<<<<<<<<<<<<
- * 
- *     def __init__(self, device_id):
- */
-  delete __pyx_v_self->bus;
-
-  /* "pjon_cython/_pjon_cython.pyx":234
- *         self.bus.set_error(&error_handler)
- * 
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.bus
- * 
- */
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "pjon_cython/_pjon_cython.pyx":237
- *         del self.bus
- * 
- *     def __init__(self, device_id):             # <<<<<<<<<<<<<<
- *         self.bus.set_id(device_id)
- *         self.bus.begin()
- */
-
-/* Python wrapper */
-static int __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,0};
-    PyObject* values[1] = {0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 237, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-    }
-    __pyx_v_device_id = values[0];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 237, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return -1;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_device_id);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id) {
-  int __pyx_r;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  __Pyx_RefNannySetupContext("__init__", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":238
- * 
- *     def __init__(self, device_id):
- *         self.bus.set_id(device_id)             # <<<<<<<<<<<<<<
- *         self.bus.begin()
- * 
- */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 238, __pyx_L1_error)
-  __pyx_v_self->bus->set_id(__pyx_t_1);
-
-  /* "pjon_cython/_pjon_cython.pyx":239
- *     def __init__(self, device_id):
- *         self.bus.set_id(device_id)
- *         self.bus.begin()             # <<<<<<<<<<<<<<
- * 
- *     def can_start(self):
- */
-  __pyx_v_self->bus->begin();
-
-  /* "pjon_cython/_pjon_cython.pyx":237
- *         del self.bus
- * 
- *     def __init__(self, device_id):             # <<<<<<<<<<<<<<
- *         self.bus.set_id(device_id)
- *         self.bus.begin()
+ *         self.link = new StrategyLink[_localudp]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  */
 
   /* function exit code */
   __pyx_r = 0;
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":241
- *         self.bus.begin()
+/* "pjon_cython/_pjon_cython.pyx":276
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  * 
- *     def can_start(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.can_start()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("can_start (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6can_start(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("can_start", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":242
- * 
- *     def can_start(self):
- *         return self.bus.strategy.can_start()             # <<<<<<<<<<<<<<
- * 
- *     def receive(self, payload, length, packet_info):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->bus->strategy.can_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 242, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":241
- *         self.bus.begin()
- * 
- *     def can_start(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.can_start()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.can_start", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":244
- *         return self.bus.strategy.can_start()
- * 
- *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         raise NotImplementedError()
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         del self.link
  * 
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  CYTHON_UNUSED PyObject *__pyx_v_payload = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_length = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_packet_info = 0;
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("receive (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_payload,&__pyx_n_s_length,&__pyx_n_s_packet_info,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_payload)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 1); __PYX_ERR(0, 244, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 2); __PYX_ERR(0, 244, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "receive") < 0)) __PYX_ERR(0, 244, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_payload = values[0];
-    __pyx_v_length = values[1];
-    __pyx_v_packet_info = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 244, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
+  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__del__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("receive", 0);
+  __Pyx_RefNannySetupContext("__del__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":245
+  /* "pjon_cython/_pjon_cython.pyx":277
  * 
- *     def receive(self, payload, length, packet_info):
- *         raise NotImplementedError()             # <<<<<<<<<<<<<<
+ *     def __del__(self):
+ *         del self.link             # <<<<<<<<<<<<<<
  * 
- *     def set_port(self, port):
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_builtin_NotImplementedError); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 245, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_Raise(__pyx_t_1, 0, 0, 0);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 245, __pyx_L1_error)
+  delete __pyx_v_self->link;
 
-  /* "pjon_cython/_pjon_cython.pyx":244
- *         return self.bus.strategy.can_start()
+  /* "pjon_cython/_pjon_cython.pyx":276
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  * 
- *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         raise NotImplementedError()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":247
- *         raise NotImplementedError()
- * 
- *     def set_port(self, port):             # <<<<<<<<<<<<<<
- *         self.bus.strategy.set_port(port)
- *         return self
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_11set_port(PyObject *__pyx_v_self, PyObject *__pyx_v_port); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_11set_port(PyObject *__pyx_v_self, PyObject *__pyx_v_port) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_port (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_10set_port(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), ((PyObject *)__pyx_v_port));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_10set_port(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_port) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_1;
-  __Pyx_RefNannySetupContext("set_port", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":248
- * 
- *     def set_port(self, port):
- *         self.bus.strategy.set_port(port)             # <<<<<<<<<<<<<<
- *         return self
- * 
- */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_1 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 248, __pyx_L1_error)
-  __pyx_v_self->bus->strategy.set_port(__pyx_t_1);
-
-  /* "pjon_cython/_pjon_cython.pyx":249
- *     def set_port(self, port):
- *         self.bus.strategy.set_port(port)
- *         return self             # <<<<<<<<<<<<<<
- * 
- *     def _receive(self, payload, length, packet_info):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(((PyObject *)__pyx_v_self));
-  __pyx_r = ((PyObject *)__pyx_v_self);
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":247
- *         raise NotImplementedError()
- * 
- *     def set_port(self, port):             # <<<<<<<<<<<<<<
- *         self.bus.strategy.set_port(port)
- *         return self
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.set_port", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":251
- *         return self
- * 
- *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         self.receive(payload[:length], length, packet_info)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_payload = 0;
-  PyObject *__pyx_v_length = 0;
-  PyObject *__pyx_v_packet_info = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("_receive (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_payload,&__pyx_n_s_length,&__pyx_n_s_packet_info,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_payload)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 1); __PYX_ERR(0, 251, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 2); __PYX_ERR(0, 251, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_receive") < 0)) __PYX_ERR(0, 251, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_payload = values[0];
-    __pyx_v_length = values[1];
-    __pyx_v_packet_info = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 251, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_12_receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("_receive", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":252
- * 
- *     def _receive(self, payload, length, packet_info):
- *         self.receive(payload[:length], length, packet_info)             # <<<<<<<<<<<<<<
- * 
- *     def device_id(self):
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_payload, 0, 0, NULL, &__pyx_v_length, NULL, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = NULL;
-  __pyx_t_5 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-      __pyx_t_5 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_6 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (__pyx_t_4) {
-      __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_5, __pyx_t_3);
-    __Pyx_INCREF(__pyx_v_length);
-    __Pyx_GIVEREF(__pyx_v_length);
-    PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_length);
-    __Pyx_INCREF(__pyx_v_packet_info);
-    __Pyx_GIVEREF(__pyx_v_packet_info);
-    PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_5, __pyx_v_packet_info);
-    __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 252, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":251
- *         return self
- * 
- *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         self.receive(payload[:length], length, packet_info)
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         del self.link
  * 
  */
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":254
- *         self.receive(payload[:length], length, packet_info)
+/* "pjon_cython/_pjon_cython.pyx":279
+ *         del self.link
  * 
- *     def device_id(self):             # <<<<<<<<<<<<<<
- *         return self.bus.device_id()
- * 
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("device_id (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_14device_id(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("device_id", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":255
- * 
- *     def device_id(self):
- *         return self.bus.device_id()             # <<<<<<<<<<<<<<
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->device_id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 255, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":254
- *         self.receive(payload[:length], length, packet_info)
- * 
- *     def device_id(self):             # <<<<<<<<<<<<<<
- *         return self.bus.device_id()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.device_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":257
- *         return self.bus.device_id()
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_17get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_17get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_r = 0;
+  PyObject *__pyx_v_port = 0;
+  int __pyx_r;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_packets_count (wrapper)", 0);
+  __Pyx_RefNannySetupContext("__init__ (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,0};
-    PyObject* values[1] = {0};
-    values[0] = __pyx_k__8;
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_port,0};
+    PyObject* values[2] = {0,0};
+    values[1] = __pyx_k__11;
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
         case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
         CYTHON_FALLTHROUGH;
         case  0: break;
@@ -4552,629 +4648,153 @@ static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_17get_packets_c
       kw_args = PyDict_Size(__pyx_kwds);
       switch (pos_args) {
         case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
         if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id);
-          if (value) { values[0] = value; kw_args--; }
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_port);
+          if (value) { values[1] = value; kw_args--; }
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_packets_count") < 0)) __PYX_ERR(0, 257, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 279, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
         CYTHON_FALLTHROUGH;
-        case  0: break;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
         default: goto __pyx_L5_argtuple_error;
       }
     }
     __pyx_v_device_id = values[0];
+    __pyx_v_port = values[1];
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_packets_count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 257, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 279, __pyx_L3_error)
   __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
-  return NULL;
+  return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_16get_packets_count(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_device_id);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_port);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_16get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id) {
-  PyObject *__pyx_r = NULL;
+static int __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port) {
+  int __pyx_r;
   __Pyx_RefNannyDeclarations
   __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
-  __Pyx_RefNannySetupContext("get_packets_count", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":258
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
- *         return self.bus.get_packets_count(device_id)             # <<<<<<<<<<<<<<
- * 
- *     def get_max_attempts(self):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 258, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v_self->bus->get_packets_count(__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":257
- *         return self.bus.device_id()
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":260
- *         return self.bus.get_packets_count(device_id)
- * 
- *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.get_max_attempts()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_19get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_19get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_max_attempts (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_18get_max_attempts(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_18get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("get_max_attempts", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":261
- * 
- *     def get_max_attempts(self):
- *         return self.bus.strategy.get_max_attempts()             # <<<<<<<<<<<<<<
- * 
- *     def loop(self, timeout_us=None):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->strategy.get_max_attempts()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 261, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":260
- *         return self.bus.get_packets_count(device_id)
- * 
- *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.get_max_attempts()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.get_max_attempts", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":263
- *         return self.bus.strategy.get_max_attempts()
- * 
- *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
- *         """
- *         :param self:
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_21loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11pjon_cython_12_pjon_cython_8LocalUDP_20loop[] = "\n        :param self:\n        :param timeout_us: optional parameter - timeout in uS on receive() call\n        :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)\n        ";
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_21loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_timeout_us = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("loop (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_timeout_us,0};
-    PyObject* values[1] = {0};
-    values[0] = ((PyObject *)Py_None);
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timeout_us);
-          if (value) { values[0] = value; kw_args--; }
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "loop") < 0)) __PYX_ERR(0, 263, __pyx_L3_error)
-      }
-    } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-    }
-    __pyx_v_timeout_us = values[0];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("loop", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 263, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_20loop(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_timeout_us);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_20loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_timeout_us) {
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_to_be_sent;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_1;
-  int __pyx_t_2;
+  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_2;
   int __pyx_t_3;
   PyObject *__pyx_t_4 = NULL;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  __Pyx_RefNannySetupContext("loop", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":269
- *         :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)
- *         """
- *         to_be_sent = self.bus.update()             # <<<<<<<<<<<<<<
- *         if timeout_us is not None:
- *             return to_be_sent, self.bus.receive(timeout_us)
- */
-  __pyx_t_1 = __pyx_v_self->bus->update(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 269, __pyx_L1_error)
-  __pyx_v_to_be_sent = __pyx_t_1;
-
-  /* "pjon_cython/_pjon_cython.pyx":270
- *         """
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:             # <<<<<<<<<<<<<<
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- */
-  __pyx_t_2 = (__pyx_v_timeout_us != Py_None);
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (__pyx_t_3) {
-
-    /* "pjon_cython/_pjon_cython.pyx":271
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:
- *             return to_be_sent, self.bus.receive(timeout_us)             # <<<<<<<<<<<<<<
- *         else:
- *             return to_be_sent, self.bus.receive()
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 271, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timeout_us); if (unlikely((__pyx_t_5 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 271, __pyx_L1_error)
-    __pyx_t_1 = __pyx_v_self->bus->receive(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 271, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 271, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 271, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_6);
-    __pyx_t_4 = 0;
-    __pyx_t_6 = 0;
-    __pyx_r = __pyx_t_7;
-    __pyx_t_7 = 0;
-    goto __pyx_L0;
-
-    /* "pjon_cython/_pjon_cython.pyx":270
- *         """
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:             # <<<<<<<<<<<<<<
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- */
-  }
-
-  /* "pjon_cython/_pjon_cython.pyx":273
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- *             return to_be_sent, self.bus.receive()             # <<<<<<<<<<<<<<
- * 
- *     def send(self, device_id, data):
- */
-  /*else*/ {
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_7 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 273, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __pyx_v_self->bus->receive(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 273, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 273, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 273, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_7);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_6);
-    __pyx_t_7 = 0;
-    __pyx_t_6 = 0;
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
-    goto __pyx_L0;
-  }
-
-  /* "pjon_cython/_pjon_cython.pyx":263
- *         return self.bus.strategy.get_max_attempts()
- * 
- *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
- *         """
- *         :param self:
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":275
- *             return to_be_sent, self.bus.receive()
- * 
- *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_23send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_23send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("send (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_data,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, 1); __PYX_ERR(0, 275, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send") < 0)) __PYX_ERR(0, 275, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_device_id = values[0];
-    __pyx_v_data = values[1];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 275, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_22send(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_22send(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  char const *__pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
-  __Pyx_RefNannySetupContext("send", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":276
- * 
- *     def send(self, device_id, data):
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- *     def reply(self, data):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 276, __pyx_L1_error)
-  __pyx_t_4 = __pyx_v_self->bus->send(__pyx_t_1, __pyx_t_2, __pyx_t_3, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_From_unsigned_short(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 276, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_r = __pyx_t_5;
-  __pyx_t_5 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":275
- *             return to_be_sent, self.bus.receive()
- * 
- *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":278
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def reply(self, data):             # <<<<<<<<<<<<<<
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_25reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_25reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("reply (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_24reply(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), ((PyObject *)__pyx_v_data));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_24reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  char const *__pyx_t_1;
-  Py_ssize_t __pyx_t_2;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("reply", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":279
- * 
- *     def reply(self, data):
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- *     def send_repeatedly(self, device_id, data, timing):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
-  __pyx_t_2 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 279, __pyx_L1_error)
-  __pyx_t_3 = __pyx_v_self->bus->reply(__pyx_t_1, __pyx_t_2, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 279, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_r = __pyx_t_4;
-  __pyx_t_4 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":278
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def reply(self, data):             # <<<<<<<<<<<<<<
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.reply", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":281
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_27send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_27send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_timing = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("send_repeatedly (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_data,&__pyx_n_s_timing,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 1); __PYX_ERR(0, 281, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timing)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 2); __PYX_ERR(0, 281, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send_repeatedly") < 0)) __PYX_ERR(0, 281, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_device_id = values[0];
-    __pyx_v_data = values[1];
-    __pyx_v_timing = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 281, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_26send_repeatedly(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data, __pyx_v_timing);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_26send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  char const *__pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_4;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_5;
   PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("send_repeatedly", 0);
+  __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":282
+  /* "pjon_cython/_pjon_cython.pyx":280
  * 
- *     def send_repeatedly(self, device_id, data, timing):
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- * 
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):
+ *         self.bus.set_id(device_id)             # <<<<<<<<<<<<<<
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
  */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 282, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timing); if (unlikely((__pyx_t_4 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
-  __pyx_t_5 = __pyx_v_self->bus->send_repeatedly(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 282, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 282, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_r = __pyx_t_6;
-  __pyx_t_6 = 0;
-  goto __pyx_L0;
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 280, __pyx_L1_error)
+  __pyx_v_self->__pyx_base.bus->set_id(__pyx_t_1);
 
   /* "pjon_cython/_pjon_cython.pyx":281
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)             # <<<<<<<<<<<<<<
+ *         self.bus.begin()
+ *         if not self.link.can_start():
+ */
+  __pyx_t_2 = __Pyx_PyInt_As_unsigned_short(__pyx_v_port); if (unlikely((__pyx_t_2 == (unsigned short)-1) && PyErr_Occurred())) __PYX_ERR(0, 281, __pyx_L1_error)
+  __pyx_v_self->link->strategy.set_port(__pyx_t_2);
+
+  /* "pjon_cython/_pjon_cython.pyx":282
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()             # <<<<<<<<<<<<<<
+ *         if not self.link.can_start():
+ *             raise PJON_Unable_To_Create_Bus()
+ */
+  __pyx_v_self->__pyx_base.bus->begin();
+
+  /* "pjon_cython/_pjon_cython.pyx":283
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
+ *         if not self.link.can_start():             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
  * 
- *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+ */
+  __pyx_t_3 = ((!(__pyx_v_self->link->can_start() != 0)) != 0);
+  if (unlikely(__pyx_t_3)) {
+
+    /* "pjon_cython/_pjon_cython.pyx":284
+ *         self.bus.begin()
+ *         if not self.link.can_start():
+ *             raise PJON_Unable_To_Create_Bus()             # <<<<<<<<<<<<<<
  * 
+ * cdef class ThroughSerial(PJONBUS):
+ */
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Unable_To_Create_Bus); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 284, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+      __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_5);
+      if (likely(__pyx_t_6)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_6);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_5, function);
+      }
+    }
+    if (__pyx_t_6) {
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    } else {
+      __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 284, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_Raise(__pyx_t_4, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __PYX_ERR(0, 284, __pyx_L1_error)
+
+    /* "pjon_cython/_pjon_cython.pyx":283
+ *         self.link.strategy.set_port(port)
+ *         self.bus.begin()
+ *         if not self.link.can_start():             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
+ * 
+ */
+  }
+
+  /* "pjon_cython/_pjon_cython.pyx":279
+ *         del self.link
+ * 
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
  */
 
   /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
   __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.LocalUDP.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
   __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
@@ -5186,19 +4806,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_26send_repeated
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_29__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_29__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_28__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_28__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_6__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5210,7 +4830,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_28__reduce_cyth
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -5240,19 +4860,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_28__reduce_cyth
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_31__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_31__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_30__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_30__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_8__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -5263,7 +4883,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_30__setstate_cy
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -5286,141 +4906,12 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_8LocalUDP_30__setstate_cy
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":286
- * 
- * 
- * cdef void _through_serial_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef ThroughSerial self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- */
-
-static void __pyx_f_11pjon_cython_12_pjon_cython__through_serial_receiver(__pyx_t_11pjon_cython_12_pjon_cython_uint8_t *__pyx_v_payload, __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_length, struct PJON_Packet_Info const &__pyx_v__pi) {
-  struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self = 0;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  int __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  __Pyx_RefNannySetupContext("_through_serial_receiver", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":287
- * 
- * cdef void _through_serial_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef ThroughSerial self = <object> _pi.custom_pointer             # <<<<<<<<<<<<<<
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- * 
- */
-  if (!(likely(((((PyObject *)__pyx_v__pi.custom_pointer)) == Py_None) || likely(__Pyx_TypeTest(((PyObject *)__pyx_v__pi.custom_pointer), __pyx_ptype_11pjon_cython_12_pjon_cython_ThroughSerial))))) __PYX_ERR(0, 287, __pyx_L1_error)
-  __pyx_t_1 = ((PyObject *)__pyx_v__pi.custom_pointer);
-  __Pyx_INCREF(__pyx_t_1);
-  __pyx_v_self = ((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":288
- * cdef void _through_serial_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
- *     cdef ThroughSerial self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))             # <<<<<<<<<<<<<<
- * 
- * cdef class ThroughSerial:
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyBytes_FromCString(__pyx_v_payload); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_length); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __pyx_f_11pjon_cython_12_pjon_cython_make_packet_info_dict(__pyx_v__pi); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = NULL;
-  __pyx_t_7 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_6)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_6);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-      __pyx_t_7 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_6, __pyx_t_3, __pyx_t_4, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 3+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_8 = PyTuple_New(3+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_8);
-    if (__pyx_t_6) {
-      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_8, 0+__pyx_t_7, __pyx_t_3);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, __pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_8, 2+__pyx_t_7, __pyx_t_5);
-    __pyx_t_3 = 0;
-    __pyx_t_4 = 0;
-    __pyx_t_5 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":286
- * 
- * 
- * cdef void _through_serial_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):             # <<<<<<<<<<<<<<
- *     cdef ThroughSerial self = <object> _pi.custom_pointer
- *     self._receive(payload, length, make_packet_info_dict(_pi))
- */
-
-  /* function exit code */
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_WriteUnraisable("pjon_cython._pjon_cython._through_serial_receiver", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
-  __pyx_L0:;
-  __Pyx_XDECREF((PyObject *)__pyx_v_self);
-  __Pyx_RefNannyFinishContext();
-}
-
-/* "pjon_cython/_pjon_cython.pyx":296
- *     cdef PJON[_throughserial] *bus
+/* "pjon_cython/_pjon_cython.pyx":290
+ *     cdef int s
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- * 
- *         self.bus = new PJON[_throughserial]()
+ *         self.link = new StrategyLink[_throughserial]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  */
 
 /* Python wrapper */
@@ -5442,113 +4933,258 @@ static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_1__cinit__(PyOb
 static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial___cinit__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
+  StrategyLink<ThroughSerial>  *__pyx_t_1;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":298
+  /* "pjon_cython/_pjon_cython.pyx":291
+ * 
  *     def __cinit__(self):
- * 
- *         self.bus = new PJON[_throughserial]()             # <<<<<<<<<<<<<<
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_through_serial_receiver)
- */
-  __pyx_v_self->bus = new PJON<ThroughSerial> ();
-
-  /* "pjon_cython/_pjon_cython.pyx":299
- * 
- *         self.bus = new PJON[_throughserial]()
- *         self.bus.set_custom_pointer(<void*> self)             # <<<<<<<<<<<<<<
- *         self.bus.set_receiver(&_through_serial_receiver)
- *         self.bus.set_error(&error_handler)
- */
-  __pyx_v_self->bus->set_custom_pointer(((void *)__pyx_v_self));
-
-  /* "pjon_cython/_pjon_cython.pyx":300
- *         self.bus = new PJON[_throughserial]()
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_through_serial_receiver)             # <<<<<<<<<<<<<<
- *         self.bus.set_error(&error_handler)
+ *         self.link = new StrategyLink[_throughserial]()             # <<<<<<<<<<<<<<
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  * 
  */
-  __pyx_v_self->bus->set_receiver((&__pyx_f_11pjon_cython_12_pjon_cython__through_serial_receiver));
+  try {
+    __pyx_t_1 = new StrategyLink<ThroughSerial> ();
+  } catch(...) {
+    __Pyx_CppExn2PyErr();
+    __PYX_ERR(0, 291, __pyx_L1_error)
+  }
+  __pyx_v_self->link = __pyx_t_1;
 
-  /* "pjon_cython/_pjon_cython.pyx":301
- *         self.bus.set_custom_pointer(<void*> self)
- *         self.bus.set_receiver(&_through_serial_receiver)
- *         self.bus.set_error(&error_handler)             # <<<<<<<<<<<<<<
+  /* "pjon_cython/_pjon_cython.pyx":292
+ *     def __cinit__(self):
+ *         self.link = new StrategyLink[_throughserial]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)             # <<<<<<<<<<<<<<
  * 
- *     def __dealloc__(self):
+ *     def __del__(self):
  */
-  __pyx_v_self->bus->set_error((&__pyx_f_11pjon_cython_12_pjon_cython_error_handler));
+  __pyx_v_self->__pyx_base.bus->strategy.set_link(((StrategyLinkBase *)__pyx_v_self->link));
 
-  /* "pjon_cython/_pjon_cython.pyx":296
- *     cdef PJON[_throughserial] *bus
+  /* "pjon_cython/_pjon_cython.pyx":290
+ *     cdef int s
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
- * 
- *         self.bus = new PJON[_throughserial]()
+ *         self.link = new StrategyLink[_throughserial]()
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  */
 
   /* function exit code */
   __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":303
- *         self.bus.set_error(&error_handler)
+/* "pjon_cython/_pjon_cython.pyx":294
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
  * 
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.bus
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         if self.s > 0:
+ *             close(self.s)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__del__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__del__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__del__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  __Pyx_RefNannySetupContext("__del__", 0);
+
+  /* "pjon_cython/_pjon_cython.pyx":295
+ * 
+ *     def __del__(self):
+ *         if self.s > 0:             # <<<<<<<<<<<<<<
+ *             close(self.s)
+ * 
+ */
+  __pyx_t_1 = ((__pyx_v_self->s > 0) != 0);
+  if (__pyx_t_1) {
+
+    /* "pjon_cython/_pjon_cython.pyx":296
+ *     def __del__(self):
+ *         if self.s > 0:
+ *             close(self.s)             # <<<<<<<<<<<<<<
+ * 
+ *     def _fd(self):
+ */
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_close); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_3, function);
+      }
+    }
+    if (!__pyx_t_5) {
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_GOTREF(__pyx_t_2);
+    } else {
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
+        __Pyx_GIVEREF(__pyx_t_4);
+        PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
+        __pyx_t_4 = 0;
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      }
+    }
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+    /* "pjon_cython/_pjon_cython.pyx":295
+ * 
+ *     def __del__(self):
+ *         if self.s > 0:             # <<<<<<<<<<<<<<
+ *             close(self.s)
+ * 
+ */
+  }
+
+  /* "pjon_cython/_pjon_cython.pyx":294
+ *         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+ * 
+ *     def __del__(self):             # <<<<<<<<<<<<<<
+ *         if self.s > 0:
+ *             close(self.s)
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.__del__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "pjon_cython/_pjon_cython.pyx":298
+ *             close(self.s)
+ * 
+ *     def _fd(self):             # <<<<<<<<<<<<<<
+ *         return self.s
  * 
  */
 
 /* Python wrapper */
-static void __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__dealloc__(PyObject *__pyx_v_self); /*proto*/
-static void __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__dealloc__(PyObject *__pyx_v_self) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5_fd(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5_fd(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__ (wrapper)", 0);
-  __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__dealloc__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("_fd (wrapper)", 0);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4_fd(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
+  return __pyx_r;
 }
 
-static void __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_2__dealloc__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4_fd(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__dealloc__", 0);
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("_fd", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":304
+  /* "pjon_cython/_pjon_cython.pyx":299
  * 
- *     def __dealloc__(self):
- *         del self.bus             # <<<<<<<<<<<<<<
+ *     def _fd(self):
+ *         return self.s             # <<<<<<<<<<<<<<
  * 
  *     def __init__(self, device_id, port, baud_rate):
  */
-  delete __pyx_v_self->bus;
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_self->s); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
 
-  /* "pjon_cython/_pjon_cython.pyx":303
- *         self.bus.set_error(&error_handler)
+  /* "pjon_cython/_pjon_cython.pyx":298
+ *             close(self.s)
  * 
- *     def __dealloc__(self):             # <<<<<<<<<<<<<<
- *         del self.bus
+ *     def _fd(self):             # <<<<<<<<<<<<<<
+ *         return self.s
  * 
  */
 
   /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial._fd", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
+  return __pyx_r;
 }
 
-/* "pjon_cython/_pjon_cython.pyx":306
- *         del self.bus
+/* "pjon_cython/_pjon_cython.pyx":301
+ *         return self.s
  * 
  *     def __init__(self, device_id, port, baud_rate):             # <<<<<<<<<<<<<<
  *         self.bus.set_id(device_id)
- *         cdef int s = serialOpen(port, baud_rate)
+ *         self.s = serialOpen(port, baud_rate)
  */
 
 /* Python wrapper */
-static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_device_id = 0;
   PyObject *__pyx_v_port = 0;
   PyObject *__pyx_v_baud_rate = 0;
@@ -5580,17 +5216,17 @@ static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5__init__(PyObj
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_port)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); __PYX_ERR(0, 306, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 1); __PYX_ERR(0, 301, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_baud_rate)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); __PYX_ERR(0, 306, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, 2); __PYX_ERR(0, 301, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 306, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 301, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -5605,21 +5241,20 @@ static int __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5__init__(PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 306, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 301, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_device_id, __pyx_v_port, __pyx_v_baud_rate);
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6__init__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_device_id, __pyx_v_port, __pyx_v_baud_rate);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port, PyObject *__pyx_v_baud_rate) {
-  int __pyx_v_s;
+static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6__init__(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_port, PyObject *__pyx_v_baud_rate) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
@@ -5628,104 +5263,122 @@ static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4__init__(struc
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   int __pyx_t_6;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_7;
+  PyObject *__pyx_t_7 = NULL;
+  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_8;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":307
+  /* "pjon_cython/_pjon_cython.pyx":302
  * 
  *     def __init__(self, device_id, port, baud_rate):
  *         self.bus.set_id(device_id)             # <<<<<<<<<<<<<<
- *         cdef int s = serialOpen(port, baud_rate)
+ *         self.s = serialOpen(port, baud_rate)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 307, __pyx_L1_error)
-  __pyx_v_self->bus->set_id(__pyx_t_1);
+  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 302, __pyx_L1_error)
+  __pyx_v_self->__pyx_base.bus->set_id(__pyx_t_1);
 
-  /* "pjon_cython/_pjon_cython.pyx":308
+  /* "pjon_cython/_pjon_cython.pyx":303
  *     def __init__(self, device_id, port, baud_rate):
  *         self.bus.set_id(device_id)
- *         cdef int s = serialOpen(port, baud_rate)             # <<<<<<<<<<<<<<
+ *         self.s = serialOpen(port, baud_rate)             # <<<<<<<<<<<<<<
  * 
- *         if(int(s) < 0):
+ *         if(int(self.s) < 0):
  */
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_port); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 308, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_v_baud_rate); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 308, __pyx_L1_error)
-  __pyx_v_s = serialOpen(__pyx_t_2, __pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_port); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_As_int(__pyx_v_baud_rate); if (unlikely((__pyx_t_3 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 303, __pyx_L1_error)
+  __pyx_v_self->s = serialOpen(__pyx_t_2, __pyx_t_3);
 
-  /* "pjon_cython/_pjon_cython.pyx":310
- *         cdef int s = serialOpen(port, baud_rate)
+  /* "pjon_cython/_pjon_cython.pyx":305
+ *         self.s = serialOpen(port, baud_rate)
  * 
- *         if(int(s) < 0):             # <<<<<<<<<<<<<<
- *             raise Exception("Couldn't open serial port")
+ *         if(int(self.s) < 0):             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
  * 
  */
-  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_int(__pyx_v_self->s); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyInt_Type)), __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyInt_Type)), __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 305, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_4 = PyObject_RichCompare(__pyx_t_5, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 305, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 310, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 305, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   if (unlikely(__pyx_t_6)) {
 
-    /* "pjon_cython/_pjon_cython.pyx":311
+    /* "pjon_cython/_pjon_cython.pyx":306
  * 
- *         if(int(s) < 0):
- *             raise Exception("Couldn't open serial port")             # <<<<<<<<<<<<<<
+ *         if(int(self.s) < 0):
+ *             raise PJON_Unable_To_Create_Bus()             # <<<<<<<<<<<<<<
  * 
- *         self.bus.strategy.set_serial(s)
+ *         self.link.strategy.set_serial(self.s)
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])), __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 311, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_PJON_Unable_To_Create_Bus); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 306, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_7 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
+      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
+      if (likely(__pyx_t_7)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_7);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_5, function);
+      }
+    }
+    if (__pyx_t_7) {
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 306, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    } else {
+      __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 306, __pyx_L1_error)
+    }
     __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 311, __pyx_L1_error)
+    __PYX_ERR(0, 306, __pyx_L1_error)
 
-    /* "pjon_cython/_pjon_cython.pyx":310
- *         cdef int s = serialOpen(port, baud_rate)
+    /* "pjon_cython/_pjon_cython.pyx":305
+ *         self.s = serialOpen(port, baud_rate)
  * 
- *         if(int(s) < 0):             # <<<<<<<<<<<<<<
- *             raise Exception("Couldn't open serial port")
+ *         if(int(self.s) < 0):             # <<<<<<<<<<<<<<
+ *             raise PJON_Unable_To_Create_Bus()
  * 
  */
   }
 
-  /* "pjon_cython/_pjon_cython.pyx":313
- *             raise Exception("Couldn't open serial port")
+  /* "pjon_cython/_pjon_cython.pyx":308
+ *             raise PJON_Unable_To_Create_Bus()
  * 
- *         self.bus.strategy.set_serial(s)             # <<<<<<<<<<<<<<
- *         # self.bus.set_synchronous_acknowledge(0)
- *         self.bus.strategy.set_baud_rate(baud_rate)
+ *         self.link.strategy.set_serial(self.s)             # <<<<<<<<<<<<<<
+ *         self.link.strategy.set_baud_rate(baud_rate)
+ *         self.bus.begin()
  */
-  __pyx_v_self->bus->strategy.set_serial(__pyx_v_s);
+  __pyx_v_self->link->strategy.set_serial(__pyx_v_self->s);
 
-  /* "pjon_cython/_pjon_cython.pyx":315
- *         self.bus.strategy.set_serial(s)
- *         # self.bus.set_synchronous_acknowledge(0)
- *         self.bus.strategy.set_baud_rate(baud_rate)             # <<<<<<<<<<<<<<
+  /* "pjon_cython/_pjon_cython.pyx":309
+ * 
+ *         self.link.strategy.set_serial(self.s)
+ *         self.link.strategy.set_baud_rate(baud_rate)             # <<<<<<<<<<<<<<
  *         self.bus.begin()
  * 
  */
-  __pyx_t_7 = __Pyx_PyInt_As_unsigned_int(__pyx_v_baud_rate); if (unlikely((__pyx_t_7 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 315, __pyx_L1_error)
-  __pyx_v_self->bus->strategy.set_baud_rate(__pyx_t_7);
+  __pyx_t_8 = __Pyx_PyInt_As_unsigned_int(__pyx_v_baud_rate); if (unlikely((__pyx_t_8 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 309, __pyx_L1_error)
+  __pyx_v_self->link->strategy.set_baud_rate(__pyx_t_8);
 
-  /* "pjon_cython/_pjon_cython.pyx":316
- *         # self.bus.set_synchronous_acknowledge(0)
- *         self.bus.strategy.set_baud_rate(baud_rate)
+  /* "pjon_cython/_pjon_cython.pyx":310
+ *         self.link.strategy.set_serial(self.s)
+ *         self.link.strategy.set_baud_rate(baud_rate)
  *         self.bus.begin()             # <<<<<<<<<<<<<<
  * 
- *     def can_start(self):
  */
-  __pyx_v_self->bus->begin();
+  __pyx_v_self->__pyx_base.bus->begin();
 
-  /* "pjon_cython/_pjon_cython.pyx":306
- *         del self.bus
+  /* "pjon_cython/_pjon_cython.pyx":301
+ *         return self.s
  * 
  *     def __init__(self, device_id, port, baud_rate):             # <<<<<<<<<<<<<<
  *         self.bus.set_id(device_id)
- *         cdef int s = serialOpen(port, baud_rate)
+ *         self.s = serialOpen(port, baud_rate)
  */
 
   /* function exit code */
@@ -5734,1083 +5387,10 @@ static int __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_4__init__(struc
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_7);
   __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":318
- *         self.bus.begin()
- * 
- *     def can_start(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.can_start()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7can_start(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("can_start (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6can_start(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_6can_start(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("can_start", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":319
- * 
- *     def can_start(self):
- *         return self.bus.strategy.can_start()             # <<<<<<<<<<<<<<
- * 
- *     def receive(self, payload, length, packet_info):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_self->bus->strategy.can_start()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":318
- *         self.bus.begin()
- * 
- *     def can_start(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.can_start()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.can_start", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":321
- *         return self.bus.strategy.can_start()
- * 
- *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         raise NotImplementedError()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  CYTHON_UNUSED PyObject *__pyx_v_payload = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_length = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_packet_info = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("receive (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_payload,&__pyx_n_s_length,&__pyx_n_s_packet_info,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_payload)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 1); __PYX_ERR(0, 321, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, 2); __PYX_ERR(0, 321, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "receive") < 0)) __PYX_ERR(0, 321, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_payload = values[0];
-    __pyx_v_length = values[1];
-    __pyx_v_packet_info = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 321, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8receive(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v_payload, CYTHON_UNUSED PyObject *__pyx_v_length, CYTHON_UNUSED PyObject *__pyx_v_packet_info) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("receive", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":322
- * 
- *     def receive(self, payload, length, packet_info):
- *         raise NotImplementedError()             # <<<<<<<<<<<<<<
- * 
- *     def get_max_attempts(self):
- */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_builtin_NotImplementedError); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_Raise(__pyx_t_1, 0, 0, 0);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __PYX_ERR(0, 322, __pyx_L1_error)
-
-  /* "pjon_cython/_pjon_cython.pyx":321
- *         return self.bus.strategy.can_start()
- * 
- *     def receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         raise NotImplementedError()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":324
- *         raise NotImplementedError()
- * 
- *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.get_max_attempts()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11get_max_attempts(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_max_attempts (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10get_max_attempts(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10get_max_attempts(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("get_max_attempts", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":325
- * 
- *     def get_max_attempts(self):
- *         return self.bus.strategy.get_max_attempts()             # <<<<<<<<<<<<<<
- * 
- *     def _receive(self, payload, length, packet_info):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->strategy.get_max_attempts()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 325, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":324
- *         raise NotImplementedError()
- * 
- *     def get_max_attempts(self):             # <<<<<<<<<<<<<<
- *         return self.bus.strategy.get_max_attempts()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.get_max_attempts", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":327
- *         return self.bus.strategy.get_max_attempts()
- * 
- *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         self.receive(payload[:length], length, packet_info)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_13_receive(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_payload = 0;
-  PyObject *__pyx_v_length = 0;
-  PyObject *__pyx_v_packet_info = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("_receive (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_payload,&__pyx_n_s_length,&__pyx_n_s_packet_info,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_payload)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_length)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 1); __PYX_ERR(0, 327, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_packet_info)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, 2); __PYX_ERR(0, 327, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_receive") < 0)) __PYX_ERR(0, 327, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_payload = values[0];
-    __pyx_v_length = values[1];
-    __pyx_v_packet_info = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_receive", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 327, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_12_receive(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_payload, __pyx_v_length, __pyx_v_packet_info);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_12_receive(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_payload, PyObject *__pyx_v_length, PyObject *__pyx_v_packet_info) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("_receive", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":328
- * 
- *     def _receive(self, payload, length, packet_info):
- *         self.receive(payload[:length], length, packet_info)             # <<<<<<<<<<<<<<
- * 
- *     def device_id(self):
- */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_receive_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 328, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_payload, 0, 0, NULL, &__pyx_v_length, NULL, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 328, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = NULL;
-  __pyx_t_5 = 0;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_4)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_4);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-      __pyx_t_5 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 328, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-    PyObject *__pyx_temp[4] = {__pyx_t_4, __pyx_t_3, __pyx_v_length, __pyx_v_packet_info};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_5, 3+__pyx_t_5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 328, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_6 = PyTuple_New(3+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 328, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    if (__pyx_t_4) {
-      __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_5, __pyx_t_3);
-    __Pyx_INCREF(__pyx_v_length);
-    __Pyx_GIVEREF(__pyx_v_length);
-    PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_length);
-    __Pyx_INCREF(__pyx_v_packet_info);
-    __Pyx_GIVEREF(__pyx_v_packet_info);
-    PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_5, __pyx_v_packet_info);
-    __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 328, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":327
- *         return self.bus.strategy.get_max_attempts()
- * 
- *     def _receive(self, payload, length, packet_info):             # <<<<<<<<<<<<<<
- *         self.receive(payload[:length], length, packet_info)
- * 
- */
-
-  /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial._receive", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":330
- *         self.receive(payload[:length], length, packet_info)
- * 
- *     def device_id(self):             # <<<<<<<<<<<<<<
- *         return self.bus.device_id()
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_15device_id(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("device_id (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_14device_id(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_14device_id(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("device_id", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":331
- * 
- *     def device_id(self):
- *         return self.bus.device_id()             # <<<<<<<<<<<<<<
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(__pyx_v_self->bus->device_id()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 331, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":330
- *         self.receive(payload[:length], length, packet_info)
- * 
- *     def device_id(self):             # <<<<<<<<<<<<<<
- *         return self.bus.device_id()
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.device_id", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":333
- *         return self.bus.device_id()
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_17get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_17get_packets_count(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_packets_count (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,0};
-    PyObject* values[1] = {0};
-    values[0] = __pyx_k__12;
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id);
-          if (value) { values[0] = value; kw_args--; }
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "get_packets_count") < 0)) __PYX_ERR(0, 333, __pyx_L3_error)
-      }
-    } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-    }
-    __pyx_v_device_id = values[0];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("get_packets_count", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 333, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_16get_packets_count(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_device_id);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_16get_packets_count(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
-  __Pyx_RefNannySetupContext("get_packets_count", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":334
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):
- *         return self.bus.get_packets_count(device_id)             # <<<<<<<<<<<<<<
- * 
- *     def loop(self, timeout_us=None):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 334, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(__pyx_v_self->bus->get_packets_count(__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 334, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_r = __pyx_t_2;
-  __pyx_t_2 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":333
- *         return self.bus.device_id()
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.get_packets_count", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":336
- *         return self.bus.get_packets_count(device_id)
- * 
- *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
- *         """
- *         :param self:
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_19loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_11pjon_cython_12_pjon_cython_13ThroughSerial_18loop[] = "\n        :param self:\n        :param timeout_us: optional parameter - timeout in uS on receive() call\n        :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)\n        ";
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_19loop(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_timeout_us = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("loop (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_timeout_us,0};
-    PyObject* values[1] = {0};
-    values[0] = ((PyObject *)Py_None);
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (kw_args > 0) {
-          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timeout_us);
-          if (value) { values[0] = value; kw_args--; }
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "loop") < 0)) __PYX_ERR(0, 336, __pyx_L3_error)
-      }
-    } else {
-      switch (PyTuple_GET_SIZE(__pyx_args)) {
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-    }
-    __pyx_v_timeout_us = values[0];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("loop", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 336, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_18loop(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_timeout_us);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_18loop(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_timeout_us) {
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_v_to_be_sent;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_1;
-  int __pyx_t_2;
-  int __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  PyObject *__pyx_t_7 = NULL;
-  __Pyx_RefNannySetupContext("loop", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":342
- *         :return: (packets_to_be_sent, return from receive (one of PJON_FAIL, PJON_BUSY, PJON_NAK)
- *         """
- *         to_be_sent = self.bus.update()             # <<<<<<<<<<<<<<
- *         if timeout_us is not None:
- *             return to_be_sent, self.bus.receive(timeout_us)
- */
-  __pyx_t_1 = __pyx_v_self->bus->update(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 342, __pyx_L1_error)
-  __pyx_v_to_be_sent = __pyx_t_1;
-
-  /* "pjon_cython/_pjon_cython.pyx":343
- *         """
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:             # <<<<<<<<<<<<<<
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- */
-  __pyx_t_2 = (__pyx_v_timeout_us != Py_None);
-  __pyx_t_3 = (__pyx_t_2 != 0);
-  if (__pyx_t_3) {
-
-    /* "pjon_cython/_pjon_cython.pyx":344
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:
- *             return to_be_sent, self.bus.receive(timeout_us)             # <<<<<<<<<<<<<<
- *         else:
- *             return to_be_sent, self.bus.receive()
- */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 344, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timeout_us); if (unlikely((__pyx_t_5 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 344, __pyx_L1_error)
-    __pyx_t_1 = __pyx_v_self->bus->receive(__pyx_t_5); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 344, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 344, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 344, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_GIVEREF(__pyx_t_4);
-    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_6);
-    __pyx_t_4 = 0;
-    __pyx_t_6 = 0;
-    __pyx_r = __pyx_t_7;
-    __pyx_t_7 = 0;
-    goto __pyx_L0;
-
-    /* "pjon_cython/_pjon_cython.pyx":343
- *         """
- *         to_be_sent = self.bus.update()
- *         if timeout_us is not None:             # <<<<<<<<<<<<<<
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- */
-  }
-
-  /* "pjon_cython/_pjon_cython.pyx":346
- *             return to_be_sent, self.bus.receive(timeout_us)
- *         else:
- *             return to_be_sent, self.bus.receive()             # <<<<<<<<<<<<<<
- * 
- *     def send(self, device_id, data):
- */
-  /*else*/ {
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_7 = __Pyx_PyInt_From_unsigned_short(__pyx_v_to_be_sent); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 346, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __pyx_v_self->bus->receive(); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 346, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 346, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 346, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_7);
-    __Pyx_GIVEREF(__pyx_t_6);
-    PyTuple_SET_ITEM(__pyx_t_4, 1, __pyx_t_6);
-    __pyx_t_7 = 0;
-    __pyx_t_6 = 0;
-    __pyx_r = __pyx_t_4;
-    __pyx_t_4 = 0;
-    goto __pyx_L0;
-  }
-
-  /* "pjon_cython/_pjon_cython.pyx":336
- *         return self.bus.get_packets_count(device_id)
- * 
- *     def loop(self, timeout_us=None):             # <<<<<<<<<<<<<<
- *         """
- *         :param self:
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.loop", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":348
- *             return to_be_sent, self.bus.receive()
- * 
- *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_21send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_21send(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("send (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_data,0};
-    PyObject* values[2] = {0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, 1); __PYX_ERR(0, 348, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send") < 0)) __PYX_ERR(0, 348, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-    }
-    __pyx_v_device_id = values[0];
-    __pyx_v_data = values[1];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 348, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_20send(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_20send(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  char const *__pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
-  __Pyx_RefNannySetupContext("send", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":349
- * 
- *     def send(self, device_id, data):
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- *     def reply(self, data):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 349, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 349, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 349, __pyx_L1_error)
-  __pyx_t_4 = __pyx_v_self->bus->send(__pyx_t_1, __pyx_t_2, __pyx_t_3, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 349, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_From_unsigned_short(__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 349, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_r = __pyx_t_5;
-  __pyx_t_5 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":348
- *             return to_be_sent, self.bus.receive()
- * 
- *     def send(self, device_id, data):             # <<<<<<<<<<<<<<
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.send", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":351
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def reply(self, data):             # <<<<<<<<<<<<<<
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_23reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_23reply(PyObject *__pyx_v_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("reply (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_22reply(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), ((PyObject *)__pyx_v_data));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_22reply(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_data) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  char const *__pyx_t_1;
-  Py_ssize_t __pyx_t_2;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_3;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("reply", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":352
- * 
- *     def reply(self, data):
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- *     def send_repeatedly(self, device_id, data, timing):
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 352, __pyx_L1_error)
-  __pyx_t_2 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 352, __pyx_L1_error)
-  __pyx_t_3 = __pyx_v_self->bus->reply(__pyx_t_1, __pyx_t_2, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 352, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_short(__pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 352, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_r = __pyx_t_4;
-  __pyx_t_4 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":351
- *         return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def reply(self, data):             # <<<<<<<<<<<<<<
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.reply", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "pjon_cython/_pjon_cython.pyx":354
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-/* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_25send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_25send_repeatedly(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
-  PyObject *__pyx_v_device_id = 0;
-  PyObject *__pyx_v_data = 0;
-  PyObject *__pyx_v_timing = 0;
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("send_repeatedly (wrapper)", 0);
-  {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_device_id,&__pyx_n_s_data,&__pyx_n_s_timing,0};
-    PyObject* values[3] = {0,0,0};
-    if (unlikely(__pyx_kwds)) {
-      Py_ssize_t kw_args;
-      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
-      switch (pos_args) {
-        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-        CYTHON_FALLTHROUGH;
-        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-        CYTHON_FALLTHROUGH;
-        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-        CYTHON_FALLTHROUGH;
-        case  0: break;
-        default: goto __pyx_L5_argtuple_error;
-      }
-      kw_args = PyDict_Size(__pyx_kwds);
-      switch (pos_args) {
-        case  0:
-        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_device_id)) != 0)) kw_args--;
-        else goto __pyx_L5_argtuple_error;
-        CYTHON_FALLTHROUGH;
-        case  1:
-        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_data)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 1); __PYX_ERR(0, 354, __pyx_L3_error)
-        }
-        CYTHON_FALLTHROUGH;
-        case  2:
-        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_timing)) != 0)) kw_args--;
-        else {
-          __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, 2); __PYX_ERR(0, 354, __pyx_L3_error)
-        }
-      }
-      if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "send_repeatedly") < 0)) __PYX_ERR(0, 354, __pyx_L3_error)
-      }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
-      goto __pyx_L5_argtuple_error;
-    } else {
-      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
-      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
-      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
-    }
-    __pyx_v_device_id = values[0];
-    __pyx_v_data = values[1];
-    __pyx_v_timing = values[2];
-  }
-  goto __pyx_L4_argument_unpacking_done;
-  __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("send_repeatedly", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 354, __pyx_L3_error)
-  __pyx_L3_error:;
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __Pyx_RefNannyFinishContext();
-  return NULL;
-  __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_24send_repeatedly(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), __pyx_v_device_id, __pyx_v_data, __pyx_v_timing);
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_24send_repeatedly(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, PyObject *__pyx_v_device_id, PyObject *__pyx_v_data, PyObject *__pyx_v_timing) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  __pyx_t_11pjon_cython_12_pjon_cython_uint8_t __pyx_t_1;
-  char const *__pyx_t_2;
-  Py_ssize_t __pyx_t_3;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint32_t __pyx_t_4;
-  __pyx_t_11pjon_cython_12_pjon_cython_uint16_t __pyx_t_5;
-  PyObject *__pyx_t_6 = NULL;
-  __Pyx_RefNannySetupContext("send_repeatedly", 0);
-
-  /* "pjon_cython/_pjon_cython.pyx":355
- * 
- *     def send_repeatedly(self, device_id, data, timing):
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_As_unsigned_char(__pyx_v_device_id); if (unlikely((__pyx_t_1 == (unsigned char)-1) && PyErr_Occurred())) __PYX_ERR(0, 355, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_v_data); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 355, __pyx_L1_error)
-  __pyx_t_3 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 355, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_As_unsigned_int(__pyx_v_timing); if (unlikely((__pyx_t_4 == (unsigned int)-1) && PyErr_Occurred())) __PYX_ERR(0, 355, __pyx_L1_error)
-  __pyx_t_5 = __pyx_v_self->bus->send_repeatedly(__pyx_t_1, __pyx_t_2, __pyx_t_3, __pyx_t_4, PJON_NO_HEADER, 0, PJON_BROADCAST); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 355, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_From_unsigned_short(__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 355, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_r = __pyx_t_6;
-  __pyx_t_6 = 0;
-  goto __pyx_L0;
-
-  /* "pjon_cython/_pjon_cython.pyx":354
- *         return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- *     def send_repeatedly(self, device_id, data, timing):             # <<<<<<<<<<<<<<
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
- * 
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_AddTraceback("pjon_cython._pjon_cython.ThroughSerial.send_repeatedly", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
@@ -6822,19 +5402,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_24send_re
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_27__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_27__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_26__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8__reduce_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_26__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_8__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6846,7 +5426,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_26__reduc
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6876,19 +5456,19 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_26__reduc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_29__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_29__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_28__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10__setstate_cython__(((struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_28__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_10__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6899,7 +5479,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_28__setst
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6922,7 +5502,7 @@ static PyObject *__pyx_pf_11pjon_cython_12_pjon_cython_13ThroughSerial_28__setst
   return __pyx_r;
 }
 
-static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_GlobalUDP(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   PyObject *o;
   if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
     o = (*t->tp_alloc)(t, 0);
@@ -6930,14 +5510,14 @@ static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_GlobalUDP(PyTypeObjec
     o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
   }
   if (unlikely(!o)) return 0;
-  if (unlikely(__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
+  if (unlikely(__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
   return o;
   bad:
   Py_DECREF(o); o = 0;
   return NULL;
 }
 
-static void __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_GlobalUDP(PyObject *o) {
+static void __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_PJONBUS(PyObject *o) {
   #if CYTHON_USE_TP_FINALIZE
   if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
     if (PyObject_CallFinalizerFromDealloc(o)) return;
@@ -6947,37 +5527,41 @@ static void __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_GlobalUDP(PyObject *o)
     PyObject *etype, *eval, *etb;
     PyErr_Fetch(&etype, &eval, &etb);
     ++Py_REFCNT(o);
-    __pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__dealloc__(o);
+    __pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_3__dealloc__(o);
     --Py_REFCNT(o);
     PyErr_Restore(etype, eval, etb);
   }
   (*Py_TYPE(o)->tp_free)(o);
 }
 
-static PyMethodDef __pyx_methods_11pjon_cython_12_pjon_cython_GlobalUDP[] = {
-  {"set_port", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_port, METH_O, 0},
-  {"can_start", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9can_start, METH_NOARGS, 0},
-  {"receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"_receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13_receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"device_id", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_15device_id, METH_NOARGS, 0},
-  {"get_max_attempts", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_17get_max_attempts, METH_NOARGS, 0},
-  {"get_packets_count", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_19get_packets_count, METH_VARARGS|METH_KEYWORDS, 0},
-  {"loop", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_21loop, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11pjon_cython_12_pjon_cython_9GlobalUDP_20loop},
-  {"send", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_23send, METH_VARARGS|METH_KEYWORDS, 0},
-  {"reply", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_25reply, METH_O, 0},
-  {"send_repeatedly", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_27send_repeatedly, METH_VARARGS|METH_KEYWORDS, 0},
-  {"add_node", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_29add_node, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_31__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_33__setstate_cython__, METH_O, 0},
+static PyMethodDef __pyx_methods_11pjon_cython_12_pjon_cython_PJONBUS[] = {
+  {"packet_overhead", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_5packet_overhead, METH_NOARGS, 0},
+  {"set_synchronous_acknowledge", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_7set_synchronous_acknowledge, METH_O, __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_6set_synchronous_acknowledge},
+  {"set_asynchronous_acknowledge", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_9set_asynchronous_acknowledge, METH_O, __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_8set_asynchronous_acknowledge},
+  {"include_sender_info", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_11include_sender_info, METH_O, 0},
+  {"set_crc_32", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_13set_crc_32, METH_O, 0},
+  {"set_packet_id", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_15set_packet_id, METH_O, 0},
+  {"can_start", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_17can_start, METH_NOARGS, 0},
+  {"receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_19receive, METH_VARARGS|METH_KEYWORDS, 0},
+  {"_receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_21_receive, METH_VARARGS|METH_KEYWORDS, 0},
+  {"device_id", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_23device_id, METH_NOARGS, 0},
+  {"get_max_attempts", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_25get_max_attempts, METH_NOARGS, 0},
+  {"get_packets_count", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_27get_packets_count, METH_VARARGS|METH_KEYWORDS, 0},
+  {"loop", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_29loop, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11pjon_cython_12_pjon_cython_7PJONBUS_28loop},
+  {"send", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_31send, METH_VARARGS|METH_KEYWORDS, 0},
+  {"reply", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_33reply, METH_O, 0},
+  {"send_repeatedly", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_35send_repeatedly, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_37__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_7PJONBUS_39__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
-static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP = {
+static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_PJONBUS = {
   PyVarObject_HEAD_INIT(0, 0)
-  "pjon_cython._pjon_cython.GlobalUDP", /*tp_name*/
-  sizeof(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP), /*tp_basicsize*/
+  "pjon_cython._pjon_cython.PJONBUS", /*tp_name*/
+  sizeof(struct __pyx_obj_11pjon_cython_12_pjon_cython_PJONBUS), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_GlobalUDP, /*tp_dealloc*/
+  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -6998,7 +5582,84 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP = {
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
-  "\n    GlobalUDP Strategy - you must create a new class that inherits this one and add a receive function\n    ", /*tp_doc*/
+  0, /*tp_doc*/
+  0, /*tp_traverse*/
+  0, /*tp_clear*/
+  0, /*tp_richcompare*/
+  0, /*tp_weaklistoffset*/
+  0, /*tp_iter*/
+  0, /*tp_iternext*/
+  __pyx_methods_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_methods*/
+  0, /*tp_members*/
+  0, /*tp_getset*/
+  0, /*tp_base*/
+  0, /*tp_dict*/
+  0, /*tp_descr_get*/
+  0, /*tp_descr_set*/
+  0, /*tp_dictoffset*/
+  0, /*tp_init*/
+  0, /*tp_alloc*/
+  __pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_new*/
+  0, /*tp_free*/
+  0, /*tp_is_gc*/
+  0, /*tp_bases*/
+  0, /*tp_mro*/
+  0, /*tp_cache*/
+  0, /*tp_subclasses*/
+  0, /*tp_weaklist*/
+  0, /*tp_del*/
+  0, /*tp_version_tag*/
+  #if PY_VERSION_HEX >= 0x030400a1
+  0, /*tp_finalize*/
+  #endif
+};
+
+static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_GlobalUDP(PyTypeObject *t, PyObject *a, PyObject *k) {
+  PyObject *o = __pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS(t, a, k);
+  if (unlikely(!o)) return 0;
+  if (unlikely(__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
+  return o;
+  bad:
+  Py_DECREF(o); o = 0;
+  return NULL;
+}
+
+static PyMethodDef __pyx_methods_11pjon_cython_12_pjon_cython_GlobalUDP[] = {
+  {"__del__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_3__del__, METH_NOARGS, 0},
+  {"set_autoregistration", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_7set_autoregistration, METH_O, 0},
+  {"add_node", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_9add_node, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_11__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_9GlobalUDP_13__setstate_cython__, METH_O, 0},
+  {0, 0, 0, 0}
+};
+
+static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP = {
+  PyVarObject_HEAD_INIT(0, 0)
+  "pjon_cython._pjon_cython.GlobalUDP", /*tp_name*/
+  sizeof(struct __pyx_obj_11pjon_cython_12_pjon_cython_GlobalUDP), /*tp_basicsize*/
+  0, /*tp_itemsize*/
+  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_dealloc*/
+  0, /*tp_print*/
+  0, /*tp_getattr*/
+  0, /*tp_setattr*/
+  #if PY_MAJOR_VERSION < 3
+  0, /*tp_compare*/
+  #endif
+  #if PY_MAJOR_VERSION >= 3
+  0, /*tp_as_async*/
+  #endif
+  0, /*tp_repr*/
+  0, /*tp_as_number*/
+  0, /*tp_as_sequence*/
+  0, /*tp_as_mapping*/
+  0, /*tp_hash*/
+  0, /*tp_call*/
+  0, /*tp_str*/
+  0, /*tp_getattro*/
+  0, /*tp_setattro*/
+  0, /*tp_as_buffer*/
+  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
+  0, /*tp_doc*/
   0, /*tp_traverse*/
   0, /*tp_clear*/
   0, /*tp_richcompare*/
@@ -7030,13 +5691,8 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP = {
   #endif
 };
 
-static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_LocalUDP(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
-  PyObject *o;
-  if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
-    o = (*t->tp_alloc)(t, 0);
-  } else {
-    o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
-  }
+static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_LocalUDP(PyTypeObject *t, PyObject *a, PyObject *k) {
+  PyObject *o = __pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS(t, a, k);
   if (unlikely(!o)) return 0;
   if (unlikely(__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
   return o;
@@ -7045,37 +5701,10 @@ static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_LocalUDP(PyTypeObject
   return NULL;
 }
 
-static void __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_LocalUDP(PyObject *o) {
-  #if CYTHON_USE_TP_FINALIZE
-  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
-    if (PyObject_CallFinalizerFromDealloc(o)) return;
-  }
-  #endif
-  {
-    PyObject *etype, *eval, *etb;
-    PyErr_Fetch(&etype, &eval, &etb);
-    ++Py_REFCNT(o);
-    __pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__dealloc__(o);
-    --Py_REFCNT(o);
-    PyErr_Restore(etype, eval, etb);
-  }
-  (*Py_TYPE(o)->tp_free)(o);
-}
-
 static PyMethodDef __pyx_methods_11pjon_cython_12_pjon_cython_LocalUDP[] = {
-  {"can_start", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7can_start, METH_NOARGS, 0},
-  {"receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"set_port", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_11set_port, METH_O, 0},
-  {"_receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_13_receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"device_id", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_15device_id, METH_NOARGS, 0},
-  {"get_packets_count", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_17get_packets_count, METH_VARARGS|METH_KEYWORDS, 0},
-  {"get_max_attempts", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_19get_max_attempts, METH_NOARGS, 0},
-  {"loop", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_21loop, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11pjon_cython_12_pjon_cython_8LocalUDP_20loop},
-  {"send", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_23send, METH_VARARGS|METH_KEYWORDS, 0},
-  {"reply", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_25reply, METH_O, 0},
-  {"send_repeatedly", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_27send_repeatedly, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_29__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_31__setstate_cython__, METH_O, 0},
+  {"__del__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_3__del__, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_7__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_8LocalUDP_9__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -7084,7 +5713,7 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP = {
   "pjon_cython._pjon_cython.LocalUDP", /*tp_name*/
   sizeof(struct __pyx_obj_11pjon_cython_12_pjon_cython_LocalUDP), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_LocalUDP, /*tp_dealloc*/
+  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -7105,7 +5734,7 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP = {
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
-  "\n    LocalUDP Strategy - you must create a new class that inherits this one and add a receive function\n    ", /*tp_doc*/
+  0, /*tp_doc*/
   0, /*tp_traverse*/
   0, /*tp_clear*/
   0, /*tp_richcompare*/
@@ -7137,13 +5766,8 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP = {
   #endif
 };
 
-static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_ThroughSerial(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
-  PyObject *o;
-  if (likely((t->tp_flags & Py_TPFLAGS_IS_ABSTRACT) == 0)) {
-    o = (*t->tp_alloc)(t, 0);
-  } else {
-    o = (PyObject *) PyBaseObject_Type.tp_new(t, __pyx_empty_tuple, 0);
-  }
+static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_ThroughSerial(PyTypeObject *t, PyObject *a, PyObject *k) {
+  PyObject *o = __pyx_tp_new_11pjon_cython_12_pjon_cython_PJONBUS(t, a, k);
   if (unlikely(!o)) return 0;
   if (unlikely(__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_1__cinit__(o, __pyx_empty_tuple, NULL) < 0)) goto bad;
   return o;
@@ -7152,36 +5776,11 @@ static PyObject *__pyx_tp_new_11pjon_cython_12_pjon_cython_ThroughSerial(PyTypeO
   return NULL;
 }
 
-static void __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_ThroughSerial(PyObject *o) {
-  #if CYTHON_USE_TP_FINALIZE
-  if (unlikely(PyType_HasFeature(Py_TYPE(o), Py_TPFLAGS_HAVE_FINALIZE) && Py_TYPE(o)->tp_finalize) && (!PyType_IS_GC(Py_TYPE(o)) || !_PyGC_FINALIZED(o))) {
-    if (PyObject_CallFinalizerFromDealloc(o)) return;
-  }
-  #endif
-  {
-    PyObject *etype, *eval, *etb;
-    PyErr_Fetch(&etype, &eval, &etb);
-    ++Py_REFCNT(o);
-    __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__dealloc__(o);
-    --Py_REFCNT(o);
-    PyErr_Restore(etype, eval, etb);
-  }
-  (*Py_TYPE(o)->tp_free)(o);
-}
-
 static PyMethodDef __pyx_methods_11pjon_cython_12_pjon_cython_ThroughSerial[] = {
-  {"can_start", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7can_start, METH_NOARGS, 0},
-  {"receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"get_max_attempts", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11get_max_attempts, METH_NOARGS, 0},
-  {"_receive", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_13_receive, METH_VARARGS|METH_KEYWORDS, 0},
-  {"device_id", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_15device_id, METH_NOARGS, 0},
-  {"get_packets_count", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_17get_packets_count, METH_VARARGS|METH_KEYWORDS, 0},
-  {"loop", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_19loop, METH_VARARGS|METH_KEYWORDS, __pyx_doc_11pjon_cython_12_pjon_cython_13ThroughSerial_18loop},
-  {"send", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_21send, METH_VARARGS|METH_KEYWORDS, 0},
-  {"reply", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_23reply, METH_O, 0},
-  {"send_repeatedly", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_25send_repeatedly, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_27__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_29__setstate_cython__, METH_O, 0},
+  {"__del__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_3__del__, METH_NOARGS, 0},
+  {"_fd", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5_fd, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_9__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_11__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -7190,7 +5789,7 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial = {
   "pjon_cython._pjon_cython.ThroughSerial", /*tp_name*/
   sizeof(struct __pyx_obj_11pjon_cython_12_pjon_cython_ThroughSerial), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_ThroughSerial, /*tp_dealloc*/
+  __pyx_tp_dealloc_11pjon_cython_12_pjon_cython_PJONBUS, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -7211,7 +5810,7 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial = {
   0, /*tp_setattro*/
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE, /*tp_flags*/
-  "\n    ThroughSerial Strategy - you must create a new class that inherits this one and add a receive function\n    ", /*tp_doc*/
+  0, /*tp_doc*/
   0, /*tp_traverse*/
   0, /*tp_clear*/
   0, /*tp_richcompare*/
@@ -7226,7 +5825,7 @@ static PyTypeObject __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial = {
   0, /*tp_descr_get*/
   0, /*tp_descr_set*/
   0, /*tp_dictoffset*/
-  __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_5__init__, /*tp_init*/
+  __pyx_pw_11pjon_cython_12_pjon_cython_13ThroughSerial_7__init__, /*tp_init*/
   0, /*tp_alloc*/
   __pyx_tp_new_11pjon_cython_12_pjon_cython_ThroughSerial, /*tp_new*/
   0, /*tp_free*/
@@ -7281,7 +5880,6 @@ static struct PyModuleDef __pyx_moduledef = {
 
 static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_BaseException, __pyx_k_BaseException, sizeof(__pyx_k_BaseException), 0, 0, 1, 1},
-  {&__pyx_kp_s_Couldn_t_open_serial_port, __pyx_k_Couldn_t_open_serial_port, sizeof(__pyx_k_Couldn_t_open_serial_port), 0, 0, 1, 0},
   {&__pyx_n_s_LUDP_RESPONSE_TIMEOUT, __pyx_k_LUDP_RESPONSE_TIMEOUT, sizeof(__pyx_k_LUDP_RESPONSE_TIMEOUT), 0, 0, 1, 1},
   {&__pyx_n_s_NotImplementedError, __pyx_k_NotImplementedError, sizeof(__pyx_k_NotImplementedError), 0, 0, 1, 1},
   {&__pyx_n_s_PJON_ACK, __pyx_k_PJON_ACK, sizeof(__pyx_k_PJON_ACK), 0, 0, 1, 1},
@@ -7298,17 +5896,20 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_PJON_PACKET_MAX_LENGTH, __pyx_k_PJON_PACKET_MAX_LENGTH, sizeof(__pyx_k_PJON_PACKET_MAX_LENGTH), 0, 0, 1, 1},
   {&__pyx_n_s_PJON_Packets_Buffer_Full, __pyx_k_PJON_Packets_Buffer_Full, sizeof(__pyx_k_PJON_Packets_Buffer_Full), 0, 0, 1, 1},
   {&__pyx_n_s_PJON_TO_BE_SENT, __pyx_k_PJON_TO_BE_SENT, sizeof(__pyx_k_PJON_TO_BE_SENT), 0, 0, 1, 1},
+  {&__pyx_n_s_PJON_Unable_To_Create_Bus, __pyx_k_PJON_Unable_To_Create_Bus, sizeof(__pyx_k_PJON_Unable_To_Create_Bus), 0, 0, 1, 1},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
-  {&__pyx_kp_s__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 0, 1, 0},
+  {&__pyx_kp_s__7, __pyx_k__7, sizeof(__pyx_k__7), 0, 0, 1, 0},
   {&__pyx_n_s_add_node_locals_lambda, __pyx_k_add_node_locals_lambda, sizeof(__pyx_k_add_node_locals_lambda), 0, 0, 1, 1},
   {&__pyx_n_s_baud_rate, __pyx_k_baud_rate, sizeof(__pyx_k_baud_rate), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
+  {&__pyx_n_s_close, __pyx_k_close, sizeof(__pyx_k_close), 0, 0, 1, 1},
   {&__pyx_n_s_data, __pyx_k_data, sizeof(__pyx_k_data), 0, 0, 1, 1},
   {&__pyx_n_s_device_id, __pyx_k_device_id, sizeof(__pyx_k_device_id), 0, 0, 1, 1},
   {&__pyx_n_s_doc, __pyx_k_doc, sizeof(__pyx_k_doc), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_header, __pyx_k_header, sizeof(__pyx_k_header), 0, 0, 1, 1},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
+  {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_ip, __pyx_k_ip, sizeof(__pyx_k_ip), 0, 0, 1, 1},
   {&__pyx_n_s_length, __pyx_k_length, sizeof(__pyx_k_length), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
@@ -7317,6 +5918,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_module, __pyx_k_module, sizeof(__pyx_k_module), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
   {&__pyx_kp_s_no_default___reduce___due_to_non, __pyx_k_no_default___reduce___due_to_non, sizeof(__pyx_k_no_default___reduce___due_to_non), 0, 0, 1, 0},
+  {&__pyx_n_s_os, __pyx_k_os, sizeof(__pyx_k_os), 0, 0, 1, 1},
   {&__pyx_n_s_packet_info, __pyx_k_packet_info, sizeof(__pyx_k_packet_info), 0, 0, 1, 1},
   {&__pyx_n_s_payload, __pyx_k_payload, sizeof(__pyx_k_payload), 0, 0, 1, 1},
   {&__pyx_n_s_pjon_cython__pjon_cython, __pyx_k_pjon_cython__pjon_cython, sizeof(__pyx_k_pjon_cython__pjon_cython), 0, 0, 1, 1},
@@ -7341,10 +5943,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_BaseException = __Pyx_GetBuiltinName(__pyx_n_s_BaseException); if (!__pyx_builtin_BaseException) __PYX_ERR(0, 95, __pyx_L1_error)
-  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 177, __pyx_L1_error)
-  __pyx_builtin_map = __Pyx_GetBuiltinName(__pyx_n_s_map); if (!__pyx_builtin_map) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_builtin_BaseException = __Pyx_GetBuiltinName(__pyx_n_s_BaseException); if (!__pyx_builtin_BaseException) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 207, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_builtin_map = __Pyx_GetBuiltinName(__pyx_n_s_map); if (!__pyx_builtin_map) __PYX_ERR(0, 265, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -7354,27 +5956,16 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "pjon_cython/_pjon_cython.pyx":130
+  /* "pjon_cython/_pjon_cython.pyx":147
  *         raise PJON_Id_Acquisition_Fail()
  * 
  *     raise Exception("PJON Error Code Unknown")             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_PJON_Error_Code_Unknown); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 130, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(1, __pyx_kp_s_PJON_Error_Code_Unknown); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-
-  /* "pjon_cython/_pjon_cython.pyx":213
- * 
- *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
- *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))             # <<<<<<<<<<<<<<
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
- * 
- */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_s__4); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 213, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -7382,18 +5973,29 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__6);
-  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
+
+  /* "pjon_cython/_pjon_cython.pyx":265
+ * 
+ *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):
+ *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))             # <<<<<<<<<<<<<<
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
+ * 
+ */
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 265, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -7414,16 +6016,24 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "pjon_cython/_pjon_cython.pyx":311
- * 
- *         if(int(s) < 0):
- *             raise Exception("Couldn't open serial port")             # <<<<<<<<<<<<<<
- * 
- *         self.bus.strategy.set_serial(s)
+  /* "(tree fragment)":2
+ * def __reduce_cython__(self):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
+ * def __setstate_cython__(self, __pyx_state):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_Couldn_t_open_serial_port); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(0, 311, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
+
+  /* "(tree fragment)":4
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
+ * def __setstate_cython__(self, __pyx_state):
+ *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
+ */
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "(tree fragment)":2
  * def __reduce_cython__(self):
@@ -7431,73 +6041,84 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
 
-  /* "pjon_cython/_pjon_cython.pyx":95
+  /* "pjon_cython/_pjon_cython.pyx":109
  * PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH
  * 
  * class PJON_Connection_Lost(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
 
-  /* "pjon_cython/_pjon_cython.pyx":98
+  /* "pjon_cython/_pjon_cython.pyx":112
  *     pass
  * 
  * class PJON_Packets_Buffer_Full(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 98, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__16);
-  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
 
-  /* "pjon_cython/_pjon_cython.pyx":101
+  /* "pjon_cython/_pjon_cython.pyx":115
  *     pass
  * 
  * class PJON_Content_Too_Long(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
 
-  /* "pjon_cython/_pjon_cython.pyx":104
+  /* "pjon_cython/_pjon_cython.pyx":118
  *     pass
  * 
  * class PJON_Id_Acquisition_Fail(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
 
-  /* "pjon_cython/_pjon_cython.pyx":107
+  /* "pjon_cython/_pjon_cython.pyx":121
  *     pass
  * 
  * class PJON_Devices_Buffer_Full(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_tuple__19 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 107, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
+
+  /* "pjon_cython/_pjon_cython.pyx":124
+ *     pass
+ * 
+ * class PJON_Unable_To_Create_Bus(BaseException):             # <<<<<<<<<<<<<<
+ *     pass
+ * 
+ */
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_builtin_BaseException); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -7549,29 +6170,40 @@ static int __Pyx_modinit_type_init_code(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_PJONBUS) < 0) __PYX_ERR(0, 166, __pyx_L1_error)
+  __pyx_type_11pjon_cython_12_pjon_cython_PJONBUS.tp_print = 0;
+  if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11pjon_cython_12_pjon_cython_PJONBUS.tp_dictoffset && __pyx_type_11pjon_cython_12_pjon_cython_PJONBUS.tp_getattro == PyObject_GenericGetAttr)) {
+    __pyx_type_11pjon_cython_12_pjon_cython_PJONBUS.tp_getattro = __Pyx_PyObject_GenericGetAttr;
+  }
+  if (PyObject_SetAttrString(__pyx_m, "PJONBUS", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_PJONBUS) < 0) __PYX_ERR(0, 166, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_PJONBUS) < 0) __PYX_ERR(0, 166, __pyx_L1_error)
+  __pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS = &__pyx_type_11pjon_cython_12_pjon_cython_PJONBUS;
+  __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP.tp_base = __pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS;
+  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 243, __pyx_L1_error)
   __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP.tp_dictoffset && __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "GlobalUDP", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "GlobalUDP", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 243, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP) < 0) __PYX_ERR(0, 243, __pyx_L1_error)
   __pyx_ptype_11pjon_cython_12_pjon_cython_GlobalUDP = &__pyx_type_11pjon_cython_12_pjon_cython_GlobalUDP;
-  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
+  __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP.tp_base = __pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS;
+  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 269, __pyx_L1_error)
   __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP.tp_dictoffset && __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11pjon_cython_12_pjon_cython_LocalUDP.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "LocalUDP", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 222, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "LocalUDP", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 269, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP) < 0) __PYX_ERR(0, 269, __pyx_L1_error)
   __pyx_ptype_11pjon_cython_12_pjon_cython_LocalUDP = &__pyx_type_11pjon_cython_12_pjon_cython_LocalUDP;
-  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial.tp_base = __pyx_ptype_11pjon_cython_12_pjon_cython_PJONBUS;
+  if (PyType_Ready(&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
   __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial.tp_dictoffset && __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "ThroughSerial", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 290, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 290, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "ThroughSerial", (PyObject *)&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial) < 0) __PYX_ERR(0, 286, __pyx_L1_error)
   __pyx_ptype_11pjon_cython_12_pjon_cython_ThroughSerial = &__pyx_type_11pjon_cython_12_pjon_cython_ThroughSerial;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -7779,265 +6411,304 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "pjon_cython/_pjon_cython.pyx":84
+  /* "pjon_cython/_pjon_cython.pyx":3
+ * import cython
+ * from libcpp cimport bool as bool_t
+ * from os import close             # <<<<<<<<<<<<<<
+ * 
+ * ctypedef unsigned char uint8_t
+ */
+  __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_INCREF(__pyx_n_s_close);
+  __Pyx_GIVEREF(__pyx_n_s_close);
+  PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_close);
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_os, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_close); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_close, __pyx_t_1) < 0) __PYX_ERR(0, 3, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "pjon_cython/_pjon_cython.pyx":98
  *         uint16_t reply(const char *packet, uint16_t length, uint8_t  header, uint16_t p_id, uint16_t requested_port) except *
  * 
  * PJON_BROADCAST = _PJON_BROADCAST             # <<<<<<<<<<<<<<
  * PJON_ACK = _PJON_ACK
  * PJON_NAK = _PJON_NAK
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_BROADCAST); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_BROADCAST, __pyx_t_1) < 0) __PYX_ERR(0, 84, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_BROADCAST); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_BROADCAST, __pyx_t_2) < 0) __PYX_ERR(0, 98, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":85
+  /* "pjon_cython/_pjon_cython.pyx":99
  * 
  * PJON_BROADCAST = _PJON_BROADCAST
  * PJON_ACK = _PJON_ACK             # <<<<<<<<<<<<<<
  * PJON_NAK = _PJON_NAK
  * PJON_BUSY = _PJON_BUSY
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_ACK); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_ACK, __pyx_t_1) < 0) __PYX_ERR(0, 85, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_ACK); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_ACK, __pyx_t_2) < 0) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":86
+  /* "pjon_cython/_pjon_cython.pyx":100
  * PJON_BROADCAST = _PJON_BROADCAST
  * PJON_ACK = _PJON_ACK
  * PJON_NAK = _PJON_NAK             # <<<<<<<<<<<<<<
  * PJON_BUSY = _PJON_BUSY
  * PJON_FAIL = _PJON_FAIL
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_NAK); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_NAK, __pyx_t_1) < 0) __PYX_ERR(0, 86, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_NAK); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_NAK, __pyx_t_2) < 0) __PYX_ERR(0, 100, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":87
+  /* "pjon_cython/_pjon_cython.pyx":101
  * PJON_ACK = _PJON_ACK
  * PJON_NAK = _PJON_NAK
  * PJON_BUSY = _PJON_BUSY             # <<<<<<<<<<<<<<
  * PJON_FAIL = _PJON_FAIL
  * PJON_TO_BE_SENT = _PJON_TO_BE_SENT
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_BUSY); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_BUSY, __pyx_t_1) < 0) __PYX_ERR(0, 87, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_BUSY); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_BUSY, __pyx_t_2) < 0) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":88
+  /* "pjon_cython/_pjon_cython.pyx":102
  * PJON_NAK = _PJON_NAK
  * PJON_BUSY = _PJON_BUSY
  * PJON_FAIL = _PJON_FAIL             # <<<<<<<<<<<<<<
  * PJON_TO_BE_SENT = _PJON_TO_BE_SENT
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_FAIL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_FAIL, __pyx_t_1) < 0) __PYX_ERR(0, 88, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_FAIL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_FAIL, __pyx_t_2) < 0) __PYX_ERR(0, 102, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":89
+  /* "pjon_cython/_pjon_cython.pyx":103
  * PJON_BUSY = _PJON_BUSY
  * PJON_FAIL = _PJON_FAIL
  * PJON_TO_BE_SENT = _PJON_TO_BE_SENT             # <<<<<<<<<<<<<<
  * 
  * PJON_MAX_PACKETS = _PJON_MAX_PACKETS
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_TO_BE_SENT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_TO_BE_SENT, __pyx_t_1) < 0) __PYX_ERR(0, 89, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_TO_BE_SENT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 103, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_TO_BE_SENT, __pyx_t_2) < 0) __PYX_ERR(0, 103, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":91
+  /* "pjon_cython/_pjon_cython.pyx":105
  * PJON_TO_BE_SENT = _PJON_TO_BE_SENT
  * 
  * PJON_MAX_PACKETS = _PJON_MAX_PACKETS             # <<<<<<<<<<<<<<
  * LUDP_RESPONSE_TIMEOUT = _LUDP_RESPONSE_TIMEOUT
  * PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_MAX_PACKETS); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 91, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_MAX_PACKETS, __pyx_t_1) < 0) __PYX_ERR(0, 91, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_MAX_PACKETS); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_MAX_PACKETS, __pyx_t_2) < 0) __PYX_ERR(0, 105, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":92
+  /* "pjon_cython/_pjon_cython.pyx":106
  * 
  * PJON_MAX_PACKETS = _PJON_MAX_PACKETS
  * LUDP_RESPONSE_TIMEOUT = _LUDP_RESPONSE_TIMEOUT             # <<<<<<<<<<<<<<
  * PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_int(LUDP_RESPONSE_TIMEOUT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_LUDP_RESPONSE_TIMEOUT, __pyx_t_1) < 0) __PYX_ERR(0, 92, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_int(LUDP_RESPONSE_TIMEOUT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_LUDP_RESPONSE_TIMEOUT, __pyx_t_2) < 0) __PYX_ERR(0, 106, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":93
+  /* "pjon_cython/_pjon_cython.pyx":107
  * PJON_MAX_PACKETS = _PJON_MAX_PACKETS
  * LUDP_RESPONSE_TIMEOUT = _LUDP_RESPONSE_TIMEOUT
  * PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH             # <<<<<<<<<<<<<<
  * 
  * class PJON_Connection_Lost(BaseException):
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(PJON_PACKET_MAX_LENGTH); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 93, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_PACKET_MAX_LENGTH, __pyx_t_1) < 0) __PYX_ERR(0, 93, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(PJON_PACKET_MAX_LENGTH); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_PACKET_MAX_LENGTH, __pyx_t_2) < 0) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":95
+  /* "pjon_cython/_pjon_cython.pyx":109
  * PJON_PACKET_MAX_LENGTH = _PJON_PACKET_MAX_LENGTH
  * 
  * class PJON_Connection_Lost(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__15); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__15, __pyx_n_s_PJON_Connection_Lost, __pyx_n_s_PJON_Connection_Lost, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__16); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_PJON_Connection_Lost, __pyx_tuple__15, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__16, __pyx_n_s_PJON_Connection_Lost, __pyx_n_s_PJON_Connection_Lost, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Connection_Lost, __pyx_tuple__16, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Connection_Lost, __pyx_t_3) < 0) __PYX_ERR(0, 95, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Connection_Lost, __pyx_t_3) < 0) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":98
+  /* "pjon_cython/_pjon_cython.pyx":112
  *     pass
  * 
  * class PJON_Packets_Buffer_Full(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__16); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 98, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__16, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_n_s_PJON_Packets_Buffer_Full, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__17); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_tuple__16, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 98, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__17, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_n_s_PJON_Packets_Buffer_Full, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_tuple__17, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_t_3) < 0) __PYX_ERR(0, 98, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Packets_Buffer_Full, __pyx_t_3) < 0) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":101
+  /* "pjon_cython/_pjon_cython.pyx":115
  *     pass
  * 
  * class PJON_Content_Too_Long(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__17); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 101, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__17, __pyx_n_s_PJON_Content_Too_Long, __pyx_n_s_PJON_Content_Too_Long, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__18); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_PJON_Content_Too_Long, __pyx_tuple__17, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__18, __pyx_n_s_PJON_Content_Too_Long, __pyx_n_s_PJON_Content_Too_Long, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Content_Too_Long, __pyx_tuple__18, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 115, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Content_Too_Long, __pyx_t_3) < 0) __PYX_ERR(0, 101, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Content_Too_Long, __pyx_t_3) < 0) __PYX_ERR(0, 115, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":104
+  /* "pjon_cython/_pjon_cython.pyx":118
  *     pass
  * 
  * class PJON_Id_Acquisition_Fail(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__18); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__18, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_n_s_PJON_Id_Acquisition_Fail, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__19); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_tuple__18, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__19, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_n_s_PJON_Id_Acquisition_Fail, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 118, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_tuple__19, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_t_3) < 0) __PYX_ERR(0, 104, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Id_Acquisition_Fail, __pyx_t_3) < 0) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":107
+  /* "pjon_cython/_pjon_cython.pyx":121
  *     pass
  * 
  * class PJON_Devices_Buffer_Full(BaseException):             # <<<<<<<<<<<<<<
  *     pass
  * 
  */
-  __pyx_t_1 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__19); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_Py3MetaclassPrepare(__pyx_t_1, __pyx_tuple__19, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_n_s_PJON_Devices_Buffer_Full, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__20); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_1, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_tuple__19, __pyx_t_2, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__20, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_n_s_PJON_Devices_Buffer_Full, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_tuple__20, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_t_3) < 0) __PYX_ERR(0, 107, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Devices_Buffer_Full, __pyx_t_3) < 0) __PYX_ERR(0, 121, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":188
+  /* "pjon_cython/_pjon_cython.pyx":124
+ *     pass
+ * 
+ * class PJON_Unable_To_Create_Bus(BaseException):             # <<<<<<<<<<<<<<
+ *     pass
+ * 
+ */
+  __pyx_t_2 = __Pyx_CalculateMetaclass(NULL, __pyx_tuple__21); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = __Pyx_Py3MetaclassPrepare(__pyx_t_2, __pyx_tuple__21, __pyx_n_s_PJON_Unable_To_Create_Bus, __pyx_n_s_PJON_Unable_To_Create_Bus, (PyObject *) NULL, __pyx_n_s_pjon_cython__pjon_cython, (PyObject *) NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_Py3ClassCreate(__pyx_t_2, __pyx_n_s_PJON_Unable_To_Create_Bus, __pyx_tuple__21, __pyx_t_1, NULL, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_PJON_Unable_To_Create_Bus, __pyx_t_3) < 0) __PYX_ERR(0, 124, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "pjon_cython/_pjon_cython.pyx":218
  *         return self.bus.strategy.get_max_attempts()
  * 
  *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
  *         return self.bus.get_packets_count(device_id)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(PJON_NOT_ASSIGNED); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_k__2 = __pyx_t_1;
-  __Pyx_GIVEREF(__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_char(PJON_NOT_ASSIGNED); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_k__2 = __pyx_t_2;
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":212
- *         return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+  /* "pjon_cython/_pjon_cython.pyx":253
+ *         del self.link
+ * 
+ *     def __init__(self, device_id, port=GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(GUDP_DEFAULT_PORT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 253, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_k__5 = __pyx_t_2;
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "pjon_cython/_pjon_cython.pyx":264
+ *         return self
  * 
  *     def add_node(self, device_id, ip, port = GUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
  *         ip_ints = bytearray(map(lambda _:int(_),ip.split('.')))
- *         self.bus.strategy.add_node(device_id, ip_ints, port)
+ *         self.link.strategy.add_node(device_id, ip_ints, port)
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_short(GUDP_DEFAULT_PORT); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_k__3 = __pyx_t_1;
-  __Pyx_GIVEREF(__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(GUDP_DEFAULT_PORT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_k__6 = __pyx_t_2;
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
 
-  /* "pjon_cython/_pjon_cython.pyx":257
- *         return self.bus.device_id()
+  /* "pjon_cython/_pjon_cython.pyx":279
+ *         del self.link
  * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
+ *     def __init__(self, device_id, port=LUDP_DEFAULT_PORT):             # <<<<<<<<<<<<<<
+ *         self.bus.set_id(device_id)
+ *         self.link.strategy.set_port(port)
  */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(PJON_NOT_ASSIGNED); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 257, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_k__8 = __pyx_t_1;
-  __Pyx_GIVEREF(__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "pjon_cython/_pjon_cython.pyx":333
- *         return self.bus.device_id()
- * 
- *     def get_packets_count(self, device_id = PJON_NOT_ASSIGNED):             # <<<<<<<<<<<<<<
- *         return self.bus.get_packets_count(device_id)
- * 
- */
-  __pyx_t_1 = __Pyx_PyInt_From_unsigned_char(PJON_NOT_ASSIGNED); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 333, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_k__12 = __pyx_t_1;
-  __Pyx_GIVEREF(__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyInt_From_unsigned_short(LUDP_DEFAULT_PORT); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 279, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_k__11 = __pyx_t_2;
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_2 = 0;
 
   /* "pjon_cython/_pjon_cython.pyx":1
  * import cython             # <<<<<<<<<<<<<<
  * from libcpp cimport bool as bool_t
- * 
+ * from os import close
  */
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /*--- Wrapped vars code ---*/
 
@@ -9658,6 +8329,85 @@ GOOD:
     return ret;
 }
 
+/* Import */
+          static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+    PyObject *empty_list = 0;
+    PyObject *module = 0;
+    PyObject *global_dict = 0;
+    PyObject *empty_dict = 0;
+    PyObject *list;
+    #if PY_MAJOR_VERSION < 3
+    PyObject *py_import;
+    py_import = __Pyx_PyObject_GetAttrStr(__pyx_b, __pyx_n_s_import);
+    if (!py_import)
+        goto bad;
+    #endif
+    if (from_list)
+        list = from_list;
+    else {
+        empty_list = PyList_New(0);
+        if (!empty_list)
+            goto bad;
+        list = empty_list;
+    }
+    global_dict = PyModule_GetDict(__pyx_m);
+    if (!global_dict)
+        goto bad;
+    empty_dict = PyDict_New();
+    if (!empty_dict)
+        goto bad;
+    {
+        #if PY_MAJOR_VERSION >= 3
+        if (level == -1) {
+            if (strchr(__Pyx_MODULE_NAME, '.')) {
+                module = PyImport_ImportModuleLevelObject(
+                    name, global_dict, empty_dict, list, 1);
+                if (!module) {
+                    if (!PyErr_ExceptionMatches(PyExc_ImportError))
+                        goto bad;
+                    PyErr_Clear();
+                }
+            }
+            level = 0;
+        }
+        #endif
+        if (!module) {
+            #if PY_MAJOR_VERSION < 3
+            PyObject *py_level = PyInt_FromLong(level);
+            if (!py_level)
+                goto bad;
+            module = PyObject_CallFunctionObjArgs(py_import,
+                name, global_dict, empty_dict, list, py_level, NULL);
+            Py_DECREF(py_level);
+            #else
+            module = PyImport_ImportModuleLevelObject(
+                name, global_dict, empty_dict, list, level);
+            #endif
+        }
+    }
+bad:
+    #if PY_MAJOR_VERSION < 3
+    Py_XDECREF(py_import);
+    #endif
+    Py_XDECREF(empty_list);
+    Py_XDECREF(empty_dict);
+    return module;
+}
+
+/* ImportFrom */
+          static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
+    PyObject* value = __Pyx_PyObject_GetAttrStr(module, name);
+    if (unlikely(!value) && PyErr_ExceptionMatches(PyExc_AttributeError)) {
+        PyErr_Format(PyExc_ImportError,
+        #if PY_MAJOR_VERSION < 3
+            "cannot import name %.230s", PyString_AS_STRING(name));
+        #else
+            "cannot import name %S", name);
+        #endif
+    }
+    return value;
+}
+
 /* CalculateMetaclass */
           static PyObject *__Pyx_CalculateMetaclass(PyTypeObject *metaclass, PyObject *bases) {
     Py_ssize_t i, nbases = PyTuple_GET_SIZE(bases);
@@ -10305,195 +9055,6 @@ raise_neg_overflow:
 }
 
 /* CIntFromPy */
-          static CYTHON_INLINE unsigned short __Pyx_PyInt_As_unsigned_short(PyObject *x) {
-    const unsigned short neg_one = (unsigned short) -1, const_zero = (unsigned short) 0;
-    const int is_unsigned = neg_one > const_zero;
-#if PY_MAJOR_VERSION < 3
-    if (likely(PyInt_Check(x))) {
-        if (sizeof(unsigned short) < sizeof(long)) {
-            __PYX_VERIFY_RETURN_INT(unsigned short, long, PyInt_AS_LONG(x))
-        } else {
-            long val = PyInt_AS_LONG(x);
-            if (is_unsigned && unlikely(val < 0)) {
-                goto raise_neg_overflow;
-            }
-            return (unsigned short) val;
-        }
-    } else
-#endif
-    if (likely(PyLong_Check(x))) {
-        if (is_unsigned) {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (unsigned short) 0;
-                case  1: __PYX_VERIFY_RETURN_INT(unsigned short, digit, digits[0])
-                case 2:
-                    if (8 * sizeof(unsigned short) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) >= 2 * PyLong_SHIFT) {
-                            return (unsigned short) (((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(unsigned short) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) >= 3 * PyLong_SHIFT) {
-                            return (unsigned short) (((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(unsigned short) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) >= 4 * PyLong_SHIFT) {
-                            return (unsigned short) (((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
-                        }
-                    }
-                    break;
-            }
-#endif
-#if CYTHON_COMPILING_IN_CPYTHON
-            if (unlikely(Py_SIZE(x) < 0)) {
-                goto raise_neg_overflow;
-            }
-#else
-            {
-                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
-                if (unlikely(result < 0))
-                    return (unsigned short) -1;
-                if (unlikely(result == 1))
-                    goto raise_neg_overflow;
-            }
-#endif
-            if (sizeof(unsigned short) <= sizeof(unsigned long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, unsigned long, PyLong_AsUnsignedLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(unsigned short) <= sizeof(unsigned PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
-#endif
-            }
-        } else {
-#if CYTHON_USE_PYLONG_INTERNALS
-            const digit* digits = ((PyLongObject*)x)->ob_digit;
-            switch (Py_SIZE(x)) {
-                case  0: return (unsigned short) 0;
-                case -1: __PYX_VERIFY_RETURN_INT(unsigned short, sdigit, (sdigit) (-(sdigit)digits[0]))
-                case  1: __PYX_VERIFY_RETURN_INT(unsigned short,  digit, +digits[0])
-                case -2:
-                    if (8 * sizeof(unsigned short) - 1 > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
-                            return (unsigned short) (((unsigned short)-1)*(((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-                case 2:
-                    if (8 * sizeof(unsigned short) > 1 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
-                            return (unsigned short) ((((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-                case -3:
-                    if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
-                            return (unsigned short) (((unsigned short)-1)*(((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-                case 3:
-                    if (8 * sizeof(unsigned short) > 2 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
-                            return (unsigned short) ((((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-                case -4:
-                    if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 4 * PyLong_SHIFT) {
-                            return (unsigned short) (((unsigned short)-1)*(((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-                case 4:
-                    if (8 * sizeof(unsigned short) > 3 * PyLong_SHIFT) {
-                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
-                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
-                        } else if (8 * sizeof(unsigned short) - 1 > 4 * PyLong_SHIFT) {
-                            return (unsigned short) ((((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
-                        }
-                    }
-                    break;
-            }
-#endif
-            if (sizeof(unsigned short) <= sizeof(long)) {
-                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, long, PyLong_AsLong(x))
-#ifdef HAVE_LONG_LONG
-            } else if (sizeof(unsigned short) <= sizeof(PY_LONG_LONG)) {
-                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, PY_LONG_LONG, PyLong_AsLongLong(x))
-#endif
-            }
-        }
-        {
-#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
-            PyErr_SetString(PyExc_RuntimeError,
-                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
-#else
-            unsigned short val;
-            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
- #if PY_MAJOR_VERSION < 3
-            if (likely(v) && !PyLong_Check(v)) {
-                PyObject *tmp = v;
-                v = PyNumber_Long(tmp);
-                Py_DECREF(tmp);
-            }
- #endif
-            if (likely(v)) {
-                int one = 1; int is_little = (int)*(unsigned char *)&one;
-                unsigned char *bytes = (unsigned char *)&val;
-                int ret = _PyLong_AsByteArray((PyLongObject *)v,
-                                              bytes, sizeof(val),
-                                              is_little, !is_unsigned);
-                Py_DECREF(v);
-                if (likely(!ret))
-                    return val;
-            }
-#endif
-            return (unsigned short) -1;
-        }
-    } else {
-        unsigned short val;
-        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
-        if (!tmp) return (unsigned short) -1;
-        val = __Pyx_PyInt_As_unsigned_short(tmp);
-        Py_DECREF(tmp);
-        return val;
-    }
-raise_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "value too large to convert to unsigned short");
-    return (unsigned short) -1;
-raise_neg_overflow:
-    PyErr_SetString(PyExc_OverflowError,
-        "can't convert negative value to unsigned short");
-    return (unsigned short) -1;
-}
-
-/* CIntFromPy */
           static CYTHON_INLINE unsigned int __Pyx_PyInt_As_unsigned_int(PyObject *x) {
     const unsigned int neg_one = (unsigned int) -1, const_zero = (unsigned int) 0;
     const int is_unsigned = neg_one > const_zero;
@@ -10680,6 +9241,195 @@ raise_neg_overflow:
     PyErr_SetString(PyExc_OverflowError,
         "can't convert negative value to unsigned int");
     return (unsigned int) -1;
+}
+
+/* CIntFromPy */
+          static CYTHON_INLINE unsigned short __Pyx_PyInt_As_unsigned_short(PyObject *x) {
+    const unsigned short neg_one = (unsigned short) -1, const_zero = (unsigned short) 0;
+    const int is_unsigned = neg_one > const_zero;
+#if PY_MAJOR_VERSION < 3
+    if (likely(PyInt_Check(x))) {
+        if (sizeof(unsigned short) < sizeof(long)) {
+            __PYX_VERIFY_RETURN_INT(unsigned short, long, PyInt_AS_LONG(x))
+        } else {
+            long val = PyInt_AS_LONG(x);
+            if (is_unsigned && unlikely(val < 0)) {
+                goto raise_neg_overflow;
+            }
+            return (unsigned short) val;
+        }
+    } else
+#endif
+    if (likely(PyLong_Check(x))) {
+        if (is_unsigned) {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (unsigned short) 0;
+                case  1: __PYX_VERIFY_RETURN_INT(unsigned short, digit, digits[0])
+                case 2:
+                    if (8 * sizeof(unsigned short) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) >= 2 * PyLong_SHIFT) {
+                            return (unsigned short) (((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(unsigned short) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) >= 3 * PyLong_SHIFT) {
+                            return (unsigned short) (((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(unsigned short) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) >= 4 * PyLong_SHIFT) {
+                            return (unsigned short) (((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0]));
+                        }
+                    }
+                    break;
+            }
+#endif
+#if CYTHON_COMPILING_IN_CPYTHON
+            if (unlikely(Py_SIZE(x) < 0)) {
+                goto raise_neg_overflow;
+            }
+#else
+            {
+                int result = PyObject_RichCompareBool(x, Py_False, Py_LT);
+                if (unlikely(result < 0))
+                    return (unsigned short) -1;
+                if (unlikely(result == 1))
+                    goto raise_neg_overflow;
+            }
+#endif
+            if (sizeof(unsigned short) <= sizeof(unsigned long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, unsigned long, PyLong_AsUnsignedLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(unsigned short) <= sizeof(unsigned PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, unsigned PY_LONG_LONG, PyLong_AsUnsignedLongLong(x))
+#endif
+            }
+        } else {
+#if CYTHON_USE_PYLONG_INTERNALS
+            const digit* digits = ((PyLongObject*)x)->ob_digit;
+            switch (Py_SIZE(x)) {
+                case  0: return (unsigned short) 0;
+                case -1: __PYX_VERIFY_RETURN_INT(unsigned short, sdigit, (sdigit) (-(sdigit)digits[0]))
+                case  1: __PYX_VERIFY_RETURN_INT(unsigned short,  digit, +digits[0])
+                case -2:
+                    if (8 * sizeof(unsigned short) - 1 > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
+                            return (unsigned short) (((unsigned short)-1)*(((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+                case 2:
+                    if (8 * sizeof(unsigned short) > 1 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 2 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
+                            return (unsigned short) ((((((unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+                case -3:
+                    if (8 * sizeof(unsigned short) - 1 > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
+                            return (unsigned short) (((unsigned short)-1)*(((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+                case 3:
+                    if (8 * sizeof(unsigned short) > 2 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 3 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
+                            return (unsigned short) ((((((((unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+                case -4:
+                    if (8 * sizeof(unsigned short) - 1 > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, long, -(long) (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 4 * PyLong_SHIFT) {
+                            return (unsigned short) (((unsigned short)-1)*(((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+                case 4:
+                    if (8 * sizeof(unsigned short) > 3 * PyLong_SHIFT) {
+                        if (8 * sizeof(unsigned long) > 4 * PyLong_SHIFT) {
+                            __PYX_VERIFY_RETURN_INT(unsigned short, unsigned long, (((((((((unsigned long)digits[3]) << PyLong_SHIFT) | (unsigned long)digits[2]) << PyLong_SHIFT) | (unsigned long)digits[1]) << PyLong_SHIFT) | (unsigned long)digits[0])))
+                        } else if (8 * sizeof(unsigned short) - 1 > 4 * PyLong_SHIFT) {
+                            return (unsigned short) ((((((((((unsigned short)digits[3]) << PyLong_SHIFT) | (unsigned short)digits[2]) << PyLong_SHIFT) | (unsigned short)digits[1]) << PyLong_SHIFT) | (unsigned short)digits[0])));
+                        }
+                    }
+                    break;
+            }
+#endif
+            if (sizeof(unsigned short) <= sizeof(long)) {
+                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, long, PyLong_AsLong(x))
+#ifdef HAVE_LONG_LONG
+            } else if (sizeof(unsigned short) <= sizeof(PY_LONG_LONG)) {
+                __PYX_VERIFY_RETURN_INT_EXC(unsigned short, PY_LONG_LONG, PyLong_AsLongLong(x))
+#endif
+            }
+        }
+        {
+#if CYTHON_COMPILING_IN_PYPY && !defined(_PyLong_AsByteArray)
+            PyErr_SetString(PyExc_RuntimeError,
+                            "_PyLong_AsByteArray() not available in PyPy, cannot convert large numbers");
+#else
+            unsigned short val;
+            PyObject *v = __Pyx_PyNumber_IntOrLong(x);
+ #if PY_MAJOR_VERSION < 3
+            if (likely(v) && !PyLong_Check(v)) {
+                PyObject *tmp = v;
+                v = PyNumber_Long(tmp);
+                Py_DECREF(tmp);
+            }
+ #endif
+            if (likely(v)) {
+                int one = 1; int is_little = (int)*(unsigned char *)&one;
+                unsigned char *bytes = (unsigned char *)&val;
+                int ret = _PyLong_AsByteArray((PyLongObject *)v,
+                                              bytes, sizeof(val),
+                                              is_little, !is_unsigned);
+                Py_DECREF(v);
+                if (likely(!ret))
+                    return val;
+            }
+#endif
+            return (unsigned short) -1;
+        }
+    } else {
+        unsigned short val;
+        PyObject *tmp = __Pyx_PyNumber_IntOrLong(x);
+        if (!tmp) return (unsigned short) -1;
+        val = __Pyx_PyInt_As_unsigned_short(tmp);
+        Py_DECREF(tmp);
+        return val;
+    }
+raise_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "value too large to convert to unsigned short");
+    return (unsigned short) -1;
+raise_neg_overflow:
+    PyErr_SetString(PyExc_OverflowError,
+        "can't convert negative value to unsigned short");
+    return (unsigned short) -1;
 }
 
 /* CIntFromPy */

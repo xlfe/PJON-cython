@@ -116,14 +116,26 @@ PJON_Connection_Lost
 ...     def receive(self, data, length, packet_info):
 ...         print ("Recv ({}): {}".format(length, data))
 
->>> g = GlobalUDP(99)
 >>> # GlobalUDP and LocalUDP both support set_port to configure their UDP listening port
->>> g.set_port(8821)                                                # doctest: +ELLIPSIS
-<__main__.GlobalUDP object at 0x...>
->>> #They return the class object, so you can "chain them"
+>>> g = GlobalUDP(99, 8821)
 >>> del g
->>> pjon = GlobalUDP(100).set_port(8821).set_autoregistration(False)
+>>> #They return the class object, so you can "chain them"
+>>> pjon = GlobalUDP(100,8821).set_autoregistration(False)
 >>> pjon                                                            # doctest: +ELLIPSIS
 <__main__.GlobalUDP object at 0x...>
+>>>
+>>> # These options affect packet overhead (in bytes)
+>>> pjon.packet_overhead()
+6
+>>> pjon.set_crc_32(True).packet_overhead()
+9
+>>> pjon.set_packet_id(True).packet_overhead()
+11
+>>> pjon.set_synchronous_acknowledge(True).packet_overhead()
+11
+>>> pjon.set_packet_id(False).set_asynchronous_acknowledge(False).packet_overhead()
+9
+>>> pjon.set_crc_32(False).include_sender_info(False).packet_overhead()
+5
 
 ```
