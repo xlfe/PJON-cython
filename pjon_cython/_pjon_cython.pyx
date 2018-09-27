@@ -60,6 +60,10 @@ cdef extern from "PJON.h":
         void set_serial(PJON_SERIAL_TYPE serial_port)
         void set_baud_rate(uint32_t baud)
 
+    cdef cppclass _throughserialasync "ThroughSerialAsync":
+        void set_serial(PJON_SERIAL_TYPE serial_port)
+        void set_baud_rate(uint32_t baud)
+
     cdef cppclass StrategyLinkBase:
         pass
 
@@ -289,6 +293,32 @@ cdef class ThroughSerial(PJONBUS):
 
     def __cinit__(self):
         self.link = new StrategyLink[_throughserial]()
+        self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
+
+        def __del__(self):
+            if self.s > 0:
+                close(self.s)
+
+        def _fd(self):
+            return self.s
+
+        def __init__(self, device_id, port, baud_rate):
+            self.bus.set_id(device_id)
+            self.s = serialOpen(port, baud_rate)
+
+            if(int(self.s) < 0):
+                raise PJON_Unable_To_Create_Bus('Unable to open serial port')
+
+            self.link.strategy.set_serial(self.s)
+            self.link.strategy.set_baud_rate(baud_rate)
+            self.bus.begin()
+
+cdef class ThroughSerialAsync(PJONBUS):
+    cdef StrategyLink[_throughserialasync] *link
+    cdef int s
+
+    def __cinit__(self):
+        self.link = new StrategyLink[_throughserialasync]()
         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
 
     def __del__(self):

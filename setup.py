@@ -61,6 +61,7 @@ setup(
                 '-std=c++11',
                 '-DPJON_INCLUDE_ANY',
                 '-DPJON_INCLUDE_TS',
+                '-DPJON_INCLUDE_TSA',
                 '-DPJON_INCLUDE_LUDP',
                 '-DPJON_INCLUDE_GUDP',
                 '-DPJON_INCLUDE_PACKET_ID=true',
