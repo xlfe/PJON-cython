@@ -66,12 +66,8 @@ setup(
                 '-DPJON_INCLUDE_GUDP',
                 '-DPJON_INCLUDE_PACKET_ID=true',
                 '-DPJON_INCLUDE_ASYNC_ACK=true',
-
-                # '-DTS_RESPONSE_TIME_OUT=5000',
-                # '-DTS_BYTE_TIME_OUT=5000',
-
                 '-DPJON_MAX_PACKETS=100',
-                '-DPJON_PACKET_MAX_LENGTH=245',
+                '-DPJON_PACKET_MAX_LENGTH=246',
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
                 '-Wno-logical-op-parentheses',
