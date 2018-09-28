@@ -18,6 +18,7 @@ Support for PJON 11.1 *only* and the following strategies :-
 - LocalUDP
 - GlobalUDP
 - ThroughSerial
+- ThroughSerialAsync *new*
 
 Note
 

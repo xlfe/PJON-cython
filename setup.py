@@ -33,6 +33,16 @@ else:
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
+strategies = []
+
+for s in ['TS', 'TSA', 'GUDP', 'LUDP']:
+    strategies.extend([
+        '-DPJON_INCLUDE_{}'.format(s),
+        '-D{}_RESPONSE_TIME_OUT=100000'.format(s)
+    ]
+    )
+
 setup(
     name='pjon_cython',
     version='11.1.5',
@@ -57,20 +67,13 @@ setup(
             "pjon_cython._pjon_cython",
             sources=["pjon_cython/_pjon_cython.{}".format(source)],
             language="c++",
-            extra_compile_args=[
+            extra_compile_args=strategies + [
                 '-std=c++11',
                 '-DPJON_INCLUDE_ANY',
-                '-DPJON_INCLUDE_TS',
-                '-DPJON_INCLUDE_LUDP',
-                '-DPJON_INCLUDE_GUDP',
                 '-DPJON_INCLUDE_PACKET_ID=true',
                 '-DPJON_INCLUDE_ASYNC_ACK=true',
-
-                # '-DTS_RESPONSE_TIME_OUT=5000',
-                # '-DTS_BYTE_TIME_OUT=5000',
-
                 '-DPJON_MAX_PACKETS=100',
-                '-DPJON_PACKET_MAX_LENGTH=245',
+                '-DPJON_PACKET_MAX_LENGTH=246',
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
                 '-Wno-logical-op-parentheses',
