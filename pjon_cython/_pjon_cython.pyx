@@ -255,8 +255,9 @@ cdef class GlobalUDP(PJONBUS):
         self.bus.set_id(device_id)
         self.link.strategy.set_port(port)
         self.bus.begin()
-        if not self.link.can_start():
-            raise PJON_Unable_To_Create_Bus()
+
+    def can_start(self):
+        return self.bus.strategy.can_start()
 
     def set_autoregistration(self, enabled):
         self.link.strategy.set_autoregistration(1 if enabled else 0)
@@ -292,23 +293,23 @@ cdef class ThroughSerial(PJONBUS):
         self.link = new StrategyLink[_throughserial]()
         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
 
-        def __del__(self):
-            if self.s > 0:
-                close(self.s)
+    def __del__(self):
+        if self.s > 0:
+            close(self.s)
 
-        def _fd(self):
-            return self.s
+    def _fd(self):
+        return self.s
 
-        def __init__(self, device_id, port, baud_rate):
-            self.bus.set_id(device_id)
-            self.s = serialOpen(port, baud_rate)
+    def __init__(self, device_id, port, baud_rate):
+        self.bus.set_id(device_id)
+        self.s = serialOpen(port, baud_rate)
 
-            if(int(self.s) < 0):
-                raise PJON_Unable_To_Create_Bus('Unable to open serial port')
+        if(int(self.s) < 0):
+            raise PJON_Unable_To_Create_Bus('Unable to open serial port')
 
-            self.link.strategy.set_serial(self.s)
-            self.link.strategy.set_baud_rate(baud_rate)
-            self.bus.begin()
+        self.link.strategy.set_serial(self.s)
+        self.link.strategy.set_baud_rate(baud_rate)
+        self.bus.begin()
 
 cdef class ThroughSerialAsync(PJONBUS):
     cdef StrategyLink[_throughserialasync] *link
@@ -325,7 +326,7 @@ cdef class ThroughSerialAsync(PJONBUS):
     def _fd(self):
         return self.s
 
-    def __init__(self, device_id, port, baud_rate):
+    def __init__(self, device_id, port, baud_rate, port_timeout_s=10):
         self.bus.set_id(device_id)
         self.s = serialOpen(port, baud_rate)
 
