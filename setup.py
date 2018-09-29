@@ -45,7 +45,7 @@ for s in ['TS', 'TSA', 'GUDP', 'LUDP']:
 
 setup(
     name='pjon_cython',
-    version='11.1.5',
+    version='11.1.5-1',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',

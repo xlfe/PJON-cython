@@ -34,7 +34,7 @@ Linux and Mac OS X are considered supported. Windows is not supported (sorry!).
 
 ## Install from pip
 
-Current version is 11.4.5
+Current version is 11.1.5-1
 
 ```bash
 pip install pjon-cython
