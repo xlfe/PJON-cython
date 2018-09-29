@@ -1,4 +1,5 @@
 from nose.tools import raises
+import os
 import time
 import pjon_cython as PJON
 
@@ -6,8 +7,11 @@ class LocalUDP(PJON.LocalUDP):
     def receive(self, data, length, packet_info):
         raise Exception("Not expecting any reply")
 
-    def __init__(self, device_id):
-        PJON.LocalUDP.__init__(self, device_id)
+    def __init__(self, device_id, port=None):
+        if port is None:
+            PJON.LocalUDP.__init__(self, device_id)
+        else:
+            PJON.LocalUDP.__init__(self, device_id, port)
 
 class GlobalUDP(PJON.GlobalUDP):
     def receive(self, data, length, packet_info):
@@ -112,6 +116,47 @@ def test_doesnt_raise_content_too_long():
     l.send(1, b'b'*(PJON.PJON_PACKET_MAX_LENGTH-10))
 
 
+def test_set_port():
+    "Test set_port"
+
+    l = LocalUDP(100, 1234)
+    l.send(2, b'To port 1234')
+
+    g = GlobalUDP(200, 5432)
+    assert g == g.set_autoregistration(True)
+    g.send(2, b'To port 5432')
+
+def test_other_options():
+
+    l = LocalUDP(100)
+    l.set_asynchronous_acknowledge(False)
+    l.set_packet_id(True)
+    l.set_crc_32(True)
+    l.send(2, b'with options')
+
+
+@raises(PJON.PJON_Unable_To_Create_Bus)
+def test_fd_open():
+    t1 = ThroughSerial(1, b'/dev/tty.doesntexist', 9600)
+
+@raises(OSError)
+def test_fd_close():
+
+    t1 = ThroughSerial(1, b'/dev/null', 9600)
+    fd = t1._fd()
+    del t1
+    os.close(fd)
+
+@raises(PJON.PJON_Unable_To_Create_Bus)
+def test_multi_conflict():
+    l1 = LocalUDP(99)
+    l2 = LocalUDP(100)
+
+
+def test_multi_no_conflict():
+    l1 = LocalUDP(99, 1234)
+    l2 = LocalUDP(100)
+
 
 cython_class_methods = lambda _: [func for func in dir(_) if callable(getattr(_, func)) and not func.startswith("__")]
 
@@ -121,9 +166,9 @@ def test_base_functions():
     """
 
     classes = {
-        PJON.GlobalUDP : {'add_node'},
-        PJON.LocalUDP: {} ,
-        PJON.ThroughSerial : {}
+        PJON.GlobalUDP : {'add_node', 'set_autoregistration'},
+        PJON.LocalUDP: {},
+        PJON.ThroughSerial : {'_fd'}
     }
 
     func_list = set()
