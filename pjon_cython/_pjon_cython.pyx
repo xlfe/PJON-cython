@@ -164,7 +164,7 @@ cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
 
 cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
     cdef PJONBUS self = <object> _pi.custom_pointer
-    self._receive(payload, length, make_packet_info_dict(_pi))
+    self.receive(<bytes>payload[:length], length, make_packet_info_dict(_pi))
 
 
 cdef class PJONBUS:
@@ -209,9 +209,6 @@ cdef class PJONBUS:
 
     def receive(self, payload, length, packet_info):
         raise NotImplementedError()
-
-    def _receive(self, payload, length, packet_info):
-        self.receive(payload[:length], length, packet_info)
 
     def device_id(self):
         return self.bus.device_id()
