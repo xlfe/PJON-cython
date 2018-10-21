@@ -34,7 +34,7 @@ Linux and Mac OS X are considered supported. Windows is not supported (sorry!).
 
 ## Install from pip
 
-Current version is 11.1.5-1
+Current version is 11.1.6
 
 ```bash
 pip install pjon-cython
@@ -142,3 +142,12 @@ PJON_Connection_Lost
 5
 
 ```
+
+#### Use serial based strategies with [pyserial_Asyncio](https://github.com/pyserial/pyserial-asyncio)
+
+Instead of passing a serial port string, you can pass a file descriptor to the ThroughSerial and ThroughSerialAsync 
+methods which allows other libraries to poll the serial port.
+
+For examples, see the [reticul8](https://github.com/xlfe/reticul8/blob/master/python/reticul8/pjon_strategies.py#L27)
+project.
+
