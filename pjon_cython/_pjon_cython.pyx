@@ -180,8 +180,8 @@ cdef class PJONBUS:
     def __dealloc__(self):
         del self.bus
 
-    def packet_overhead(self):
-        return self.bus.packet_overhead(PJON_NO_HEADER)
+    def packet_overhead(self, header=PJON_NO_HEADER):
+        return self.bus.packet_overhead(header)
 
     def set_synchronous_acknowledge(self, enabled):
         "Acknowledge receipt of packets"
@@ -305,7 +305,10 @@ cdef class ThroughSerial(PJONBUS):
 
     def __del__(self):
         if self.s > 0:
-            close(self.s)
+            try:
+                close(self.s)
+            except OSError:
+                pass
 
     def _fd(self):
         return self.s
@@ -334,8 +337,11 @@ cdef class ThroughSerialAsync(PJONBUS):
         self.bus.strategy.set_link(<StrategyLinkBase *> self.link)
 
     def __del__(self):
-        if self.s > 0:
-            close(self.s)
+        if self.s > 0 :
+            try:
+                close(self.s)
+            except OSError:
+                pass
 
     def _fd(self):
         return self.s
