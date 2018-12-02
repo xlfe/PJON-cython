@@ -241,14 +241,15 @@ cdef class PJONBUS:
     def bus_update(self):
         return self.bus.update()
 
-    def send(self, device_id, data):
-        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+    def send(self, device_id, data, port=_PJON_BROADCAST, packet_id=0):
+        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, packet_id, port)
 
-    def reply(self, data):
-        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, _PJON_BROADCAST)
+    def reply(self, data, port=_PJON_BROADCAST):
+        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, port)
 
-    def send_repeatedly(self, device_id, data, timing):
-        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, _PJON_BROADCAST)
+    def send_repeatedly(self, device_id, data, timing, port=_PJON_BROADCAST):
+        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, port)
+
 
 
 cdef class GlobalUDP(PJONBUS):

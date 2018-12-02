@@ -113,7 +113,7 @@ def test_raises_content_too_long():
 def test_doesnt_raise_content_too_long():
     "Check that we don't get CONTENT_TOO_LONG error"
     l=LocalUDP(0)
-    l.send(1, b'b'*(PJON.PJON_PACKET_MAX_LENGTH-10))
+    l.send(1, b'b'*(PJON.PJON_PACKET_MAX_LENGTH-16))
 
 
 def test_set_port():

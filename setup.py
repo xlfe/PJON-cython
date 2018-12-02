@@ -73,7 +73,7 @@ setup(
                 '-DPJON_INCLUDE_PACKET_ID=true',
                 '-DPJON_INCLUDE_ASYNC_ACK=true',
                 '-DPJON_MAX_PACKETS=100',
-                '-DPJON_PACKET_MAX_LENGTH=246',
+                '-DPJON_PACKET_MAX_LENGTH=1536',
                 '-DLINUX',
                 '-Wno-unneeded-internal-declaration',
                 '-Wno-logical-op-parentheses',
