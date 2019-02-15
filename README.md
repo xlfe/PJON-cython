@@ -14,7 +14,7 @@ PJON is one of very few open-source implementations of multi-master communicatio
 
 ## Current status:
 
-Support for PJON 11.1 *only* and the following strategies :-
+Support for PJON 11.2 *only* and the following strategies :-
 - LocalUDP
 - GlobalUDP
 - ThroughSerial
@@ -34,7 +34,7 @@ Linux and Mac OS X are considered supported. Windows is not supported (sorry!).
 
 ## Install from pip
 
-Current version is 11.1.6
+Current version is 11.2.0
 
 ```bash
 pip install pjon-cython
