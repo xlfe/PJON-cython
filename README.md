@@ -125,7 +125,7 @@ PJON_Connection_Lost
 >>> #They return the class object, so you can "chain them"
 >>> pjon = GlobalUDP(100,8821).set_autoregistration(False)
 >>> pjon                                                            # doctest: +ELLIPSIS
-<__main__.GlobalUDP object at 0x...>
+<GlobalUDP object at 0x...>
 >>>
 >>> # These options affect packet overhead (in bytes)
 >>> pjon.packet_overhead()
