@@ -21,11 +21,10 @@ cdef extern from "PJON.h":
     const uint16_t GUDP_DEFAULT_PORT
     const uint16_t LUDP_DEFAULT_PORT
 
+    # errors
     const uint8_t PJON_CONNECTION_LOST
     const uint8_t PJON_PACKETS_BUFFER_FULL
     const uint8_t PJON_CONTENT_TOO_LONG
-    const uint8_t PJON_ID_ACQUISITION_FAIL
-    const uint8_t PJON_DEVICES_BUFFER_FULL
 
     const uint16_t _PJON_ACK "PJON_ACK"
     const uint16_t _PJON_NAK "PJON_NAK"
@@ -78,8 +77,8 @@ cdef extern from "PJON.h":
         bool_t can_start()
 
     cdef cppclass PJON[T]:
-        StrategyLink strategy
-        PJON()
+        StrategyLink strategy 
+        PJON() except +
         void set_id(uint8_t id)
         void set_packet_id(bool_t state)
         void set_crc_32(bool_t state)
@@ -120,36 +119,26 @@ class PJON_Packets_Buffer_Full(BaseException):
 class PJON_Content_Too_Long(BaseException):
     pass
 
-class PJON_Id_Acquisition_Fail(BaseException):
-    pass
-
-class PJON_Devices_Buffer_Full(BaseException):
-    pass
-
 class PJON_Unable_To_Create_Bus(BaseException):
     pass
 
 
-cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer) except *:
+cdef void error_handler(uint8_t code, uint16_t data, void *custom_pointer):
 
     # raise Exception('Code: {} Data: {}'.format(code, data))
+    cdef PJONBUS self = <object> custom_pointer
 
     if code == PJON_CONNECTION_LOST:
-        raise PJON_Connection_Lost()
+        self.exception = PJON_Connection_Lost
 
-    if code == PJON_PACKETS_BUFFER_FULL:
-        raise PJON_Packets_Buffer_Full()
+    elif code == PJON_PACKETS_BUFFER_FULL:
+        self.exception = PJON_Packets_Buffer_Full
 
-    if code == PJON_CONTENT_TOO_LONG:
-        raise PJON_Content_Too_Long()
-
-    if code == PJON_DEVICES_BUFFER_FULL:
-        raise PJON_Devices_Buffer_Full()
-
-    if code == PJON_ID_ACQUISITION_FAIL:
-        raise PJON_Id_Acquisition_Fail()
-
-    raise Exception("PJON Error Code Unknown")
+    elif code == PJON_CONTENT_TOO_LONG:
+        self.exception = PJON_Content_Too_Long
+    
+    else:
+        self.exception = Exception
 
 
 cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
@@ -163,7 +152,7 @@ cdef object make_packet_info_dict(const PJON_Packet_Info &_pi):
         port = _pi.port
     )
 
-cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi):
+cdef void _pjon_receiver(uint8_t *payload, uint16_t length, const PJON_Packet_Info &_pi) except *:
     cdef PJONBUS self = <object> _pi.custom_pointer
     self.receive(<bytes>payload[:length], length, make_packet_info_dict(_pi))
 
@@ -176,6 +165,7 @@ cdef class PJONBUS:
         self.bus.set_custom_pointer(<void*> self)
         self.bus.set_receiver(&_pjon_receiver)
         self.bus.set_error(&error_handler)
+        self.exception = None
 
     def __dealloc__(self):
         del self.bus
@@ -228,28 +218,46 @@ cdef class PJONBUS:
         """
         to_be_sent = self.bus.update()
         if timeout_us is not None:
-            return to_be_sent, self.bus.receive(timeout_us)
+            resa,resb = to_be_sent, self.bus.receive(timeout_us)
         else:
-            return to_be_sent, self.bus.receive()
+            resa,resb = to_be_sent, self.bus.receive()
+
+        self.check_for_exc()
+        return resa,resb
 
     def bus_receive(self, timeout_us=None):
         if timeout_us is None:
-            return self.bus.receive()
+            res = self.bus.receive()
         else:
-            return self.bus.receive(timeout_us)
+            res = self.bus.receive(timeout_us)
+        self.check_for_exc()
+        return res
 
     def bus_update(self):
-        return self.bus.update()
+        res = self.bus.update()
+        self.check_for_exc()
+        return res
 
     def send(self, device_id, data, port=_PJON_BROADCAST, packet_id=0):
-        return self.bus.send(device_id, data, len(data), PJON_NO_HEADER, packet_id, port)
+        res = self.bus.send(device_id, data, len(data), PJON_NO_HEADER, packet_id, port)
+        self.check_for_exc()
+        return res
 
     def reply(self, data, port=_PJON_BROADCAST):
-        return self.bus.reply(data, len(data), PJON_NO_HEADER, 0, port)
+        res = self.bus.reply(data, len(data), PJON_NO_HEADER, 0, port)
+        self.check_for_exc()
+        return res
 
     def send_repeatedly(self, device_id, data, timing, port=_PJON_BROADCAST):
-        return self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, port)
+        res = self.bus.send_repeatedly(device_id, data, len(data), timing, PJON_NO_HEADER, 0, port)
+        self.check_for_exc()
+        return res
 
+    def check_for_exc(self):
+        if self.exception is not None:
+            exc_to_raise = self.exception()
+            self.exception = None
+            raise exc_to_raise
 
 
 cdef class GlobalUDP(PJONBUS):
