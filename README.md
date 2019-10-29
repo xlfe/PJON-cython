@@ -14,11 +14,11 @@ PJON is one of very few open-source implementations of multi-master communicatio
 
 ## Current status:
 
-Support for PJON 11.2 *only* and the following strategies :-
+Support for PJON 12 and the following strategies :-
 - LocalUDP
 - GlobalUDP
 - ThroughSerial
-- ThroughSerialAsync *new*
+- ThroughSerialAsync
 
 Note
 
@@ -26,7 +26,7 @@ Note
 
 #### Python support
 
-Python 2.7, 3.4, 3.5 and 3.6 are tested and considered supported
+Python 2.7, 3.4, 3.5, 3.6 and 3.7 are tested and considered supported
 
 #### Platform support
 
@@ -34,7 +34,7 @@ Linux and Mac OS X are considered supported. Windows is not supported (sorry!).
 
 ## Install from pip
 
-Current version is 11.2.0
+Current version is 12.0.0
 
 ```bash
 pip install pjon-cython
@@ -106,7 +106,7 @@ True
 ...     packets_to_send, receive_status = ts.loop()
 Traceback (most recent call last):
     ...
-PJON_Connection_Lost
+pjon_cython._pjon_cython.PJON_Connection_Lost
 
 ```
 

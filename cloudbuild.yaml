@@ -61,3 +61,19 @@ steps:
   env:
     - FORCE_CYTHON=1
     - PYTHON3=1
+
+- name: 'python:3.7'
+  args: ['bash', 'docker/run_tests.sh']
+  id: py37_without_cython
+  waitFor: ['-']
+  env:
+    - DISABLE_CYTHON=1
+    - PYTHON3=1
+
+- name: 'python:3.7'
+  args: ['bash', 'docker/run_tests.sh']
+  waitFor: ['-']
+  id: py37_with_cython
+  env:
+    - FORCE_CYTHON=1
+    - PYTHON3=1

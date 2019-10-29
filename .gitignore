@@ -1,3 +1,7 @@
 *.so
 .idea/
 build/
+.eggs/
+__pycache__/
+dist/
+*.egg-info/
