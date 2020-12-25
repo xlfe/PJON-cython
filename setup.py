@@ -45,7 +45,7 @@ for s in ['TS', 'TSA', 'GUDP', 'LUDP']:
 
 setup(
     name='pjon_cython',
-    version='12.0.0',
+    version='13.0.0',
     packages=['pjon_cython'],
     url='https://github.com/xlfe/PJON-cython',
     license='Apache 2.0',
@@ -61,6 +61,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.8'
+        'Programming Language :: Python :: 3.9'
     ],
     cmdclass=cmdclass,
     ext_modules=[
@@ -71,6 +73,8 @@ setup(
             extra_compile_args=strategies + [
                 '-std=c++11',
                 '-DPJON_INCLUDE_ANY',
+                '-DPJON_INCLUDE_PACKET_ID=true',
+                '-DPJON_INCLUDE_PORT=true',
                 '-DPJON_INCLUDE_PACKET_ID=true',
                 '-DPJON_INCLUDE_ASYNC_ACK=true',
                 '-DPJON_MAX_PACKETS=100',

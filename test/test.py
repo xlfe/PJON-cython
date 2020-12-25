@@ -129,7 +129,7 @@ def test_set_port():
 def test_other_options():
 
     l = LocalUDP(100)
-    l.set_asynchronous_acknowledge(False)
+    l.set_acknowledge(False)
     l.set_packet_id(True)
     l.set_crc_32(True)
     l.send(2, b'with options')
