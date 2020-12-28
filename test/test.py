@@ -1,4 +1,5 @@
 from nose.tools import raises
+import pty
 import os
 import time
 import pjon_cython as PJON
@@ -44,7 +45,9 @@ def test_ludp():
 def test_throughserial():
     "Test ThroughSerial and send_repeatedly"
 
-    ts = ThroughSerial(44, b"/dev/null", 115200)
+    (master, slave) = pty.openpty()
+
+    ts = ThroughSerial(44, master, 115200)
     ts.send_repeatedly(10, b"1234", 10000000)
     for i in range(10):
         ts.loop()
@@ -89,7 +92,10 @@ def test_gudp_raises_packet_buffer_full():
 @raises(PJON.PJON_Packets_Buffer_Full)
 def test_ts_raises_packet_buffer_full():
     "Check that we get PACKET_BUFFER_FULL error in ThroughSerial"
-    ts = ThroughSerial(44, b"/dev/null", 115200)
+
+    (master, slave) = pty.openpty()
+
+    ts = ThroughSerial(44, master, 115200)
     for i in range(PJON.PJON_MAX_PACKETS + 1):
         ts.send(1, b'blah')
 
@@ -142,7 +148,9 @@ def test_fd_open():
 @raises(OSError)
 def test_fd_close():
 
-    t1 = ThroughSerial(1, b'/dev/null', 9600)
+    (master, slave) = pty.openpty()
+
+    t1 = ThroughSerial(1, master, 9600)
     fd = t1._fd()
     del t1
     os.close(fd)

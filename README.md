@@ -80,6 +80,7 @@ True
 
 ```python
 >>> import pjon_cython as PJON
+>>> import pty
 >>> #ThroughSerial Example
 >>> # Make sure you set self.bus.set_synchronous_acknowledge(false) on the other side
 >>> 
@@ -93,8 +94,9 @@ True
 ...            print ("Recv ({}): {}".format(length, data))
 ...        print ('')
 ...
+>>> (master, slave) = pty.openpty()
 >>> # Put your actual serial device in here...
->>> ts = ThroughSerial(44, b"/dev/null", 115200)
+>>> ts = ThroughSerial(44, master, 115200)
 >>> # Send returns the packet's index in the packet buffer
 >>> ts.send(100, b'PING 1')
 0
